@@ -8,11 +8,10 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Waktu\Waktu;
+use App\Waktu;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
-use GoogleTranslate\GoogleTranslate;
 
 class NewchatmembersCommand extends SystemCommand
 {
@@ -62,33 +61,33 @@ class NewchatmembersCommand extends SystemCommand
             Request::deleteMessage($data);
             foreach ($members as $member) {
                 $nameLen = strlen($member->getFirstName() . ' ' . $member->getLastName());
+                $nameLink = "<a href='tg://user?id=" . $member->getId() . "'>" . $member->getFirstName() . '</a>';
                 if ($nameLen < 140) {
                     if ($member->getUsername() === null) {
-                        $member_nounames[] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                            . $member->getFirstName() . '</a>';
+                        $member_nounames[] = $nameLink;
                     }
 
                     if ($member->getIsBot() === true) {
-                        $member_bots [] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                            . $member->getFirstName() . '</a> 🤖';
+                        $member_bots [] = $nameLink . ' 🤖';
                     }
 
-                    $member_names[] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                        . $member->getFirstName() . '</a>';
+                    $member_names[] = $nameLink;
+
                 } else {
-                    $member_lnames [] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                        . $member->getFirstName() . '</a>';
+                    $member_lnames [] = $nameLink;
+
                     $data = [
                         'chat_id' => $chat_id,
                         'user_id' => $member->getId()
                     ];
+
                     $isKicked = Request::kickChatMember($data);
                     $isKicked = json_decode($isKicked, true);
                     Request::unbanChatMember($data);
 
                     $data = [
                         'chat_id' => $chat_id,
-                        'message_id' => $message->getMessageId()
+                        'message_id' => $message->getMessageId() + 1
                     ];
 
                     Request::deleteMessage($data);
@@ -98,35 +97,35 @@ class NewchatmembersCommand extends SystemCommand
 
             if (count($member_names) > 0) {
                 $text =
-                    "<b>👥 Anggota baru: </b> (<code>" . count($member_names) . ")</code>" .
-                    "\nHi " . implode(', ', $member_names) .
+                    '<b>👥 Anggota baru: </b> (<code>' . count($member_names) . ')</code>' .
+                    "\nHai " . implode(', ', $member_names) .
                     "\nSelamat datang di kontrakan <b>" . $chat_tit . '</b>';
             }
 
             if (count($member_bots) > 0) {
                 $text .=
-                    "\n\n<b>🤖 Bot baru: </b> (<code>" . count($member_bots) . ")</code>" .
-                    "\nHi " . implode(', ', $member_bots) .
+                    "\n\n<b>🤖 Bot baru: </b> (<code>" . count($member_bots) . ')</code>' .
+                    "\nHai " . implode(', ', $member_bots) .
                     "\nSiapa yang menambahkan kamu?";
             }
 
             if (count($member_nounames) > 0) {
                 $text .=
-                    "\n\n<b>⚠ Tanpa Username: </b> (<code>" . count($member_nounames) . ")</code>" .
-                    "\n" . implode(', ', $member_nounames) . ", Tolong pasang username" .
+                    "\n\n<b>⚠ Tanpa Username: </b> (<code>" . count($member_nounames) . ')</code>' .
+                    "\n" . implode(', ', $member_nounames) . ', Tolong pasang username' .
                     "\n<i>Buka aplikasi Telegram > Settings > Username, lalu isi Username-nya.</i>";
             }
 
             if (count($member_lnames) > 0) {
                 if ($isKicked['ok'] != false) {
                     $text .=
-                        "🚷 <b>Ditendang: </b> (<code>" . count($member_lnames) . ")</code>" .
-                        "\n" . implode(', ', $member_lnames) . ", Namamu panjang gan!";
+                        '🚷 <b>Ditendang: </b> (<code>' . count($member_lnames) . ')</code>' .
+                        "\n" . implode(', ', $member_lnames) . ', Namamu panjang gan!';
                 } else {
                     $text .=
-                        "<b>Eksekusi : </b> Mencoba untuk menendang spammer" .
+                        '<b>Eksekusi : </b> Mencoba untuk menendang spammer' .
                         "\n<b>Status : </b>" . $isKicked['error_code'] .
-                        "\n<b>Result : </b>" . $isKicked['description'] . "";
+                        "\n<b>Result : </b>" . $isKicked['description'];
                 }
             }
         }
@@ -143,6 +142,7 @@ class NewchatmembersCommand extends SystemCommand
             'parse_mode' => 'HTML',
             'reply_markup' => $in_keyboard
         ];
+
         if ($text !== null) {
             return Request::sendMessage($data);
         }
