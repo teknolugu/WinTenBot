@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Waktu\Waktu;
+use App\Waktu;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
