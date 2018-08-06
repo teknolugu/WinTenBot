@@ -10,7 +10,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/app/Waktu.php';
 require_once __DIR__ . '/app/Terjemah.php';
-require_once __DIR__ . 'config.php';
+require_once __DIR__ . '/config.php';
 
 $commands_paths = [
     __DIR__ . '/Commands/',
