@@ -1,0 +1,9 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Azhe
+ * Date: 04/08/2018
+ * Time: 22.50
+ */
+
+define('bot_token', 'Token_Bot_Kamu'); // NamaBot
