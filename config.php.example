@@ -7,3 +7,6 @@
  */
 
 define('bot_token', 'Token_Bot_Kamu'); // NamaBot
+
+define('bot_username', 'Username_Bot');
+
