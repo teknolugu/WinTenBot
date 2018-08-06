@@ -1,11 +1,15 @@
 {
-  "name": "NewBot",
+  "name": "wintengroup/tg-bot",
+  "description": "Telegram Bot Web hook",
   "version": "1.0.0",
   "type": "project",
+  "license": "MIT",
   "require": {
     "php": ">=5.5",
-    "longman/telegram-bot": "*",
+    "longman/telegram-bot": "dev",
     "ammarfaizi2/googletranslate": "0.0.1",
-    "stichoza/google-translate-php": "v3.2.13"
+    "stichoza/google-translate-php": "v3.2.13",
+    "nicolab/php-ftp-client": "v1.4.1",
+    "dg/ftp-php": "^1.2"
   }
 }
