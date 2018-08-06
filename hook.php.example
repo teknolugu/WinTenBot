@@ -8,9 +8,10 @@
 
 // Load composer
 require_once __DIR__ . '/vendor/autoload.php';
+
 require_once __DIR__ . '/app/Waktu.php';
 require_once __DIR__ . '/app/Terjemah.php';
-require_once __DIR__ . 'config.php';
+require_once __DIR__ . 'config.php'; // Rename from config.php.example if not exist
 
 $commands_paths = [
     __DIR__ . '/Commands/',
@@ -29,7 +30,7 @@ try {
 
     // Enable admin users
     $telegram->enableAdmins([
-        '236205726'
+        '236205726' // Your Telegram ID
     ]);
 
     // Logging (Error, Debug and Raw Updates)
