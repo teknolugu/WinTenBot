@@ -47,7 +47,7 @@ class AdminCommand extends UserCommand
             $num = 1;
             foreach ($respon as $admin) {
                 $fullname = trim($admin['user']['first_name'] . ' ' . $admin['user']['last_name']);
-                $fullname = Kata::substrteks($fullname, 40);
+                $fullname = Kata::substrteks($fullname, 30);
                 if ($fullname == null) {
                     $fullname = 'Deletted accunnt';
                 }
@@ -67,7 +67,7 @@ class AdminCommand extends UserCommand
             if ($adminl != $lastAdm) {
                 $ngadmin .= '├ ' . $noAdm . ' . ' . $adminl . "\n";
             } else {
-                $ngadmin .= '└ ' . $noAdm . ' . ' . $adminl . "\n";
+                $ngadmin .= '└ ' . $noAdm . ' . ' . $adminl;
             }
             $noAdm++;
         }
