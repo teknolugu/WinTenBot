@@ -10,10 +10,9 @@
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/app/Waktu.php';
 require_once __DIR__ . '/app/Terjemah.php';
-require_once __DIR__ . '/app/FtpUpload.php';
-require_once __DIR__ . '/app/Kata.php';
-require_once __DIR__ . '/config.php';
 
+$bot_token = '363445341:AAE25Ahnl5Z2DmavrzxFRqqbEkcS_susLOI';
+$bot_username = 'AzheBot';
 
 $commands_paths = [
     __DIR__ . '/Commands/',
@@ -21,7 +20,7 @@ $commands_paths = [
 
 try {
     // Create Telegram API object
-    $telegram = new Longman\TelegramBot\Telegram(bot_token, bot_username);
+    $telegram = new Longman\TelegramBot\Telegram($bot_token, $bot_username);
 
     // Set custom Upload and Download paths
     $telegram->setDownloadPath(__DIR__ . '/Download');
