@@ -40,4 +40,18 @@ class Kata
         }
         return $output;
     }
+
+    /**
+     * @param $teks
+     * @param int $index
+     * @return mixed
+     */
+    public static function extrlink($teks, $index = 0)
+    {
+        $pattern = '~[a-z]+://\S+~';
+        preg_match_all($pattern, $teks, $out);
+        return $out[0][$index];
+        //return explode(' ', strstr($teks, 'https://'))[$index];
+
+    }
 }
