@@ -8,11 +8,9 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Terjemah;
 use App\Waktu;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use Stichoza\GoogleTranslate\TranslateClient;
 
 class PingCommand extends UserCommand
 {
@@ -36,7 +34,7 @@ class PingCommand extends UserCommand
 
         $time = $message->getDate();
         $time = Waktu::jeda($time);
-        $text = "<b>Pong..!!</b>";
+        $text = '<b>Pong..!!</b>';
         $data = [
             'chat_id' => $chat_id,
             'text' => $text . $time,
