@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu\Waktu;
+use App\Waktu;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -34,9 +34,16 @@ class AdminCommand extends UserCommand
         $time = $message->getDate();
         $time = Waktu::jeda($time);
 
-        $data1 = [
-            'chat_id' => $chat_id,
-        ];
+        $atext = explode(' ', $message->getText())[1];
+        if ($atext != '') {
+            $data1 = [
+                'chat_id' => $atext,
+            ];
+        } else {
+            $data1 = [
+                'chat_id' => $chat_id,
+            ];
+        }
 
         $respon = Request::getChatAdministrators($data1);
         $respon = json_decode($respon, true);
