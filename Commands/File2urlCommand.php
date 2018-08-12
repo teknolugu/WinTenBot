@@ -40,15 +40,16 @@ class File2urlCommand extends UserCommand
         $file_id = $repMssg->getDocument()->getFileId();
 
         if ($repMssg !== null) {
-            $text .= "<b>Ini url nya gan..!!</b>\n" . $file_id;
             $respFile = Request::getFile(['file_id' => $file_id]);
             if ($respFile->isOk()) {
                 $files = $respFile->getResult();
-                $dirUpl = $this->telegram->getDownloadPath();
                 Request::downloadFile($files);
-                $text .= FtpUpload::aplod($dirUpl . '/documents/file_0.exe');
+                $text .= "<b>File2URL</b>\n" .
+                    "<b>URL : </b>" . $respFile->getResult()->getFilePath();
+                // $dirUpl = $this->telegram->getDownloadPath();
+                // $text .= FtpUpload::aplod($dirUpl . '/documents/file_0.exe');
             } else {
-                $text .= 'Error!!';
+                $text .= $respFile->getErrorCode();
             }
         } else {
             $text = '🚫 <b>Reply File yang akan di conpert!!</b>';

@@ -35,9 +35,18 @@ class ShortCommand extends UserCommand
         if ($repMssg != null) {
             if ($pecah[1] == 'all') {
                 $links = '';
+                $inEntity = '';
                 $num = 1;
                 $linkArr = Kata::extrlinkArr($repMssg->getText());
+                $inEntities = json_decode($repMssg->getEntities(), true);
+                foreach ($inEntities as $inE) {
+                    if ($inE['type'] == 'text_link') {
+                        $inEntity .= $inE['url'] . " Aa\n";
+                    }
+                }
+
                 foreach ($linkArr as $link) {
+                    $link = Kata::addhttp($link);
                     $result = json_decode(file_get_contents("http://api.bit.ly/v3/shorten?login=" .
                         bitly_username . "&apiKey=" . bitly_token . "&longUrl=" . urlencode($link) .
                         "&format=json"))->data;
@@ -61,8 +70,8 @@ class ShortCommand extends UserCommand
                 "&format=json"));
 
             if ($result->status_code == '200') {
-                $text = "<b>Original : </b>" . $result->data->long_url . "\n" .
-                    "<b>Shorten : </b>" . $result->data->url;
+                $text = "<b>Original : </b>" . $result->data->long_url .
+                    "\n<b>Shorten : </b>" . $result->data->url;
             } else {
                 $text = "<b>Error      : </b>" . $result->status_code .
                     "\n<b>Message : </b>" . $result->status_txt;
