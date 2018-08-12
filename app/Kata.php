@@ -61,7 +61,7 @@ class Kata
         return $out[0];
     }
 
-    function addhttp($url)
+    public static function addhttp($url)
     {
         if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
             $url = "http://" . $url;
