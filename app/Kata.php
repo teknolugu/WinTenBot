@@ -52,6 +52,20 @@ class Kata
         preg_match_all($pattern, $teks, $out);
         return $out[0][$index];
         //return explode(' ', strstr($teks, 'https://'))[$index];
+    }
 
+    public static function extrlinkArr($teks)
+    {
+        $pattern = '~[a-z]+://\S+~';
+        preg_match_all($pattern, $teks, $out);
+        return $out[0];
+    }
+
+    function addhttp($url)
+    {
+        if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+            $url = "http://" . $url;
+        }
+        return $url;
     }
 }
