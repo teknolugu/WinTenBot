@@ -68,4 +68,54 @@ class Kata
         }
         return $url;
     }
+
+    public static function cekKata($pesans, $apa)
+    {
+        $apesan = explode(" ", $pesans);
+        if (is_array($apa)) {
+            foreach ($apa as $anu) {
+                foreach ($apesan as $pesan) {
+                    if ($pesan === $anu) {
+                        return true;
+                    }
+                }
+            }
+        } else if ($pesans === $apa) {
+            return true;
+        }
+    }
+
+    public static function isBadword($pesan)
+    {
+        $apesan = explode(' ', $pesan);
+        foreach ($apesan as $anu) {
+            foreach (self::listBadword() as $kata) {
+                if (self::cekKata($anu, $kata['kata'])) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    public static function listBadword()
+    {
+        $url = winten_api . 'kata/?api_token=' . winten_key;
+        $json = file_get_contents($url);
+        $datas = json_decode($json, true)['message'];
+        return $datas;
+    }
+
+    public static function tambahBadword($datas)
+    {
+        $ch = curl_init();
+        $url = winten_api . 'kata/?api_token=' . winten_key;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($datas));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($ch);
+
+        return $result;
+    }
 }
