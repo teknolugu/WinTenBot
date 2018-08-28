@@ -68,4 +68,11 @@ class Kata
         }
         return $url;
     }
+
+    public static function shortUrl($url)
+    {
+        return json_decode(file_get_contents("http://api.bit.ly/v3/shorten?login=" .
+            bitly_username . "&apiKey=" . bitly_token . "&longUrl=" . urlencode($url) .
+            "&format=json"))->data->url;
+    }
 }
