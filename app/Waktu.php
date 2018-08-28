@@ -19,4 +19,10 @@ class Waktu
         $time = microtime(true) - $_SERVER['request_time_float'] - $time;
         return "\n\n<code>⏱ " . number_format((float)$time, 3, '.', '') . ' ms</code>';
     }
+
+    public static function jedaNew($time)
+    {
+        $time = microtime(true) - $_SERVER['request_time_float'] - $time;
+        return '<code>' . number_format((float)$time, 3, '.', '') . ' ms</code>';
+    }
 }
