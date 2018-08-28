@@ -10,6 +10,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use App\Kata;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Commands\SystemCommand;
@@ -43,9 +44,22 @@ class GenericmessageCommand extends SystemCommand
     public function execute()
     {
         $pesan = ltrim($this->getMessage()->getText(true), '!');
+        $message = $this->getMessage();
+        $chat_id = $message->getChat()->getId();
         $repMsg = $this->getMessage()->getReplyToMessage();
         if ($this->getMessage()) {
             $pesanCmd = strtolower($pesan);
+
+            // Pindai kata
+            if (Kata::isBadword($pesanCmd)) {
+                $data = [
+                    'chat_id' => $chat_id,
+                    'message_id' => $message->getMessageId()
+                ];
+
+                Request::deleteMessage($data);
+            }
+
             if ($pesanCmd === 'ping') {
                 return $this->telegram->executeCommand('ping');
             }
