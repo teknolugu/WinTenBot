@@ -34,13 +34,9 @@ class KataCommand extends UserCommand
                     'id_telegram' => $message->getFrom()->getId(),
                     'id_grup' => $chat_id
                 ];
-                $blok = json_decode(Kata::tambahBadword($katas), true);
+                $blok = json_decode(Kata::tambahKata($katas), true);
                 $text = "<b>Diblok : </b>" . $pecah[2] .
                     "\n<b>Status : </b>" . $blok['message'];
-                break;
-
-            case 'unblok':
-                $text = "ublock";
                 break;
 
             case 'biar':
@@ -50,23 +46,21 @@ class KataCommand extends UserCommand
                     'id_telegram' => $message->getFrom()->getId(),
                     'id_grup' => $chat_id
                 ];
-                $blok = json_decode(Kata::tambahBadword($katas), true);
+                $blok = json_decode(Kata::tambahKata($katas), true);
                 $text = "<b>Dibiar : </b>" . $pecah[2] .
                     "\n<b>Status : </b>" . $blok['message'];
                 break;
 
-            case 'unbiar':
-                $text = "Unbiar";
-                break;
-
-            case 'help':
-                $text = "<b>Penggunaan /kata</b>" .
-                    "\n<code>/kata [command] katamu</code>" .
-                    "\n<b>Command : </b><code>blok, unblok, biar, unbiar</code>";
+            case 'del':
+                $del = json_decode(Kata::hapusKata($pecah[2]), true);
+                $text = "<b>Hapus : </b>" . $pecah[2] .
+                    "\n<b>Status : </b>" . $del['message'];
                 break;
 
             default:
-                $text = "mau diapain?";
+                $text = "<b>Penggunaan /kata</b>" .
+                    "\n<code>/kata [command] katamu</code>" .
+                    "\n<b>Command : </b><code>blok, biar, del</code>";
         }
 
         return Request::sendMessage([

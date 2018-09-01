@@ -112,7 +112,7 @@ class Kata
         return $datas;
     }
 
-    public static function tambahBadword($datas)
+    public static function tambahKata($datas)
     {
         $ch = curl_init();
         $url = winten_api . 'kata/?api_token=' . winten_key;
@@ -124,5 +124,18 @@ class Kata
         $result = curl_exec($ch);
 
         return $result;
+    }
+
+    public static function hapusKata($kata)
+    {
+        $ch = curl_init();
+        $url = winten_api . 'kata/$kata?api_token=' . winten_key;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $json = curl_exec($ch);
+
+        curl_close($ch);
+        return $json;
     }
 }
