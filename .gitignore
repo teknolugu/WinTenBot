@@ -74,3 +74,4 @@ fabric.properties
 .idea/*
 composer.lock
 *.json
+*.lock
