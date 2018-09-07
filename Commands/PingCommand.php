@@ -35,8 +35,13 @@ class PingCommand extends UserCommand
         $mssg_id = $message->getMessageId();
 
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
+        $time1 = Waktu::jedaNew($time);
+
         $text = "<b>Pong..!!</b>";
+
+        $time2 = Waktu::jedaNew($time);
+        $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
+
         $data = [
             'chat_id' => $chat_id,
             'text' => $text . $time,

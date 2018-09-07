@@ -2,18 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: Azhe
- * Date: 8/23/2018
- * Time: 10:45 AM
+ * Date: 07/09/2018
+ * Time: 19.02
  */
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use App\Terjemah;
 use App\Waktu;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
-class TagsCommand extends UserCommand
+
+class TestCommand extends UserCommand
 {
+
     /**
      * Execute command
      *
@@ -23,25 +26,18 @@ class TagsCommand extends UserCommand
     public function execute()
     {
         $message = $this->getMessage();
+
         $chat_id = $message->getChat()->getId();
+        $user_id = $message->getFrom()->getId();
         $mssg_id = $message->getMessageId();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
-
-        $url = winten_api . "tag/$chat_id?api_token=" . winten_key;
-        $json = file_get_contents($url);
-        $datas = json_decode($json, true);
-        if (count($datas['message']) > 0) {
-            $hit = count($datas['message']);
-            $text = "#️⃣  <b>$hit Tags</b>\n-------\n";
-            foreach ($datas['message'] as $data) {
-                $text .= " #" . $data['tag'];
-            }
+        $time = Waktu::jeda($time);
+        if ($this->telegram->isAdmin($user_id)) {
+            $text = "<b>Pong..!!</b>";
+        } else {
+            $text = "Tis";
         }
-
-        $time2 = Waktu::jedaNew($time);
-        $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
 
         $data = [
             'chat_id' => $chat_id,

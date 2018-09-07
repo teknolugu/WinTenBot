@@ -35,14 +35,15 @@ try {
         '236205726'
     ]);
 
-    // Logging (Error, Debug and Raw Updates)
-    // Longman\TelegramBot\TelegramLog::initErrorLog(__DIR__ . "/{$bot_username}_error.log");
-    // Longman\TelegramBot\TelegramLog::initDebugLog(__DIR__ . "/{$bot_username}_debug.log");
-    // Longman\TelegramBot\TelegramLog::initUpdateLog(__DIR__ . "/{$bot_username}_update.log");
+//     Logging (Error, Debug and Raw Updates)
+//     Longman\TelegramBot\TelegramLog::initDebugLog(__DIR__ . "/{$bot_username}_debug.log");
+//     Longman\TelegramBot\TelegramLog::initErrorLog(__DIR__ . "/{$bot_username}_error.log");
+//     Longman\TelegramBot\TelegramLog::initUpdateLog(__DIR__ . "/{$bot_username}_update.log");
 
     // Handle Webhook Request
     $telegram->handle();
 
+    return 1;
 } catch (Longman\TelegramBot\Exception\TelegramException $e) {
     // Silence is golden!
     // log telegram errors

@@ -100,7 +100,7 @@ class NewchatmembersCommand extends SystemCommand
             if (count($member_names) > 0) {
                 $text =
                     "<b>👥 Anggota baru: </b> (<code>" . count($member_names) . ")</code>" .
-                    "\nHi " . implode(', ', $member_names) .
+                    "\nHi " . implode(', ', $member_names) . ', ' . Waktu::sambuts() .
                     "\nSelamat datang di kontrakan <b>" . $chat_tit . '</b>';
             }
 
