@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Waktu\Waktu;
+use App\Waktu;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
@@ -46,7 +46,7 @@ class NewchatmembersCommand extends SystemCommand
 //        $pinned_msg = $message->getPinnedMessage()->;
 
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
+        $time1 = Waktu::jedaNew($time);
 
         if ($message->botAddedInChat() || $message->getNewChatMembers()) {
             $member_names = [];
@@ -61,23 +61,24 @@ class NewchatmembersCommand extends SystemCommand
 
             Request::deleteMessage($data);
             foreach ($members as $member) {
-                $nameLen = strlen($member->getFirstName() . ' ' . $member->getLastName());
+                $full_name = trim($member->getFirstName() . ' ' . $member->getLastName());
+                $nameLen = strlen($full_name);
                 if ($nameLen < 140) {
                     if ($member->getUsername() === null) {
                         $member_nounames[] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                            . $member->getFirstName() . '</a>';
+                            . $full_name . '</a>';
                     }
 
                     if ($member->getIsBot() === true) {
                         $member_bots [] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                            . $member->getFirstName() . '</a> 🤖';
+                            . $full_name . '</a> 🤖';
                     }
 
                     $member_names[] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                        . $member->getFirstName() . '</a>';
+                        . $full_name . '</a>';
                 } else {
                     $member_lnames [] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                        . $member->getFirstName() . '</a>';
+                        . $full_name . '</a>';
                     $data = [
                         'chat_id' => $chat_id,
                         'user_id' => $member->getId()
@@ -136,6 +137,9 @@ class NewchatmembersCommand extends SystemCommand
             ['text' => '📌 Pinned', 'url' => 'https://t.me/' . $chat_uname . '/'],
             ['text' => '🌐 Site', 'url' => 'https://winten.tk']
         ]);
+
+        $time2 = Waktu::jedaNew($time);
+        $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
 
         $data = [
             'chat_id' => $chat_id,
