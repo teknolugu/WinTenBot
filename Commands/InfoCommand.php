@@ -39,7 +39,7 @@ class InfoCommand extends UserCommand
             ['text' => 'Made With ❤️ by WinTenDev', 'url' => 'https://t.me/WinTenDev'],
         ], [
             ['text' => '👥 Redmi 5A (Riva) ID', 'url' => 'https://t.me/Redmi5AID'],
-            ['text' => '💽 Source code', 'url' => 'http://bit.ly/2PA2bJt'],
+            ['text' => '💽 Source code', 'url' => 'https://github.com/WinTenGroup/WinTenBot'],
         ]);
 
         $time2 = Waktu::jedaNew($time);
