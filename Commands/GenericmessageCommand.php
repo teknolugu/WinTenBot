@@ -48,7 +48,7 @@ class GenericmessageCommand extends SystemCommand
         $chat_id = $message->getChat()->getId();
         $repMsg = $this->getMessage()->getReplyToMessage();
         if ($this->getMessage()) {
-            $pesanCmd = strtolower($pesan);
+            $pesanCmd = explode(' ', strtolower($pesan))[0];
 
             // Pindai kata
             if (Kata::isBadword($pesanCmd)) {
@@ -60,8 +60,13 @@ class GenericmessageCommand extends SystemCommand
                 Request::deleteMessage($data);
             }
 
-            if ($pesanCmd === 'ping') {
-                return $this->telegram->executeCommand('ping');
+            switch ($pesanCmd) {
+                case 'ping':
+                    return $this->telegram->executeCommand('ping');
+                    break;
+                case '@admin':
+                    return $this->telegram->executeCommand('report');
+                    break;
             }
 
             if ($repMsg !== null) {
