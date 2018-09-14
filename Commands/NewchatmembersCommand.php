@@ -12,23 +12,9 @@ use App\Waktu;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
-use GoogleTranslate\GoogleTranslate;
 
 class NewchatmembersCommand extends SystemCommand
 {
-    /**
-     * @var string
-     */
-    protected $name = 'newchatmembers';
-    /**
-     * @var string
-     */
-    protected $description = 'New Chat Members';
-    /**
-     * @var string
-     */
-    protected $version = '1.0.0';
-
     /**
      * Command execute method
      *
@@ -37,6 +23,7 @@ class NewchatmembersCommand extends SystemCommand
      */
     public function execute()
     {
+        $text = '';
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
         $members = $message->getNewChatMembers();
@@ -65,20 +52,14 @@ class NewchatmembersCommand extends SystemCommand
                 $nameLen = strlen($full_name);
                 if ($nameLen < 140) {
                     if ($member->getUsername() === null) {
-                        $member_nounames[] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                            . $full_name . '</a>';
+                        $member_nounames[] = "<a href='tg://user?id=" . $member->getId() . "'>" . $full_name . '</a>';
+                    } else if ($member->getIsBot() === true) {
+                        $member_bots [] = "<a href='tg://user?id=" . $member->getId() . "'>" . $full_name . '</a> 🤖';
+                    } else {
+                        $member_names[] = "<a href='tg://user?id=" . $member->getId() . "'>" . $full_name . '</a>';
                     }
-
-                    if ($member->getIsBot() === true) {
-                        $member_bots [] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                            . $full_name . '</a> 🤖';
-                    }
-
-                    $member_names[] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                        . $full_name . '</a>';
                 } else {
-                    $member_lnames [] = "<a href='tg://user?id=" . $member->getId() . "'>"
-                        . $full_name . '</a>';
+                    $member_lnames [] = "<a href='tg://user?id=" . $member->getId() . "'>" . $full_name . '</a>';
                     $data = [
                         'chat_id' => $chat_id,
                         'user_id' => $member->getId()
@@ -94,20 +75,19 @@ class NewchatmembersCommand extends SystemCommand
 
                     Request::deleteMessage($data);
                 }
-
             }
 
             if (count($member_names) > 0) {
                 $text =
                     "<b>👥 Anggota baru: </b> (<code>" . count($member_names) . ")</code>" .
-                    "\nHi " . implode(', ', $member_names) . ', ' . Waktu::sambuts() .
+                    "\nHai " . implode(', ', $member_names) . ', ' . Waktu::sambuts() .
                     "\nSelamat datang di kontrakan <b>" . $chat_tit . '</b>';
             }
 
             if (count($member_bots) > 0) {
                 $text .=
                     "\n\n<b>🤖 Bot baru: </b> (<code>" . count($member_bots) . ")</code>" .
-                    "\nHi " . implode(', ', $member_bots) .
+                    "\nHai " . implode(', ', $member_bots) .
                     "\nSiapa yang menambahkan kamu?";
             }
 
@@ -127,7 +107,7 @@ class NewchatmembersCommand extends SystemCommand
                     $text .=
                         "<b>Eksekusi : </b> Mencoba untuk menendang spammer" .
                         "\n<b>Status : </b>" . $isKicked['error_code'] .
-                        "\n<b>Result : </b>" . $isKicked['description'] . "";
+                        "\n<b>Result : </b>" . $isKicked['description'];
                 }
             }
         }
@@ -147,6 +127,7 @@ class NewchatmembersCommand extends SystemCommand
             'parse_mode' => 'HTML',
             'reply_markup' => $in_keyboard
         ];
+
         if ($text !== null) {
             return Request::sendMessage($data);
         }
