@@ -106,8 +106,9 @@ class Kata
 
     public static function listBadword()
     {
+        $file = botData . 'badword.json';
         $url = winten_api . 'kata/?api_token=' . winten_key;
-        $json = file_get_contents($url);
+        $json = file_get_contents($file);
         $datas = json_decode($json, true)['message'];
         return $datas;
     }
@@ -138,4 +139,13 @@ class Kata
         curl_close($ch);
         return $json;
     }
+
+    public static function simpanJson()
+    {
+        $file = botData . 'badword.json';
+        $url = winten_api . 'kata/?api_token=' . winten_key;
+        $json = file_get_contents($url);
+        file_put_contents($file, $json);
+    }
+
 }

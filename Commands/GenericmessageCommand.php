@@ -48,10 +48,11 @@ class GenericmessageCommand extends SystemCommand
         $chat_id = $message->getChat()->getId();
         $repMsg = $this->getMessage()->getReplyToMessage();
         if ($this->getMessage()) {
+            $kata = strtolower($pesan);
             $pesanCmd = explode(' ', strtolower($pesan))[0];
 
             // Pindai kata
-            if (Kata::isBadword($pesanCmd)) {
+            if (Kata::isBadword($kata)) {
                 $data = [
                     'chat_id' => $chat_id,
                     'message_id' => $message->getMessageId()
