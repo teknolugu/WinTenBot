@@ -24,7 +24,7 @@ class KataCommand extends UserCommand
         $from_id = $message->getFrom()->getId();
 
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
+        $time1 = Waktu::jedaNew($time);
 
         $pecah = explode(' ', $message->getText());
         $isSudoer = Grup::isSudoer($from_id);
@@ -60,20 +60,37 @@ class KataCommand extends UserCommand
                         "\n<b>Status : </b>" . $del['message'];
                     break;
 
+                case 'update':
+                    Kata::simpanJson();
+                    $text = 'Basis data kata berhasil di perbarui';
+                    break;
+
+                case 'all':
+                    $text = "🗒 <b>Ini list kata</b>\n"
+                        . Kata::allBadword();
+
+                    break;
+
                 default:
                     $text = '<b>Penggunaan /kata</b>' .
                         "\n<code>/kata [command] katamu</code>" .
                         "\n<b>Command : </b><code>blok, biar, del</code>";
             }
+        } else {
+            $text = "<b>You isn't sudoer</b>";
         }
 
-        Kata::simpanJson();
+        $time2 = Waktu::jedaNew($time);
+        $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
-        return Request::sendMessage([
-            'chat_id' => $chat_id,
-            'text' => $text . $time,
-            'reply_to_message_id' => $mssg_id,
-            'parse_mode' => 'HTML'
-        ]);
+        if ($text != '') {
+            Kata::simpanJson();
+            return Request::sendMessage([
+                'chat_id' => $chat_id,
+                'text' => $text . $time,
+                'reply_to_message_id' => $mssg_id,
+                'parse_mode' => 'HTML'
+            ]);
+        }
     }
 }

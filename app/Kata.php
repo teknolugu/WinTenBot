@@ -8,6 +8,8 @@
 
 namespace App;
 
+use GuzzleHttp\Client;
+
 class Kata
 {
     public static function substrteks($text, $limit, $end = '...')
@@ -107,37 +109,36 @@ class Kata
     public static function listBadword()
     {
         $file = botData . 'badword.json';
-        $url = winten_api . 'kata/?api_token=' . winten_key;
         $json = file_get_contents($file);
-        $datas = json_decode($json, true)['message'];
-        return $datas;
+        return json_decode($json, true)['message'];
+    }
+
+    public static function allBadword()
+    {
+        $data = '';
+        foreach (self::listBadword() as $kata) {
+            $data .= '<code>' . $kata['kata'] . ' -> ' . $kata['kelas'] . '</code>, ';
+        }
+        return $data;
     }
 
     public static function tambahKata($datas)
     {
-        $ch = curl_init();
-        $url = winten_api . 'kata/?api_token=' . winten_key;
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($datas));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $uri = winten_api . 'kata/?api_token=' . winten_key;
+        $client = new Client();
+        $response = $client->request('POST', $uri, [
+            'form_params' => $datas
+        ]);
 
-        $result = curl_exec($ch);
-
-        return $result;
+        return $response->getBody();
     }
 
     public static function hapusKata($kata)
     {
-        $ch = curl_init();
-        $url = winten_api . 'kata/$kata?api_token=' . winten_key;
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $json = curl_exec($ch);
-
-        curl_close($ch);
-        return $json;
+        $uri = winten_api . 'kata/' . $kata . '?api_token=' . winten_key;
+        $client = new Client(['base_url' => $uri]);
+        $response = $client->delete($uri);
+        return $response->getBody();
     }
 
     public static function simpanJson()
@@ -147,5 +148,4 @@ class Kata
         $json = file_get_contents($url);
         file_put_contents($file, $json);
     }
-
 }
