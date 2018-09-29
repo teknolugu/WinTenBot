@@ -70,6 +70,18 @@ class GenericmessageCommand extends SystemCommand
                     break;
             }
 
+            //Cek Makasih
+            $makasih = Kata::cekKata($kata, thanks);
+            if ($makasih) {
+                $text = 'Sama-sama, senang bisa membantu gan...';
+                Request::sendMessage([
+                    'chat_id' => $chat_id,
+                    'text' => $text,
+                    'reply_to_message_id' => $message->getMessageId(),
+                    'parse_mode' => 'HTML'
+                ]);
+            }
+
             if ($repMsg !== null) {
                 return $this->telegram->executeCommand('privatenotif');
             }
