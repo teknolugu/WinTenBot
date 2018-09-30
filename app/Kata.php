@@ -94,6 +94,19 @@ class Kata
         }
     }
 
+    public static function cekKandungan($pesan, $apa)
+    {
+        if (is_array($apa)) {
+            foreach ($apa as $anu) {
+                if (strpos($pesan, $anu) !== false) {
+                    return true;
+                }
+            }
+        } else if (strpos($pesan, $apa) !== false) {
+            return true;
+        }
+    }
+
     public static function isBadword($pesan)
     {
         $apesan = explode(' ', $pesan);
