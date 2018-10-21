@@ -31,4 +31,12 @@ class Tag
         return $response->getBody();
     }
 
+    public static function ambilTag($datas)
+    {
+        $uri = winten_api . 'tag/' . $datas['chat_id'] . '/' . $datas['tag'] . '?api_token=' . winten_key;
+        $client = new Client();
+        $response = $client->request('GET', $uri);
+        return $response->getBody();
+    }
+
 }
