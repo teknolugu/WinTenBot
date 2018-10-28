@@ -17,11 +17,28 @@ class Terjemah
      * @param $text
      * @param $from
      * @param $to
-     * @return string
+     * @return array
      * @throws Exception
      */
     public static function Exe($text, $from, $to)
     {
-        return TranslateClient::translate($from, $to, $text);
+        $tr = new TranslateClient(); // Default is from 'auto' to 'en'
+
+        if ($to !== null) {
+            $tr->setTarget($to); // Translate to
+        } else {
+            $tr->setSource(null);
+            $tr->setTarget($from);
+            $to = $from;
+            $from = 'auto';
+        }
+
+        $result = [
+            'from' => $from,
+            'to' => $to,
+            'text' => $tr->translate($text)
+        ];
+
+        return $result;
     }
 }
