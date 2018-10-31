@@ -1,0 +1,12 @@
+{
+  "name": "NewBot",
+  "version": "1.0.0",
+  "type": "project",
+  "require": {
+    "php": ">=5.5",
+    "longman/telegram-bot": "*",
+    "ammarfaizi2/googletranslate": "0.0.1",
+    "stichoza/google-translate-php": "v3.2.13",
+    "catfan/medoo": "v1.5.7"
+  }
+}
