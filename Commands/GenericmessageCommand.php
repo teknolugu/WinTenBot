@@ -10,6 +10,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use App\Kata;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Commands\SystemCommand;
@@ -43,11 +44,42 @@ class GenericmessageCommand extends SystemCommand
     public function execute()
     {
         $pesan = ltrim($this->getMessage()->getText(true), '!');
+        $message = $this->getMessage();
+        $chat_id = $message->getChat()->getId();
         $repMsg = $this->getMessage()->getReplyToMessage();
         if ($this->getMessage()) {
-            $pesanCmd = strtolower($pesan);
-            if ($pesanCmd === 'ping') {
-                return $this->telegram->executeCommand('ping');
+            $kata = strtolower($pesan);
+            $pesanCmd = explode(' ', strtolower($pesan))[0];
+
+            // Pindai kata
+            if (Kata::isBadword($kata)) {
+                $data = [
+                    'chat_id' => $chat_id,
+                    'message_id' => $message->getMessageId()
+                ];
+
+                Request::deleteMessage($data);
+            }
+
+            switch ($pesanCmd) {
+                case 'ping':
+                    return $this->telegram->executeCommand('ping');
+                    break;
+                case '@admin':
+                    return $this->telegram->executeCommand('report');
+                    break;
+            }
+
+            //Cek Makasih
+            $makasih = Kata::cekKata($kata, thanks);
+            if ($makasih) {
+                $text = 'Sama-sama, senang bisa membantu gan...';
+                Request::sendMessage([
+                    'chat_id' => $chat_id,
+                    'text' => $text,
+                    'reply_to_message_id' => $message->getMessageId(),
+                    'parse_mode' => 'HTML'
+                ]);
             }
 
             if ($repMsg !== null) {

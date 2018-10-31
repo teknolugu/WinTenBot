@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: Azhe
- * Date: 04/08/2018
- * Time: 23.33
+ * Date: 07/09/2018
+ * Time: 19.02
  */
 
 namespace Longman\TelegramBot\Commands\UserCommands;
@@ -12,35 +12,32 @@ use App\Terjemah;
 use App\Waktu;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use Stichoza\GoogleTranslate\TranslateClient;
 
-class PingCommand extends UserCommand
+
+class TestCommand extends UserCommand
 {
 
-    protected $name = 'ping';
-    protected $description = 'A Ping';
-    protected $usage = '<ping>';
-    protected $version = '1.0.0';
-
     /**
+     * Execute command
+     *
      * @return \Longman\TelegramBot\Entities\ServerResponse
      * @throws \Longman\TelegramBot\Exception\TelegramException
-     * @throws \Exception
      */
     public function execute()
     {
         $message = $this->getMessage();
 
         $chat_id = $message->getChat()->getId();
+        $user_id = $message->getFrom()->getId();
         $mssg_id = $message->getMessageId();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
-
-        $text = "<b>Pong..!!</b>";
-
-        $time2 = Waktu::jedaNew($time);
-        $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
+        $time = Waktu::jeda($time);
+        if ($this->telegram->isAdmin($user_id)) {
+            $text = "<b>Pong..!!</b>";
+        } else {
+            $text = "Tis";
+        }
 
         $data = [
             'chat_id' => $chat_id,

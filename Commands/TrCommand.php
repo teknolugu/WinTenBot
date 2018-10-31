@@ -2,50 +2,47 @@
 /**
  * Created by PhpStorm.
  * User: Azhe
- * Date: 04/08/2018
- * Time: 23.33
+ * Date: 28/10/2018
+ * Time: 14.19
  */
 
 namespace Longman\TelegramBot\Commands\UserCommands;
+
 
 use App\Terjemah;
 use App\Waktu;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use Stichoza\GoogleTranslate\TranslateClient;
 
-class PingCommand extends UserCommand
+class TrCommand extends UserCommand
 {
 
-    protected $name = 'ping';
-    protected $description = 'A Ping';
-    protected $usage = '<ping>';
-    protected $version = '1.0.0';
-
     /**
+     * Execute command
+     *
      * @return \Longman\TelegramBot\Entities\ServerResponse
      * @throws \Longman\TelegramBot\Exception\TelegramException
-     * @throws \Exception
      */
     public function execute()
     {
         $message = $this->getMessage();
-
         $chat_id = $message->getChat()->getId();
-        $mssg_id = $message->getMessageId();
+        $pecah = explode(' ', $message->getText());
+        $repMssg = $message->getReplyToMessage();
 
         $time = $message->getDate();
         $time1 = Waktu::jedaNew($time);
 
-        $text = "<b>Pong..!!</b>";
+        $tr_data = Terjemah::Exe($repMssg->getText(), $pecah[1], $pecah[2]);
+        $text = '<b>Translate from</b> <code>' . $tr_data['from'] . '</code> <b>to</b> <code>' . $tr_data['to'] . "</code>\n";
+        $text .= '<code>' . $tr_data['text'] . '</code>';
 
         $time2 = Waktu::jedaNew($time);
-        $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
-
+        $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
         $data = [
             'chat_id' => $chat_id,
             'text' => $text . $time,
-            'reply_to_message_id' => $mssg_id,
+            'reply_to_message_id' => $repMssg->getMessageId(),
             'parse_mode' => 'HTML'
         ];
 
