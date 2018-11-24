@@ -161,4 +161,9 @@ class Kata
         $json = file_get_contents($url);
         file_put_contents($file, $json);
     }
+
+    public static function cleanAlpaNum($teks)
+    {
+        return preg_replace('/[^[:alnum:]]/', '', $teks);
+    }
 }
