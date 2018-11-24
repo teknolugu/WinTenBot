@@ -8,7 +8,6 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-
 use App\Kata;
 use App\Tag;
 use App\Waktu;
@@ -18,7 +17,6 @@ use Longman\TelegramBot\Request;
 
 class GettagCommand extends UserCommand
 {
-
     /**
      * Execute command
      *
@@ -57,7 +55,7 @@ class GettagCommand extends UserCommand
                         $tipe_data = $tag[0]['tipe_data'];
                         $btn_data = $tag[0]['btn_data']; // teks1|link1.com, teks2|link2.com
 
-                        $data2 = [
+                        $data = [
                             'chat_id' => $chatid,
                             'parse_mode' => 'HTML',
                             'reply_to_message_id' => $mssg_id,
@@ -70,62 +68,56 @@ class GettagCommand extends UserCommand
                         $text = '#️⃣<code>#' . $tag[0]['tag'] . '</code>' .
                             "\n" . $tag[0]['konten'];
 
-                        if ($btn_data !== null && $pecah[1] != '-raw') {
-                            $btns = [];
-                            $abtn_data = explode(',', $btn_data); // teks1|link1.com teks2|link2.com
-                            foreach ($abtn_data as $btn) {
-                                $abtn = explode('|', trim($btn));
-                                $btns[] = [
-                                    'text' => $abtn[0],
-                                    'url' => $abtn[1]
-                                ];
+                        if ($btn_data !== null) {
+                            if ($pecah[1] != '-raw') {
+                                $btns = [];
+                                $abtn_data = explode(',', $btn_data); // teks1|link1.com teks2|link2.com
+                                foreach ($abtn_data as $btn) {
+                                    $abtn = explode('|', trim($btn));
+                                    $btns[] = [
+                                        'text' => $abtn[0],
+                                        'url' => $abtn[1]
+                                    ];
+                                }
+                                sort($btns);
+                                $btns = array_chunk($btns, 3);
+                                $data['reply_markup'] = new InlineKeyboard([
+                                    'inline_keyboard' => $btns
+                                ]);
+                            } else {
+                                $text .= "\n" . $btn_data;
                             }
-                            $btns = array_chunk($btns, 2);
-                            $data2['reply_markup'] = new InlineKeyboard([
-                                'inline_keyboard' => $btns
-                            ]);
-                        } else {
-                            $text .= "\n" . $btn_data;
                         }
 
                         $text .= $time;
 
-                        if ($tipe_data === 'text') {
-                            $data2['text'] = $text;
-                            Request::sendMessage($data2);
-                        } elseif ($tipe_data === 'document') {
-                            $data2 += [
+                        if ($tipe_data == 'text') {
+                            $data['text'] = $text;
+                            Request::sendMessage($data);
+                        } else {
+                            $data += [
                                 $tipe_data => $id_data,
                                 'caption' => $text
                             ];
-                            Request::sendDocument($data2);
-                        }
-//                        elseif ($tipe_data === 'video') {
-//                            $data2 += [
-//                                'video' => $id_data,
-//                                'caption' => $text
-//                            ];
-//                            Request::sendVideo($data2);
-//                        } elseif ($tipe_data === 'audio') {
-//                            $data2 += [
-//                                'audio' => $id_data,
-//                                'caption' => $text
-//                            ];
-//                            Request::sendAudio($data2);
-//                        } elseif ($tipe_data === 'photo') {
-//                            $data2 += [
-//                                'photo' => $id_data,
-//                                'caption' => $text
-//                            ];
-//                            Request::sendPhoto($data2);
-//                        } elseif ($tipe_data === 'sticker') {
-//                            $data2 += [
-//                                'sticker' => $id_data,
-//                                'caption' => $text
-//                            ];
-//                            Request::sendSticker($data2);
-//                        }
 
+                            switch ($tipe_data) {
+                                case 'document':
+                                    Request::sendDocument($data);
+                                    break;
+                                case 'video':
+                                    Request::sendVideo($data);
+                                    break;
+                                case 'voice':
+                                    Request::sendVoice($data);
+                                    break;
+                                case 'photo':
+                                    Request::sendPhoto($data);
+                                    break;
+                                case 'sticker':
+                                    Request::sendSticker($data);
+                                    break;
+                            }
+                        }
                     }
                 }
             }
