@@ -6,4 +6,24 @@
  * Time: 22.50
  */
 
-define('bot_token', 'Token_Bot_Kamu'); // NamaBot
+date_default_timezone_set('Asia/Jakarta');
+
+define('bot_username', 'YourBotUsername');
+define('bot_token', 'YOUR BOT TOKEN HERE');
+define('versi','1.201808.01');
+define('isBeta', true);
+
+// API key Thumbnail.ws
+define('thumbws_token', 'YOUR API TOKEN HERE');
+
+// API Bitly
+define('bitly_username', 'azhe403');
+define('bitly_token', 'YOUR API TOKEN HERE');
+
+define('winten_api', "https://api.winten.tk/");
+define('winten_key', "YOUR API TOKEN HERE");
+
+define('sudoer',[
+    '236205726', // Azhe Kun
+    '1234567890' // Your Sudoer
+]);
