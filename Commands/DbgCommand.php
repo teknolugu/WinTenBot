@@ -33,7 +33,8 @@ class DbgCommand extends UserCommand
 
             $text = "<b>Debug</b>\n" .
                 "<code>" .
-                json_encode($repMssg, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) .
+                json_encode($repMssg->getRawData(),
+                    JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) .
                 "</code>";
         } else {
             $text = "Reply yang akan di debug";
