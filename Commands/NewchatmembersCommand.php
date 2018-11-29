@@ -77,6 +77,8 @@ class NewchatmembersCommand extends SystemCommand
                 }
             }
 
+            //$chatCount = json_decode(Request::getChatMembersCount(['chat_id' => $chat_id]), true)['result'];
+
             if (count($member_names) > 0) {
                 $text =
                     "<b>👥 Anggota baru: </b> (<code>" . count($member_names) . ")</code>" .
@@ -94,8 +96,9 @@ class NewchatmembersCommand extends SystemCommand
             if (count($member_nounames) > 0) {
                 $text .=
                     "\n\n<b>⚠ Tanpa Username: </b> (<code>" . count($member_nounames) . ")</code>" .
-                    "\n" . implode(', ', $member_nounames) . ", Tolong pasang username" .
-                    "\n<i>Buka aplikasi Telegram > Settings > Username, lalu isi Username-nya.</i>";
+                    "\n" . implode(', ', $member_nounames) . ", Tolong pasang username." .
+                    "\n<i>Buka aplikasi Telegram > Settings > Username, lalu isi Username-nya.</i>".
+                    " Jika belum tau caranya, ketik #username";
             }
 
             if (count($member_lnames) > 0) {
@@ -110,6 +113,8 @@ class NewchatmembersCommand extends SystemCommand
                         "\n<b>Result : </b>" . $isKicked['description'];
                 }
             }
+
+            //$text .= "\n<b>Total : </b>" . $chatCount . 'Anggota';
         }
 
         $in_keyboard = new InlineKeyboard([

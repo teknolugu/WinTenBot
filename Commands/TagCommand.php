@@ -13,7 +13,6 @@ use App\Kata;
 use App\Tag;
 use App\Waktu;
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
 
 class TagCommand extends UserCommand
@@ -32,6 +31,7 @@ class TagCommand extends UserCommand
         $mssg_id = $message->getMessageId();
         $pecah = explode(' ', $message->getText());
         $repMssg = $message->getReplyToMessage();
+        $kirim = false;
 
         $time = $message->getDate();
         $time1 = Waktu::jedaNew($time);
@@ -70,6 +70,7 @@ class TagCommand extends UserCommand
                         }
 
                         $btn_data = trim(str_replace(['/tag', $pecah[1]], '', $message->getText()));
+                        //$btn_data = explode('-',$message->getText(false))[1];
 
                     } else {
                         $konten = trim(str_replace(['/tag', $pecah[1]], '', $message->getText()));
@@ -109,95 +110,18 @@ class TagCommand extends UserCommand
                 $time2 = Waktu::jedaNew($time);
                 $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
+
                 if ($text !== '') {
-                    return Request::sendMessage([
+                    $kirim =  Request::sendMessage([
                         'chat_id' => $chatid,
                         'text' => $text . $time,
                         'parse_mode' => 'HTML'
                     ]);
                 }
+
+
             }
         }
-
-        if (Kata::cekKandungan($message->getText(), '#')) {
-            foreach ($pecah as $pecahan) {
-                if (Kata::cekKandungan($pecahan, '#')) {
-                    $pecahan = ltrim($pecahan, '#');
-                    $hashtag = Kata::cekKandungan($pecahan, '#');
-                    if (!$hashtag && strlen($pecahan) >= 3) {
-                        $tag = Tag::ambilTag([
-                            'chat_id' => $chatid,
-                            'tag' => $pecahan
-                        ]);
-                        $tag = json_decode($tag, true)['message'];
-                        $text = '#️⃣<code>#' . $tag[0]['tag'] . '</code>' .
-                            "\n" . $tag[0]['konten'] .
-                            "\n\n" . $time1;
-                        if ($repMssg != null) {
-                            $mssg_id = $repMssg->getMessageId();
-                        }
-
-                        $id_data = $tag[0]['id_data'];
-                        $tipe_data = $tag[0]['tipe_data'];
-                        $btn_data = $tag[0]['btn_data']; // teks1|link1.com, teks2|link2.com
-                        $data2 = [
-                            'chat_id' => $chatid,
-                            'parse_mode' => 'HTML',
-                            'reply_to_message_id' => $mssg_id,
-                            'disable_web_preview' => true
-                        ];
-
-                        if ($btn_data !== null) {
-                            $btn2 = [];
-                            $abtn_data = explode(',', $btn_data); // teks1|link1.com teks2|link2.com
-                            foreach ($abtn_data as $btn) {
-                                $abtn = explode('|', trim($btn));
-                                $btn2[] = [
-                                    'text' => $abtn[0],
-                                    'url' => $abtn[1]
-                                ];
-                            }
-                            $keyboard = new InlineKeyboard($btn2);
-                            $data2['reply_markup'] = $keyboard;
-                        }
-
-                        if ($tipe_data === 'text') {
-                            $data2['text'] = $text;
-                            Request::sendMessage($data2);
-                        } elseif ($tipe_data === 'document') {
-                            $data2 += [
-                                'document' => $id_data,
-                                'caption' => $text
-                            ];
-                            Request::sendDocument($data2);
-                        } elseif ($tipe_data === 'video') {
-                            $data2 += [
-                                'video' => $id_data,
-                                'caption' => $text
-                            ];
-                            Request::sendVideo($data2);
-                        } elseif ($tipe_data === 'audio') {
-                            $data2 += [
-                                'audio' => $id_data,
-                                'caption' => $text
-                            ];
-                            Request::sendAudio($data2);
-                        } elseif ($tipe_data === 'photo') {
-                            $data2 += [
-                                'photo' => $id_data,
-                                'caption' => $text
-                            ];
-                            Request::sendPhoto($data2);
-                        } elseif ($tipe_data === 'sticker') {
-                            $data2 += [
-                                'sticker' => $id_data,
-                                'caption' => $text
-                            ];
-                            Request::sendSticker($data2);
-                        }
-                    }
-                }
-            }
-        }
+        return $kirim;
     }
 }

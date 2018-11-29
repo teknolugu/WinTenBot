@@ -8,6 +8,7 @@
 
 namespace App;
 
+use GuzzleHttp\Client;
 use Longman\TelegramBot\Request;
 
 class Grup
@@ -62,15 +63,13 @@ class Grup
 
     public static function simpanSet($datas)
     {
-        $ch = curl_init();
-        $url = winten_api . 'grupset/?api_token=' . winten_key;
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($datas));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $uri = winten_api . 'grupset/?api_token=' . winten_key;
+        $client = new Client();
+        $response = $client->request('POST', $uri, [
+            'form_params' => $datas
+        ]);
 
-        $result = curl_exec($ch);
+        return $response->getBody();
 
-        return $result;
     }
 }

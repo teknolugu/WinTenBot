@@ -15,11 +15,6 @@ use Longman\TelegramBot\Request;
 
 class AdminCommand extends UserCommand
 {
-    protected $name = 'admin';
-    protected $description = 'A Admin';
-    protected $usage = 'admin';
-    protected $version = '1.0.0';
-
     /**
      * Execute command
      *
@@ -28,6 +23,7 @@ class AdminCommand extends UserCommand
      */
     public function execute()
     {
+        $text = '';
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
         $mssg_id = $message->getMessageId();
@@ -62,7 +58,6 @@ class AdminCommand extends UserCommand
                     $creator = "<a href='tg://user?id=" . $admin['user']['id'] . "'>" . $fullname . '</a>';
                 } else {
                     $ngadmins[] = "<a href='tg://user?id=" . $admin['user']['id'] . "'>" . $fullname . '</a>';
-                    $num++;
                 }
                 sort($ngadmins);
             }
@@ -80,7 +75,7 @@ class AdminCommand extends UserCommand
         }
 
         if ($creator != '') {
-            $text = "👤 <b>Creator</b>\n└ " . $creator;
+            $text .= "👤 <b>Creator</b>\n└ " . $creator;
         }
 
         if ($ngadmin != '') {
