@@ -13,6 +13,8 @@ define('bot_token', 'YOUR BOT TOKEN HERE');
 define('versi','1.201808.01');
 define('isBeta', true);
 
+define('botData','./Data/');
+
 // API key Thumbnail.ws
 define('thumbws_token', 'YOUR API TOKEN HERE');
 
