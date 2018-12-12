@@ -80,13 +80,11 @@ class Kata
 
     public static function cekKata($pesans, $apa)
     {
-        $apesan = explode(" ", $pesans);
+        $apesan = explode(' ', $pesans);
         if (is_array($apa)) {
             foreach ($apa as $anu) {
-                foreach ($apesan as $pesan) {
-                    if ($pesan === $anu) {
-                        return true;
-                    }
+                if (in_array($anu, $apesan, true)) {
+                    return true;
                 }
             }
         } else if ($pesans === $apa) {
