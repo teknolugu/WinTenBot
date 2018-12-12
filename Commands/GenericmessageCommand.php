@@ -10,6 +10,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use App\Grup;
 use App\Kata;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;
@@ -42,7 +43,7 @@ class GenericmessageCommand extends SystemCommand
      */
     public function execute()
     {
-        $pesan = Kata::cleanAlpaNum($this->getMessage()->getText(true));
+        $pesan = $this->getMessage()->getText();
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
         $repMsg = $this->getMessage()->getReplyToMessage();
@@ -53,11 +54,25 @@ class GenericmessageCommand extends SystemCommand
             // Pindai kata
             if (Kata::isBadword($kata)) {
                 $data = [
-                    'chat_id' => $chat_id,
+                    'chat_id'    => $chat_id,
                     'message_id' => $message->getMessageId()
                 ];
 
                 Request::deleteMessage($data);
+            }
+
+            // Perika apakah Aku harus keluar grup?
+            if (isRestricted
+                && !$message->getChat()->isPrivateChat()
+                && Grup::isMustLeft($message->getChat()->getId())) {
+                $text = "Sepertinya saya salah alamat. Saya pamit dulu.." .
+                    "\nGunakan @WinTenBot";
+                Request::sendMessage([
+                    'chat_id'    => $chat_id,
+                    'text'       => $text,
+                    'parse_mode' => 'HTML'
+                ]);
+                Request::leaveChat(['chat_id' => $chat_id]);
             }
 
             // Command Aliases
@@ -65,7 +80,7 @@ class GenericmessageCommand extends SystemCommand
                 case 'ping':
                     return $this->telegram->executeCommand('ping');
                     break;
-                case 'notes' || 'tags':
+                case 'notes':
                     return $this->telegram->executeCommand('tags');
                     break;
                 case '@admin':
@@ -81,15 +96,20 @@ class GenericmessageCommand extends SystemCommand
             if ($makasih) {
                 $text = 'Sama-sama, senang bisa membantu gan...';
                 Request::sendMessage([
-                    'chat_id' => $chat_id,
-                    'text' => $text,
+                    'chat_id'             => $chat_id,
+                    'text'                => $text,
                     'reply_to_message_id' => $message->getMessageId(),
-                    'parse_mode' => 'HTML'
+                    'parse_mode'          => 'HTML'
                 ]);
             }
 
             if ($repMsg !== null) {
                 return $this->telegram->executeCommand('privatenotif');
+            }
+
+            $pinned_message = $message->getPinnedMessage()->getMessageId();
+            if (isset($pinned_message)) {
+                return $this->telegram->executeCommand('pinnedmessage');
             }
         }
     }

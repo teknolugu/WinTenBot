@@ -61,6 +61,15 @@ class Grup
         }
     }
 
+    public static function isMustLeft($id_chat)
+    {
+        if (!in_array($id_chat, restrictArea)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static function simpanSet($datas)
     {
         $uri = winten_api . 'grupset/?api_token=' . winten_key;
