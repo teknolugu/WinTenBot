@@ -98,7 +98,7 @@ class NewchatmembersCommand extends SystemCommand
                     "\n\n<b>⚠ Tanpa Username: </b> (<code>" . count($member_nounames) . ")</code>" .
                     "\n" . implode(', ', $member_nounames) . ", Tolong pasang username." .
                     "\n<i>Buka aplikasi Telegram > Settings > Username, lalu isi Username-nya.</i>".
-                    " Jika belum tau caranya, ketik #username";
+                    " Jika belum tau caranya, klik tombol di bawah ini";
             }
 
             if (count($member_lnames) > 0) {
@@ -117,11 +117,18 @@ class NewchatmembersCommand extends SystemCommand
             //$text .= "\n<b>Total : </b>" . $chatCount . 'Anggota';
         }
 
-        $in_keyboard = new InlineKeyboard([
+        $btn_data = [
             ['text' => '📢 Channel', 'url' => 'https://t.me/WinTenChannel'],
             ['text' => '📌 Pinned', 'url' => 'https://t.me/' . $chat_uname . '/'],
             ['text' => '🌐 Site', 'url' => 'https://winten.tk']
-        ]);
+        ];
+
+        $urlStart = 'https://t.me/'.bot_username.'?start=username';
+        if(count($member_nounames) > 0){
+            $btn_data[] = ['text' => 'Cara pasang username', 'url' => $urlStart ];
+        }
+
+        $btn_data = array_chunk($btn_data, 3);
 
         $time2 = Waktu::jedaNew($time);
         $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
@@ -130,7 +137,9 @@ class NewchatmembersCommand extends SystemCommand
             'chat_id' => $chat_id,
             'text' => $text . $time,
             'parse_mode' => 'HTML',
-            'reply_markup' => $in_keyboard
+            'reply_markup' => new InlineKeyboard([
+                'inline_keyboard' => $btn_data
+            ])
         ];
 
         if ($text !== null) {
