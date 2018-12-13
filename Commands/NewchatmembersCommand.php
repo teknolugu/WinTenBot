@@ -8,6 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use App\Grup;
 use App\Waktu;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
@@ -34,6 +35,20 @@ class NewchatmembersCommand extends SystemCommand
 
         $time = $message->getDate();
         $time1 = Waktu::jedaNew($time);
+
+        // Perika apakah Aku harus keluar grup?
+        if (isRestricted
+            && !$message->getChat()->isPrivateChat()
+            && Grup::isMustLeft($message->getChat()->getId())) {
+            $text = "Sepertinya saya salah alamat. Saya pamit dulu.." .
+                "\nGunakan @WinTenBot";
+            Request::sendMessage([
+                'chat_id' => $chat_id,
+                'text' => $text,
+                'parse_mode' => 'HTML'
+            ]);
+            return Request::leaveChat(['chat_id' => $chat_id]);
+        }
 
         if ($message->botAddedInChat() || $message->getNewChatMembers()) {
             $member_names = [];
