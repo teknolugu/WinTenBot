@@ -45,4 +45,9 @@ class Waktu
 
         return $sambut;
     }
+
+    public static function formatUnix($unixDate)
+    {
+        return date("d M Y H:i:s", $unixDate);
+    }
 }
