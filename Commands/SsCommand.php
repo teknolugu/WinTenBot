@@ -15,6 +15,9 @@ use Longman\TelegramBot\Request;
 
 class SsCommand extends UserCommand
 {
+    protected $name = 'ss';
+    protected $description = 'Capture web screenshot based on Thumbnail.ws API';
+    protected $usage = '/ss <url>';
     protected $version = '1.0.0';
 
     /**

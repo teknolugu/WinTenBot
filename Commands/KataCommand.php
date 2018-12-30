@@ -11,11 +11,16 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use App\Grup;
 use App\Kata;
 use App\Waktu;
-use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Request;
 
 class KataCommand extends UserCommand
 {
+    protected $name = 'kata';
+    protected $description = 'Add word to blacklist or whitelist';
+    protected $usage = '<kata>';
+    protected $version = '1.0.0';
+
     public function execute()
     {
         $message = $this->getMessage();

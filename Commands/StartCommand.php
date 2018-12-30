@@ -15,6 +15,11 @@ use Longman\TelegramBot\Request;
 
 class StartCommand extends SystemCommand
 {
+    protected $name = 'start';
+    protected $description = 'Get started to Bot ';
+    protected $usage = '<ping>';
+    protected $version = '1.0.0';
+
     /**
      * @return \Longman\TelegramBot\Entities\ServerResponse
      * @throws \Longman\TelegramBot\Exception\TelegramException

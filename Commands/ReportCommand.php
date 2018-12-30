@@ -10,13 +10,17 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 
 use App\Grup;
 use App\Waktu;
-use App\Kata;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
 
 class ReportCommand extends UserCommand
 {
+    protected $name = 'report';
+    protected $description = 'Report message to all Admin';
+    protected $usage = '/report';
+    protected $version = '1.0.0';
+
     /**
      * Execute command
      *

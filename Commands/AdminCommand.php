@@ -15,6 +15,10 @@ use Longman\TelegramBot\Request;
 
 class AdminCommand extends UserCommand
 {
+    protected $name = 'admin';
+    protected $description = 'Get list all Admins group and current bot (if admin)';
+    protected $usage = '<admin>';
+    protected $version = '1.0.0';
     /**
      * Execute command
      *

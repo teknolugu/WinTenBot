@@ -10,17 +10,21 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 
 use App\Grup;
 use App\Waktu;
-use App\Kata;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
 
 class OutCommand extends UserCommand
 {
+    protected $name = 'out';
+    protected $description = 'Force out bot, (for sudoer only, even not admin)';
+    protected $usage = '/out';
+    protected $version = '1.0.0';
+
     /**
      * Execute command
      *
-     * @return \Longman\TelegramBot\Entities\ServerResponse
+     * @return void
      * @throws \Longman\TelegramBot\Exception\TelegramException
      */
     public function execute()

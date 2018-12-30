@@ -15,8 +15,12 @@ use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
 
-class GettagCommand extends UserCommand
+class GetCommand extends UserCommand
 {
+    protected $name = 'get';
+    protected $description = 'Get cloud tag, or #tag instead';
+    protected $usage = '<tag>';
+    protected $version = '1.0.0';
     /**
      * Execute command
      *

@@ -15,6 +15,11 @@ use Longman\TelegramBot\Request;
 
 class PinCommand extends UserCommand
 {
+    protected $name = 'pin';
+    protected $description = 'Reply message become Pinned Message';
+    protected $usage = '/pin';
+    protected $version = '1.0.0';
+
     /**
      * Execute command
     *

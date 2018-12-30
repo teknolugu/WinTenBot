@@ -9,14 +9,13 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use App\Waktu;
-use App\FtpUpload;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
 class File2urlCommand extends UserCommand
 {
     protected $name = 'url2file';
-    protected $description = 'Konversi URL jadi File';
+    protected $description = 'Konversi URL jadi Files';
     protected $usage = '/file2url';
     protected $version = '1.0.0';
 

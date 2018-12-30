@@ -10,8 +10,6 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use App\Waktu\Waktu;
 use Longman\TelegramBot\Commands\SystemCommand;
-use Longman\TelegramBot\Entities\InlineKeyboard;
-use Longman\TelegramBot\Request;
 
 class LeftchatmemberCommand extends SystemCommand
 {
@@ -45,6 +43,7 @@ class LeftchatmemberCommand extends SystemCommand
                 'text' => $text . $time,
                 'parse_mode' => 'HTML'
             ];
+
 //            return Request::sendMessage($data);
         }
     }

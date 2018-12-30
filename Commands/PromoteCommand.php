@@ -15,6 +15,11 @@ use Longman\TelegramBot\Request;
 
 class PromoteCommand extends UserCommand
 {
+    protected $name = 'promote';
+    protected $description = 'Promote chat member (bot must admin)';
+    protected $usage = '/promote';
+    protected $version = '1.0.0';
+
     /**
      * Execute command
      *

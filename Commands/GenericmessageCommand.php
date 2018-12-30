@@ -87,7 +87,7 @@ class GenericmessageCommand extends SystemCommand
                     return $this->telegram->executeCommand('report');
                     break;
                 case Kata::cekKandungan($pesan, '#'):
-                    return $this->telegram->executeCommand('gettag');
+                    return $this->telegram->executeCommand('get');
                     break;
             }
 
@@ -104,7 +104,32 @@ class GenericmessageCommand extends SystemCommand
             }
 
             if ($repMsg !== null) {
-                return $this->telegram->executeCommand('privatenotif');
+                if ($message->getChat()->getType() != "private") {
+                    $text = "<a href='tg://user?id=" . $message->getFrom()->getId() . "'>" . $message->getFrom()->getFirstName() . '</a>' . ' mereply ' .
+                        "<a href='https://t.me/" . $message->getChat()->getUsername() . '/' . $message->getMessageId() . "'>pesan kamu" . '</a>' .
+                        ' di grup <b>' . $message->getChat()->getTitle() . '</b>';
+                    $text .= "\n" . $message->getText();
+                    $data = [
+                        'chat_id' => $repMsg->getFrom()->getId(),
+                        'text' => $text,
+                        'parse_mode' => 'HTML',
+                        'disable_web_page_preview' => true
+                    ];
+
+                    return Request::sendMessage($data);
+                } else {
+                    $chat_id = $repMsg->getCaptionEntities()[3]->getUrl();
+                    $chat_id = str_replace("tg://user?id=", "", $chat_id);
+
+                    $data = [
+                        'chat_id' => $chat_id,
+                        'text' => "lorem",
+                        'parse_mode' => 'HTML',
+                        'disable_web_page_preview' => true
+                    ];
+
+                    return Request::sendMessage($data);
+                }
             }
 
             $pinned_message = $message->getPinnedMessage()->getMessageId();

@@ -15,6 +15,11 @@ use Longman\TelegramBot\Request;
 
 class KickCommand extends UserCommand
 {
+    protected $name = 'kick';
+    protected $description = 'Reply to kick member';
+    protected $usage = '<kick>';
+    protected $version = '1.0.0';
+
     /**
      * Execute command
      *

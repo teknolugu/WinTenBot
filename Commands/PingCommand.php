@@ -15,9 +15,8 @@ use Longman\TelegramBot\Request;
 
 class PingCommand extends UserCommand
 {
-
     protected $name = 'ping';
-    protected $description = 'A Ping';
+    protected $description = 'Get latency Telegram Bot to Servers';
     protected $usage = '<ping>';
     protected $version = '1.0.0';
 

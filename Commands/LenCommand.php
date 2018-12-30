@@ -9,11 +9,15 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use App\Waktu;
-use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Request;
 
 class LenCommand extends UserCommand
 {
+    protected $name = 'len';
+    protected $description = 'Get length message text or caption media';
+    protected $usage = '<len>';
+    protected $version = '1.0.0';
     /**
      * Execute command
      *

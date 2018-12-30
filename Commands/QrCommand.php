@@ -14,6 +14,11 @@ use Longman\TelegramBot\Request;
 
 class QrCommand extends UserCommand
 {
+    protected $name = 'qt';
+    protected $description = 'Generate Qr codes';
+    protected $usage = '/qr';
+    protected $version = '1.0.0';
+
     /**
      * Execute command
      *

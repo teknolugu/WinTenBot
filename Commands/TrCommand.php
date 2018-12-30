@@ -16,7 +16,13 @@ use Longman\TelegramBot\Request;
 
 class TrCommand extends UserCommand
 {
-
+    protected $name = 'tr';
+    protected $description = 'Translate text or media caption into your language';
+    protected $usage = '<ping>';
+    protected $version = '1.0.0';
+    /**
+     * @inheritdoc
+     */
     /**
      * Execute command
      *

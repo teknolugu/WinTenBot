@@ -14,6 +14,11 @@ use Longman\TelegramBot\Request;
 
 class KucingCommand extends UserCommand
 {
+    protected $name = 'kucing';
+    protected $description = 'Get random cat picture based on random.cat';
+    protected $usage = '<kucing>';
+    protected $version = '1.0.0';
+
     public function execute()
     {
         $message = $this->getMessage();

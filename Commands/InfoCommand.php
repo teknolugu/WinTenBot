@@ -15,6 +15,10 @@ use Longman\TelegramBot\Request;
 
 class InfoCommand extends UserCommand
 {
+    protected $name = 'info';
+    protected $description = 'Get information about Me';
+    protected $usage = '<info>';
+    protected $version = '1.0.0';
     /**
      * Execute command
      *

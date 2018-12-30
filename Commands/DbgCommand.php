@@ -9,13 +9,15 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use App\Waktu;
-use App\Kata;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
 class DbgCommand extends UserCommand
 {
-
+    protected $name = 'dbg';
+    protected $description = 'Get debug message';
+    protected $usage = '<dbg>';
+    protected $version = '1.0.0';
     /**
      * Execute command
      *

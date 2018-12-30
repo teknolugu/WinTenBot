@@ -14,6 +14,11 @@ use Longman\TelegramBot\Request;
 
 class TagsCommand extends UserCommand
 {
+    protected $name = 'tags';
+    protected $description = 'Get cloud tags in current chat';
+    protected $usage = '/tags';
+    protected $version = '1.0.0';
+
     /**
      * Execute command
      *

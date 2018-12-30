@@ -15,6 +15,11 @@ use Longman\TelegramBot\Request;
 
 class PurgeCommand extends UserCommand
 {
+    protected $name = 'purge';
+    protected $description = 'Remove message only target with range';
+    protected $usage = '/purge>';
+    protected $version = '1.0.0';
+
     /**
      * Execute command
      *

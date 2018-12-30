@@ -8,7 +8,6 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Kata;
 use App\Waktu;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
@@ -17,6 +16,11 @@ use Longman\TelegramBot\Request;
 
 class PinnedmessageCommand extends SystemCommand
 {
+    protected $name = 'pinnedmessage';
+    protected $description = 'Send summary about new pinned message';
+    protected $usage = 'pinnedmessage';
+    protected $version = '1.0.0';
+
     /**
      * @return \Longman\TelegramBot\Entities\ServerResponse
      * @throws \Longman\TelegramBot\Exception\TelegramException
