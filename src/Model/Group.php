@@ -6,12 +6,12 @@
  * Time: 08.20
  */
 
-namespace App;
+namespace src\Model;
 
 use GuzzleHttp\Client;
 use Longman\TelegramBot\Request;
 
-class Grup
+class Group
 {
     public static function idAdmins($chatid)
     {

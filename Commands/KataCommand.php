@@ -8,9 +8,9 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Grup;
-use App\Kata;
-use App\Waktu;
+use src\Model\Group;
+use src\Utils\Words;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -29,10 +29,10 @@ class KataCommand extends UserCommand
         $from_id = $message->getFrom()->getId();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
 
         $pecah = explode(' ', $message->getText());
-        $isSudoer = Grup::isSudoer($from_id);
+	    $isSudoer = Group::isSudoer($from_id);
         if ($isSudoer) {
             switch ($pecah[1]) {
                 case 'blok':
@@ -42,7 +42,7 @@ class KataCommand extends UserCommand
                         'id_telegram' => $message->getFrom()->getId(),
                         'id_grup' => $chat_id
                     ];
-                    $blok = json_decode(Kata::tambahKata($katas), true);
+	                $blok = json_decode(Words::tambahKata($katas), true);
                     $text = '<b>Diblok : </b>' . $pecah[2] .
                         "\n<b>Status : </b>" . $blok['message'];
                     break;
@@ -54,25 +54,25 @@ class KataCommand extends UserCommand
                         'id_telegram' => $message->getFrom()->getId(),
                         'id_grup' => $chat_id
                     ];
-                    $blok = json_decode(Kata::tambahKata($katas), true);
+	                $blok = json_decode(Words::tambahKata($katas), true);
                     $text = '<b>Dibiar : </b>' . $pecah[2] .
                         "\n<b>Status : </b>" . $blok['message'];
                     break;
 
                 case 'del':
-                    $del = json_decode(Kata::hapusKata($pecah[2]), true);
+	                $del = json_decode(Words::hapusKata($pecah[2]), true);
                     $text = '<b>Hapus : </b>' . $pecah[2] .
                         "\n<b>Status : </b>" . $del['message'];
                     break;
 
                 case 'update':
-                    Kata::simpanJson();
+	                Words::simpanJson();
                     $text = 'Basis data kata berhasil di perbarui';
                     break;
 
                 case 'all':
                     $text = "🗒 <b>Ini list kata</b>\n"
-                        . Kata::allBadword();
+	                    . Words::allBadword();
 
                     break;
 
@@ -84,12 +84,12 @@ class KataCommand extends UserCommand
         } else {
             $text = "<b>You isn't sudoer</b>";
         }
-
-        $time2 = Waktu::jedaNew($time);
+	
+	    $time2 = Time::jedaNew($time);
         $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
         if ($text != '') {
-            Kata::simpanJson();
+	        Words::simpanJson();
             return Request::sendMessage([
                 'chat_id' => $chat_id,
                 'text' => $text . $time,

@@ -8,9 +8,9 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Grup;
-use App\Kata;
-use App\Waktu;
+use src\Model\Group;
+use src\Utils\Words;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
@@ -38,10 +38,10 @@ class WelcomeCommand extends UserCommand
 		$from_id = $message->getFrom()->getId();
 		
 		$time = $message->getDate();
-		$time1 = Waktu::jedaNew($time);
+		$time1 = Time::jedaNew($time);
 		
-		$isAdmin = Grup::isAdmin($from_id, $chat_id);
-		$isSudoer = Grup::isSudoer($from_id);
+		$isAdmin = Group::isAdmin($from_id, $chat_id);
+		$isSudoer = Group::isSudoer($from_id);
 		if ($isAdmin || $isSudoer) {
 			$pecah = explode(' ', $message->getText(true));
 			$text = "Processing...\n";
@@ -53,7 +53,7 @@ class WelcomeCommand extends UserCommand
 			];
 			$mssg = Request::sendMessage($data);
 			$commands = ['message', 'button'];
-			if (Kata::cekKata($pecah[0], $commands)) {
+			if (Words::cekKata($pecah[0], $commands)) {
 				$welcome_data = trim(str_replace($pecah[0], '', $message->getText(true)));
 				$property = 'welcome_' . $pecah[0];
 				
@@ -62,7 +62,7 @@ class WelcomeCommand extends UserCommand
 					'property' => $property,
 					'value'    => $welcome_data,
 				]);
-				$time2 = Waktu::jedaNew($time);
+				$time2 = Time::jedaNew($time);
 			} else if ($pecah[0] == '') {
 				$json = json_decode(Settings::get(['chat_id' => $chat_id]), true);
 				$datas = $json['result']['data'][0];
@@ -85,10 +85,10 @@ class WelcomeCommand extends UserCommand
 						'inline_keyboard' => array_chunk($btn_markup, 2),
 					]);
 				}
-				$time2 = Waktu::jedaNew($time);
+				$time2 = Time::jedaNew($time);
 			} else {
 				$text = "Invalid parameters.\nExample /welcome message|button [data]";
-				$time2 = Waktu::jedaNew($time);
+				$time2 = Time::jedaNew($time);
 			}
 			$data['message_id'] = $mssg->result->message_id;
 		} else {

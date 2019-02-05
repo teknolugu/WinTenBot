@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 use src\Model\Resi;
@@ -85,8 +85,8 @@ class ResiCommand extends UserCommand
         }else{
             $text = 'ℹ️ <b>Kurir tidak terdefinisi</b>';
         }
-
-        $time = Waktu::jeda($time);
+	
+	    $time = Time::jeda($time);
         $data = [
             'chat_id'                  => $chat_id,
             'text'                     => $text . $time,

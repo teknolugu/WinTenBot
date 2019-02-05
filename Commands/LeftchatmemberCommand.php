@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Waktu\Waktu;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\SystemCommand;
 
 class LeftchatmemberCommand extends SystemCommand
@@ -34,7 +34,7 @@ class LeftchatmemberCommand extends SystemCommand
 
         $leftMemFname = $leftMem->getFirstName();
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
+	    $time = Time::jeda($time);
 
         if (isset($leftMem)) {
             $text = "<b>Dikeluarkan : </b> {$leftMemFname}";

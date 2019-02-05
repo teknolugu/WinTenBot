@@ -6,12 +6,12 @@
  * Time: 17.21
  */
 
-namespace App;
+namespace src\Model;
 
 use Exception;
 use Stichoza\GoogleTranslate\TranslateClient;
 
-class Terjemah
+class Translator
 {
     /**
      * @param $text

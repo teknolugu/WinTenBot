@@ -8,8 +8,8 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Grup;
-use App\Waktu;
+use src\Model\Group;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -33,7 +33,7 @@ class PingCommand extends UserCommand
         $mssg_id = $message->getMessageId();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
 
         $hook = json_decode(Request::getWebhookInfo())->result;
         $me = Request::getMe();
@@ -55,19 +55,19 @@ class PingCommand extends UserCommand
 
         $text = "<b>Pong..!!</b>";
         if ($message->getChat()->getType() == "private"
-            && Grup::isSudoer($message->getFrom()->getId())) {
+	        && Group::isSudoer($message->getFrom()->getId())) {
             $text .=
                 "\n<b>Your Access : </b> You is Sudoer!! " .
                 "\n<b>Username : </b> @" . $me->getBotUsername() .
                 "\n<b>Current Hook : </b><code>" . $hook->url . '</code>' .
                 "\n<b>Clean Hook : </b><code>" . clean_hook . '</code>' .
                 "\n<b>Pending Update : </b> " . $hook->pending_update_count .
-                "\n<b>Last Error Date : </b> " . Waktu::formatUnix($hook->last_error_date) .
+                "\n<b>Last Error Date : </b> " . Time::formatUnix($hook->last_error_date) .
                 "\n<b>Last Error Mssg : </b> " . $hook->last_error_message .
                 "\n<b>Max Connection : </b> " . $hook->max_connections;
         }
-
-        $time2 = Waktu::jedaNew($time);
+	
+	    $time2 = Time::jedaNew($time);
         $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
 
         $data = [

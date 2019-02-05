@@ -8,8 +8,8 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Grup;
-use App\Waktu;
+use src\Model\Group;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -36,9 +36,9 @@ class OutCommand extends UserCommand
         $pecah = explode(' ', $message->getText());
 
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
-
-        $isSudoer = Grup::isSudoer($from_id);
+	    $time = Time::jeda($time);
+	
+	    $isSudoer = Group::isSudoer($from_id);
 
         if ($isSudoer) {
             if (isBeta && $pecah[1] == 'beta') {

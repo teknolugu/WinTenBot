@@ -8,9 +8,9 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Kata;
-use App\Tag;
-use App\Waktu;
+use src\Utils\Words;
+use src\Model\Tag;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
@@ -37,13 +37,13 @@ class GetCommand extends UserCommand
         $repMssg = $message->getReplyToMessage();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
-
-        if (Kata::cekKandungan($message->getText(), '#')) {
+	    $time1 = Time::jedaNew($time);
+	
+	    if (Words::cekKandungan($message->getText(), '#')) {
             foreach ($pecah as $pecahan) {
-                if (Kata::cekKandungan($pecahan, '#')) {
+	            if (Words::cekKandungan($pecahan, '#')) {
                     $pecahan = ltrim($pecahan, '#');
-                    $hashtag = Kata::cekKandungan($pecahan, '#');
+		            $hashtag = Words::cekKandungan($pecahan, '#');
                     if (!$hashtag && strlen($pecahan) >= 3) {
                         $tag = Tag::ambilTag([
                             'chat_id' => $chatid,
@@ -65,8 +65,8 @@ class GetCommand extends UserCommand
                             'reply_to_message_id' => $mssg_id,
                             'disable_web_page_preview' => true
                         ];
-
-                        $time2 = Waktu::jedaNew($time);
+	
+	                    $time2 = Time::jedaNew($time);
                         $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
 
                         $text = '#️⃣<code>#' . $tag[0]['tag'] . '</code>' .

@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -35,7 +35,7 @@ class PurgeCommand extends UserCommand
         $repMssg = $message->getReplyToMessage();
 
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
+	    $time = Time::jeda($time);
 
         if (isset($repMssg)) {
             $repMssgId = $repMssg->getMessageId();
@@ -54,13 +54,17 @@ class PurgeCommand extends UserCommand
             $text = "\nSebanyak : " . $deleted;
         } else if (isset($pecah[1]) && is_numeric($pecah[1])) {
             $range = $mssg_id - $pecah[1];
+	        $num = 0;
             for ($x = $mssg_id; $x >= $range; $x--) {
                 $del = Request::deleteMessage([
                     'chat_id' => $chat_id,
                     'message_id' => $x
                 ]);
+	            if ($del->isOk()) {
+		            $num++;
+	            }
             }
-            $text = "Selesai hapus" . $del->getResult();
+	        $text = "Selesai hapus " . $num;
         } else {
             $text = "Reply sampai mana pesan akan di purge, atau jumlah ygn akan di purge";
         }

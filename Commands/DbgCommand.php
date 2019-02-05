@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -41,8 +41,8 @@ class DbgCommand extends UserCommand
         } else {
             $text = "Reply yang akan di debug";
         }
-
-        $time = Waktu::jeda($time);
+	
+	    $time = Time::jeda($time);
         $data = [
             'chat_id' => $chat_id,
             'text' => $text . $time,

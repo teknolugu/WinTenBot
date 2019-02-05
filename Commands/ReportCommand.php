@@ -8,8 +8,8 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Grup;
-use App\Waktu;
+use src\Model\Group;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
@@ -37,14 +37,14 @@ class ReportCommand extends UserCommand
         $pecah = explode(' ', $message->getText());
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
 
         if ($repMssg != null) {
-            $idAdmins = Grup::idAdmins($chat_id);
+	        $idAdmins = Group::idAdmins($chat_id);
 
             $text = 'Pesan sedang di laporkan kesemua admin..';
-
-            $time2 = Waktu::jedaNew($time);
+	
+	        $time2 = Time::jedaNew($time);
             $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
             $data = [
@@ -66,8 +66,8 @@ class ReportCommand extends UserCommand
                 $inline_keyboard = new InlineKeyboard([
                     ['text' => '👥 Ke pesan', 'url' => 'https://t.me/' . $chat_user . '/' . $repMssg->getMessageId()]
                 ]);
-
-                $time2 = Waktu::jedaNew($time);
+	
+	            $time2 = Time::jedaNew($time);
                 $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
                 Request::forwardMessage([

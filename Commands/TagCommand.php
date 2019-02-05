@@ -8,10 +8,10 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Grup;
-use App\Kata;
-use App\Tag;
-use App\Waktu;
+use src\Model\Group;
+use src\Utils\Words;
+use src\Model\Tag;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -38,12 +38,12 @@ class TagCommand extends UserCommand
         $repMssg = $message->getReplyToMessage();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
-
-        $isAdmin = Grup::isAdmin($fromid, $chatid);
-        $isSudoer = Grup::isSudoer($fromid);
+	    $time1 = Time::jedaNew($time);
+	
+	    $isAdmin = Group::isAdmin($fromid, $chatid);
+	    $isSudoer = Group::isSudoer($fromid);
         if ($isAdmin || $isSudoer) {
-            if (strlen($pecah[0]) >= 3 && !Kata::cekKandungan($pecah[0], '-')) {
+	        if (strlen($pecah[0]) >= 3 && !Words::cekKandungan($pecah[0], '-')) {
                 $datas = [
                     'tag' => $pecah[0],
                     'id_telegram' => $fromid,
@@ -98,8 +98,7 @@ class TagCommand extends UserCommand
 //                ]);
 
                 $text = json_encode($datas);
-
-            } else if (Kata::cekKandungan($pecah[0], '-')) {
+	        } else if (Words::cekKandungan($pecah[0], '-')) {
                 $hapus = Tag::hapusTag([
                     'tag' => str_replace('-', '', $pecah[0]),
                     'chat_id' => $chatid
@@ -111,8 +110,8 @@ class TagCommand extends UserCommand
             } else if (strlen($pecah[0]) < 3) {
                 $text = '📛 Tag minimal 3 karakter';
             }
-
-            $time2 = Waktu::jedaNew($time);
+	
+	        $time2 = Time::jedaNew($time);
             $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
             return Request::sendMessage([

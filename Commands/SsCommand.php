@@ -8,8 +8,8 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Kata;
-use App\Waktu;
+use src\Utils\Words;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -38,10 +38,10 @@ class SsCommand extends UserCommand
         $repMssg = $message->getReplyToMessage();
 
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
+	    $time = Time::jeda($time);
 
         if ($repMssg != null) {
-            $url = Kata::extrlink($repMssg->getText(true), $pecah[1] ?? '0');
+	        $url = Words::extrlink($repMssg->getText(true), $pecah[1] ?? '0');
             if ($url != '') {
                 $link = $url;
             } else {

@@ -6,7 +6,7 @@
  * Time: 3:40 PM
  */
 
-namespace App;
+namespace src\Model;
 
 
 class Bot

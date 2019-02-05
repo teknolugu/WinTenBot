@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -26,7 +26,7 @@ class KucingCommand extends UserCommand
         $mssg_id = $message->getMessageId();
 
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
+	    $time = Time::jeda($time);
 
         $json = file_get_contents('http://aws.random.cat/meow');
         $json = json_decode($json, true);

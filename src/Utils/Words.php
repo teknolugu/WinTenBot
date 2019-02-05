@@ -6,11 +6,11 @@
  * Time: 21.14
  */
 
-namespace App;
+namespace src\Utils;
 
 use GuzzleHttp\Client;
 
-class Kata
+class Words
 {
     public static function substrteks($text, $limit, $end = '...')
     {

@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
@@ -31,7 +31,7 @@ class InfoCommand extends UserCommand
         $chat_id = $message->getChat()->getId();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
 
         $text = '🤖 <b>WinTen Beta Bot</b> <code>' . versi . "</code>\n" . descBot;
 
@@ -49,8 +49,8 @@ class InfoCommand extends UserCommand
             ['text' => '💽 Source code', 'url' => 'https://github.com/WinTenGroup/WinTenBot'],
             ['text' => '🏗 Akmal Projext', 'url' => 'https://t.me/AkmalProjext'],
         ]);
-
-        $time2 = Waktu::jedaNew($time);
+	
+	    $time2 = Time::jedaNew($time);
         $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
         $data = [

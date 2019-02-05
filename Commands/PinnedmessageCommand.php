@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Waktu;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
@@ -33,7 +33,7 @@ class PinnedmessageCommand extends SystemCommand
         $pinnedMsg = $message->getPinnedMessage();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
 
         $pinById = $message->getFrom()->getId();
         $pinByFullname =  trim($message->getFrom()->getFirstName(). ' ' . $message->getFrom()->getLastName());
@@ -52,8 +52,8 @@ class PinnedmessageCommand extends SystemCommand
         $keyboard = new InlineKeyboard([
             ['text' => '📌 Ke Pinned', 'url' => $linkPin]
         ]);
-
-        $time2 = Waktu::jedaNew($time);
+	
+	    $time2 = Time::jedaNew($time);
         $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
         $data = [

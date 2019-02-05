@@ -8,8 +8,8 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Kata;
-use App\Waktu;
+use src\Utils\Words;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -33,7 +33,7 @@ class AdminCommand extends UserCommand
         $mssg_id = $message->getMessageId();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
 
         $pecah = explode(' ', $message->getText(true));
         if ($pecah[0] != '') {
@@ -59,7 +59,7 @@ class AdminCommand extends UserCommand
         if (count($result) > 0) {
             foreach ($result as $admin) {
                 $fullname = trim($admin['user']['first_name'] . ' ' . $admin['user']['last_name']);
-                $fullname = Kata::substrteks($fullname, 30);
+	            $fullname = Words::substrteks($fullname, 30);
                 $fullname = htmlspecialchars($fullname);
                 if ($fullname == null) {
                     $fullname = 'Akun terhapus';
@@ -97,8 +97,8 @@ class AdminCommand extends UserCommand
             $text .= "\n\n👥️ <b>Administrators: " . count($ngadmins) . "</b>" .
                 "\n" . $ngadmin;
         }
-
-        $time2 = Waktu::jedaNew($time);
+	
+	    $time2 = Time::jedaNew($time);
         $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
 
         $data = [

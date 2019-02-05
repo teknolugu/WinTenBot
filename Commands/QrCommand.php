@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -34,7 +34,7 @@ class QrCommand extends UserCommand
         $repMssg = $message->getReplyToMessage();
 
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
+	    $time = Time::jeda($time);
 
         if ($repMssg != null) {
             $text = $repMssg->getText(true);

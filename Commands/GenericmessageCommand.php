@@ -10,8 +10,8 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Grup;
-use App\Kata;
+use src\Model\Group;
+use src\Utils\Words;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;
 
@@ -21,17 +21,17 @@ use Longman\TelegramBot\Request;
 class GenericmessageCommand extends SystemCommand
 {
     /**
-     * @var string
+     * @var Words
      */
     protected $name = 'genericmessage';
 
     /**
-     * @var string
+     * @var Words
      */
     protected $description = 'Handle generic message';
 
     /**
-     * @var string
+     * @var Words
      */
     protected $version = '1.0.0';
 
@@ -52,7 +52,7 @@ class GenericmessageCommand extends SystemCommand
             $pesanCmd = explode(' ', strtolower($pesan))[0];
 
             // Pindai kata
-            if (Kata::isBadword($kata)) {
+	        if (Words::isBadword($kata)) {
                 $data = [
                     'chat_id'    => $chat_id,
                     'message_id' => $message->getMessageId()
@@ -64,7 +64,7 @@ class GenericmessageCommand extends SystemCommand
             // Perika apakah Aku harus keluar grup?
             if (isRestricted
                 && !$message->getChat()->isPrivateChat()
-                && Grup::isMustLeft($message->getChat()->getId())) {
+	            && Group::isMustLeft($message->getChat()->getId())) {
                 $text = 'Sepertinya saya salah alamat. Saya pamit dulu..' .
                     "\nGunakan @WinTenBot";
                 Request::sendMessage([
@@ -86,13 +86,13 @@ class GenericmessageCommand extends SystemCommand
                 case '@admin':
                     return $this->telegram->executeCommand('report');
                     break;
-                case Kata::cekKandungan($pesan, '#'):
+	            case Words::cekKandungan($pesan, '#'):
                     return $this->telegram->executeCommand('get');
                     break;
             }
 
             //Cek Makasih
-            $makasih = Kata::cekKata($kata, thanks);
+	        $makasih = Words::cekKata($kata, thanks);
             if ($makasih) {
                 $text = 'Sama-sama, senang bisa membantu gan...';
                 Request::sendMessage([
@@ -106,10 +106,10 @@ class GenericmessageCommand extends SystemCommand
             // Chatting
             $chat = '';
             switch (true){
-                case Kata::cekKata($kata, 'gan'):
+	            case Words::cekKata($kata, 'gan'):
                     $chat = 'ya gan, gimana';
                     break;
-                case Kata::cekKata($kata, 'mau tanya'):
+	            case Words::cekKata($kata, 'mau tanya'):
                     $chat = 'Langsung aja tanya gan';
                     break;
 

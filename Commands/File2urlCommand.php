@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -33,7 +33,7 @@ class File2urlCommand extends UserCommand
         $mssg_id = $message->getMessageId();
         $text = '';
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
+	    $time = Time::jeda($time);
 
         $repMssg = $message->getReplyToMessage();
         $file_id = $repMssg->getDocument()->getFileId();

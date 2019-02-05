@@ -8,8 +8,8 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Grup;
-use App\Waktu;
+use src\Model\Group;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
@@ -37,7 +37,7 @@ class PromoteCommand extends UserCommand
         $pecah = explode(' ', $message->getText());
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
 
         $senderId = $message->getFrom()->getId();
         $promoteByName = trim($message->getFrom()->getFirstName() . ' ' . $message->getFrom()->getLastName());
@@ -68,8 +68,8 @@ class PromoteCommand extends UserCommand
         ];
 
         if (isset($repMssg)) {
-            $isAdmin = Grup::isAdmin($from_id, $chat_id);
-            $isSudoer = Grup::isSudoer($from_id);
+	        $isAdmin = Group::isAdmin($from_id, $chat_id);
+	        $isSudoer = Group::isSudoer($from_id);
             if ($isAdmin || $isSudoer) {
                 if ($pecah[1] == '-d') {
                     $depromote_data['user_id'] = $repMssg->getFrom()->getId();
@@ -104,8 +104,8 @@ class PromoteCommand extends UserCommand
         } else {
             $text = '<b>🚫 Status : </b><code>' . $promoteRes->getDescription() . '.</code>';
         }
-
-        $time2 = Waktu::jedaNew($time);
+	
+	    $time2 = Time::jedaNew($time);
         $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
         $data = [

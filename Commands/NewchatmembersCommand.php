@@ -8,9 +8,9 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Grup;
-use App\Kata;
-use App\Waktu;
+use src\Model\Group;
+use src\Utils\Words;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
@@ -37,12 +37,12 @@ class NewchatmembersCommand extends SystemCommand
 		$isKicked = false;
 		
 		$time = $message->getDate();
-		$time1 = Waktu::jedaNew($time);
+		$time1 = Time::jedaNew($time);
 		
 		// Perika apakah Aku harus keluar grup?
 		if (isRestricted
 			&& !$message->getChat()->isPrivateChat()
-			&& Grup::isMustLeft($message->getChat()->getId())) {
+			&& Group::isMustLeft($message->getChat()->getId())) {
 			$text = 'Sepertinya saya salah alamat. Saya pamit dulu..' . "\nGunakan @WinTenBot";
 			Request::sendMessage([
 				'chat_id'    => $chat_id,
@@ -57,7 +57,7 @@ class NewchatmembersCommand extends SystemCommand
 			$member_nounames = [];
 			$member_bots = [];
 			$member_lnames = [];
-			$time_current = Waktu::sambuts();
+			$time_current = Time::sambuts();
 			$new_welcome_message = '';
 			
 			$data = [
@@ -153,7 +153,7 @@ class NewchatmembersCommand extends SystemCommand
 			'time_current'      => $time_current,
 		];
 		
-		$text = Kata::resolveVariable(trim($new_welcome_message), $replacement);
+		$text = Words::resolveVariable(trim($new_welcome_message), $replacement);
 		
 		$btn_markup = [];
 		if ($welcome_datas['welcome_button'] !== '') {
@@ -168,7 +168,7 @@ class NewchatmembersCommand extends SystemCommand
 			]);
 		}
 		
-		$time2 = Waktu::jedaNew($time);
+		$time2 = Time::jedaNew($time);
 		$time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 		
 		$data['text'] = $text . $time;

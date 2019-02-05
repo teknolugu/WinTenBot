@@ -8,8 +8,8 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Bot;
-use App\Waktu;
+use src\Model\Bot;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;
 
@@ -33,7 +33,7 @@ class StartCommand extends SystemCommand
         $mssg_id = $message->getMessageId();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
 
         $text = "🤖 <b>WinTen Beta Bot</b> is a debugging bot, group management and other useful equipment." .
             "\nOfficial Telegram Bot based on <b>WinTen API</b> with Anti-Spam Security!" .
@@ -69,8 +69,8 @@ class StartCommand extends SystemCommand
                 $text = 'Selamat datang di @' . bot_username;
                 break;
         }
-
-        $time2 = Waktu::jedaNew($time);
+	
+	    $time2 = Time::jedaNew($time);
         $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
         $data = [

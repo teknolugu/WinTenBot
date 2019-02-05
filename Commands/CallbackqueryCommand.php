@@ -10,7 +10,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Bot;
+use src\Model\Bot;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;

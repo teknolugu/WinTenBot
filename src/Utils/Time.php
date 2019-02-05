@@ -6,13 +6,13 @@
  * Time: 03.27
  */
 
-namespace App;
+namespace src\Utils;
 
-class Waktu
+class Time
 {
     /**
      * @param $time
-     * @return string
+     * @return Words
      */
     public static function jeda($time)
     {

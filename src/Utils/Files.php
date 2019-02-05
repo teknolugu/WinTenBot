@@ -6,10 +6,9 @@
  * Time: 11:24 PM
  */
 
-namespace App;
+namespace src\Utils;
 
-
-class Berkas
+class Files
 {
     /**
      *  Get the file size of any remote resource (using get_headers()),
@@ -19,10 +18,10 @@ class Berkas
      * @license MIT <http://eyecatchup.mit-license.org/>
      * @url     <https://gist.github.com/eyecatchup/f26300ffd7e50a92bc4d>
      *
-     * @param   string $url Takes the remote object's URL.
+     * @param   Words   $url Takes the remote object's URL.
      * @param   boolean $formatSize Whether to return size in bytes or formatted.
      * @param   boolean $useHead Whether to use HEAD requests. If false, uses GET.
-     * @return  string                 Returns human-readable formatted size
+     * @return  Words                 Returns human-readable formatted size
      *                                  or size in bytes (default: formatted).
      */
     public static function getRemoteFilesize($url, $formatSize = true, $useHead = true)
