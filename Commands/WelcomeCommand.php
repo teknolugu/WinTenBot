@@ -66,9 +66,12 @@ class WelcomeCommand extends UserCommand
 			} else if ($pecah[0] == '') {
 				$json = json_decode(Settings::get(['chat_id' => $chat_id]), true);
 				$datas = $json['result']['data'][0];
-				$text = '<b>Welcome Message</b>' .
-//					"\nCode : " . $json['code'] .
-					"\n<code>" . $datas['welcome_message'] . '</code>';
+				if($datas['welcome_message'] != '') {
+					$text = '<b>Welcome Message</b>' .
+						"\n<code>" . $datas['welcome_message'] . '</code>';
+				}else {
+					$text = 'Tidak ada konfigurasi pesan welcome, silakan konfigurasi dulu';
+				}
 				if ($datas['welcome_button'] != '') {
 					$btn_data = $datas['welcome_button'];
 					$btn_datas = explode(',', $btn_data);
