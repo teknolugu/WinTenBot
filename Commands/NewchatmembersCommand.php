@@ -33,7 +33,7 @@ class NewchatmembersCommand extends SystemCommand
 		$members = $message->getNewChatMembers();
 		$chat_title = $message->getChat()->getTitle();
 		$chat_uname = $message->getChat()->getUsername();
-		$pinned_msg = $message->getPinnedMessage()->getMessageId();
+//		$pinned_msg = $message->getPinnedMessage()->getMessageId();
 		$isKicked = false;
 		
 		$time = $message->getDate();
@@ -131,19 +131,19 @@ class NewchatmembersCommand extends SystemCommand
 //					"\n < i>Buka aplikasi Telegram > Settings > Username, lalu isi Username - nya .</i > " .
 //					' Jika belum tau caranya, klik tombol di bawah ini';
 			}
-			
-			if (count($member_lnames) > 0) {
-				if ($isKicked['ok'] != false) {
-					$text .=
-						'🚷 < b>Ditendang: </b > (<code > ' . count($member_lnames) . ')</code > ' .
-						"\n" . implode(', ', $member_lnames) . ', Namamu panjang gan!';
-				} else {
-					$text .=
-						' < b>Eksekusi : </b > Mencoba untuk menendang spammer' .
-						"\n < b>Status : </b > " . $isKicked['error_code'] .
-						"\n < b>Result : </b > " . $isKicked['description'];
-				}
-			}
+
+//			if (count($member_lnames) > 0) {
+//				if ($isKicked['ok'] != false) {
+//					$text .=
+//						'🚷 < b>Ditendang: </b > (<code > ' . count($member_lnames) . ')</code > ' .
+//						"\n" . implode(', ', $member_lnames) . ', Namamu panjang gan!';
+//				} else {
+//					$text .=
+//						' < b>Eksekusi : </b > Mencoba untuk menendang spammer' .
+//						"\n < b>Status : </b > " . $isKicked['error_code'] .
+//						"\n < b>Result : </b > " . $isKicked['description'];
+//				}
+//			}
 			//$text .= "\n < b>Total : </b > " . $chatCount . 'Anggota';
 		}
 		
