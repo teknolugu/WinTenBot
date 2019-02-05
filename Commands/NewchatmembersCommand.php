@@ -66,6 +66,7 @@ class NewchatmembersCommand extends SystemCommand
 			];
 			
 			Request::deleteMessage($data);
+			
 			foreach ($members as $member) {
 				$full_name = trim($member->getFirstName() . ' ' . $member->getLastName());
 				$nameLen = strlen($full_name);
@@ -106,30 +107,17 @@ class NewchatmembersCommand extends SystemCommand
 			//$chatCount = json_decode(Request::getChatMembersCount(['chat_id' => $chat_id]), true)['result'];
 			$json = json_decode(Settings::get(['chat_id' => $chat_id]), true);
 			$welcome_datas = $json['result']['data'][0];
-			$welcome_message1 = explode("\n\n", $welcome_datas['welcome_message']);
+			$welcome_message = explode("\n\n", $welcome_datas['welcome_message']);
 			if (count($member_names) > 0) {
-				$new_welcome_message = $welcome_message1[0] . "\n\n";
-//				$text =
-//					'<b > 👥 Anggota baru: </b > (<code > ' . count($member_names) . ')</code > ' .
-//					"\nHai " . implode(', ', $member_names) . ', ' . Waktu::sambuts() .
-//					"\nSelamat datang di kontrakan < b>" . $chat_title . '</b>';
+				$new_welcome_message = $welcome_message[0] . "\n\n";
 			}
 			
 			if (count($member_bots) > 0) {
-				$new_welcome_message .= $welcome_message1[1] . "\n\n";
-//				$text .=
-//					"\n\n < b>🤖 Bot baru: </b > (<code > " . count($member_bots) . ')</code > ' .
-//					"\nHai " . implode(', ', $member_bots) .
-//					"\nSiapa yang menambahkan kamu ? ";
+				$new_welcome_message .= $welcome_message[1] . "\n\n";
 			}
 			
 			if (count($member_nounames) > 0) {
-				$new_welcome_message .= $welcome_message1[2];
-//				$text .=
-//					"\n\n < b>⚠ Tanpa Username: </b > (<code > " . count($member_nounames) . ')</code > ' .
-//					"\n" . implode(', ', $member_nounames) . ', Tolong pasang username . ' .
-//					"\n < i>Buka aplikasi Telegram > Settings > Username, lalu isi Username - nya .</i > " .
-//					' Jika belum tau caranya, klik tombol di bawah ini';
+				$new_welcome_message .= $welcome_message[2];
 			}
 
 //			if (count($member_lnames) > 0) {
