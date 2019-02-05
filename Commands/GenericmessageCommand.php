@@ -65,7 +65,7 @@ class GenericmessageCommand extends SystemCommand
             if (isRestricted
                 && !$message->getChat()->isPrivateChat()
                 && Grup::isMustLeft($message->getChat()->getId())) {
-                $text = "Sepertinya saya salah alamat. Saya pamit dulu.." .
+                $text = 'Sepertinya saya salah alamat. Saya pamit dulu..' .
                     "\nGunakan @WinTenBot";
                 Request::sendMessage([
                     'chat_id'    => $chat_id,
@@ -102,6 +102,27 @@ class GenericmessageCommand extends SystemCommand
                     'parse_mode'          => 'HTML'
                 ]);
             }
+
+            // Chatting
+            $chat = '';
+            switch (true){
+                case Kata::cekKata($kata, 'gan'):
+                    $chat = 'ya gan, gimana';
+                    break;
+                case Kata::cekKata($kata, 'mau tanya'):
+                    $chat = 'Langsung aja tanya gan';
+                    break;
+
+                default:
+                    break;
+            }
+
+            Request::sendMessage([
+                'chat_id'             => $chat_id,
+                'text'                => $chat,
+                'reply_to_message_id' => $message->getMessageId(),
+                'parse_mode'          => 'HTML'
+            ]);
 
             if ($repMsg !== null) {
                 if ($message->getChat()->getType() != "private") {
