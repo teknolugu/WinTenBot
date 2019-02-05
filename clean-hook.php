@@ -17,9 +17,9 @@ function apiRequestWebhook($method, $parameters)
         return false;
     }
 
-    $parameters["method"] = $method;
+    $parameters['method'] = $method;
 
-    header("Content-Type: application/json");
+    header('Content-Type: application/json');
     echo json_encode($parameters);
     return true;
 }
@@ -105,7 +105,7 @@ function apiRequestJson($method, $parameters)
         return false;
     }
 
-    $parameters["method"] = $method;
+    $parameters['method'] = $method;
 
     $handle = curl_init(API_URL);
     curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
@@ -113,7 +113,7 @@ function apiRequestJson($method, $parameters)
     curl_setopt($handle, CURLOPT_TIMEOUT, 60);
     curl_setopt($handle, CURLOPT_POST, true);
     curl_setopt($handle, CURLOPT_POSTFIELDS, json_encode($parameters));
-    curl_setopt($handle, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+    curl_setopt($handle, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 
     return exec_curl_request($handle);
 }
@@ -127,8 +127,8 @@ function processMessage($message)
         // incoming text message
         $text = $message['text'];
 
-        if (strpos($text, "/ping") === 0) {
-            apiRequestJson("sendMessage", array('chat_id' => $chat_id, "text" => 'Hello', 'reply_markup' => array(
+        if (strpos($text, '/ping') === 0) {
+            apiRequestJson('sendMessage', array('chat_id' => $chat_id, 'text' => 'Hello', 'reply_markup' => array(
                 'keyboard' => array(array('Hello', 'Hi')),
                 'one_time_keyboard' => true,
                 'resize_keyboard' => true)));
@@ -142,7 +142,7 @@ function processMessage($message)
     }
 
 
-    $content = file_get_contents("php://input");
+    $content = file_get_contents('php://input');
     $update = json_decode($content, true);
 
     if (!$update) {
@@ -150,7 +150,9 @@ function processMessage($message)
         exit;
     }
 
-    if (isset($update["message"])) {
-        processMessage($update["message"]);
+    if (isset($update['message'])) {
+        processMessage($update['message']);
+        apiRequestJson('sendMessage', ['chat_id' => '-1001387872546', 'text' => 'Pending Count Cleaned']);
+        apiRequest('setWebhook', ['url' => url_hook]);
     }
 }
