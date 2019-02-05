@@ -38,20 +38,20 @@ class PingCommand extends UserCommand
         $hook = json_decode(Request::getWebhookInfo())->result;
         $me = Request::getMe();
 
-        if ($hook->pending_update_count > 5) {
-            $pesan = "Pending count lebih dari 5, dan di bersihkan otomatis\n";
-            foreach (sudoer as $sudo) {
-                $data = [
-                    'chat_id' => $sudo,
-                    'text' => $pesan . $time1,
-                    'parse_mode' => 'HTML'
-                ];
-                Request::sendMessage($data);
-            }
-//            Request::deleteWebhook();
-            Request::setWebhook(['url' => clean_hook]);
-            Request::setWebhook(['url' => url_hook]);
-        }
+//        if ($hook->pending_update_count > 5) {
+//            $pesan = "Pending count lebih dari 5, dan di bersihkan otomatis\n";
+//            foreach (sudoer as $sudo) {
+//                $data = [
+//                    'chat_id' => $sudo,
+//                    'text' => $pesan . $time1,
+//                    'parse_mode' => 'HTML'
+//                ];
+//                Request::sendMessage($data);
+//            }
+////            Request::deleteWebhook();
+//            Request::setWebhook(['url' => clean_hook]);
+//            Request::setWebhook(['url' => url_hook]);
+//        }
 
         $text = "<b>Pong..!!</b>";
         if ($message->getChat()->getType() == "private"
