@@ -164,4 +164,17 @@ class Kata
     {
         return preg_replace('/[^[:alnum:]]/', '', $teks);
     }
+	
+	public static function resolveVariable($string, $replacement)
+	{
+		$string_processed = preg_replace_callback(
+			'~\{\$(.*?)\}~si',
+			function ($match) use ($replacement) {
+				return str_replace($match[0], isset($replacement[$match[1]])
+					? $replacement[$match[1]]
+					: $match[0], $match[0]);
+			},
+			$string);
+		return $string_processed;
+	}
 }
