@@ -8,10 +8,10 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use src\Model\Notes;
+use src\Model\Tags;
+use src\Utils\Time;
 
 class TagsCommand extends UserCommand
 {
@@ -19,13 +19,14 @@ class TagsCommand extends UserCommand
     protected $description = 'Get cloud tags in current chat';
     protected $usage = '/tags';
     protected $version = '1.0.0';
-
-    /**
-     * Execute command
-     *
-     * @return \Longman\TelegramBot\Entities\ServerResponse
-     * @throws \Longman\TelegramBot\Exception\TelegramException
-     */
+	
+	/**
+	 * Execute command
+	 *
+	 * @return \Longman\TelegramBot\Entities\ServerResponse
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @throws \Longman\TelegramBot\Exception\TelegramException
+	 */
     public function execute()
     {
         $message = $this->getMessage();
@@ -37,13 +38,13 @@ class TagsCommand extends UserCommand
 
 //        $url = winten_api . "tag/$chat_id?api_token=" . winten_key;
 //        $json = file_get_contents($url);
-	    $json = Notes::getNotes($chat_id);
+	    $json = Tags::getTags($chat_id);
 	    $datas = json_decode($json, true)['result'];
 	    if (count($datas['data']) > 0) {
 		    $hit = count($datas['data']);
             $text = "#️⃣  <b>$hit Tags</b>\n-------\n";
 		    foreach ($datas['data'] as $data) {
-			    $text .= "<code>#" . $data['slug'] . '</code> ';
+			    $text .= "<code>#" . $data['tag'] . '</code> ';
             }
         }
 	

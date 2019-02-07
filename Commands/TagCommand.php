@@ -8,12 +8,12 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use src\Model\Group;
-use src\Utils\Words;
-use src\Model\Tag;
-use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
+use src\Model\Group;
+use src\Model\Tags;
+use src\Utils\Time;
+use src\Utils\Words;
 
 class TagCommand extends UserCommand
 {
@@ -21,13 +21,14 @@ class TagCommand extends UserCommand
     protected $description = 'Save tag into cloud';
     protected $usage = '/tag <tagnya>';
     protected $version = '1.0.0';
-
-    /**
-     * Execute command
-     *
-     * @return \Longman\TelegramBot\Entities\ServerResponse
-     * @throws \Longman\TelegramBot\Exception\TelegramException
-     */
+	
+	/**
+	 * Execute command
+	 *
+	 * @return \Longman\TelegramBot\Entities\ServerResponse
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @throws \Longman\TelegramBot\Exception\TelegramException
+	 */
     public function execute()
     {
         $message = $this->getMessage();
@@ -45,13 +46,13 @@ class TagCommand extends UserCommand
         if ($isAdmin || $isSudoer) {
 	        if (strlen($pecah[0]) >= 3 && !Words::cekKandungan($pecah[0], '-')) {
                 $datas = [
-                    'tag' => $pecah[0],
-                    'id_telegram' => $fromid,
-                    'id_grup' => $chatid
+	                'tag'     => $pecah[0],
+	                'id_user' => $fromid,
+	                'id_chat' => $chatid,
                 ];
 
                 $tipe_data = 'text';
-                if ($repMssg != null) {
+		        if ($repMssg !== null) {
                     $konten = $repMssg->getText() ?? $repMssg->getCaption();
                     if ($repMssg->getSticker()) {
                         $tipe_data = 'sticker';
@@ -80,35 +81,35 @@ class TagCommand extends UserCommand
                 }
 
                 $datas += [
-                    'konten' => $konten,
-                    'tipe_data' => $tipe_data,
-                    'id_data' => $id_data,
-                    'btn_data' => $btn_data
+	                'content'   => $konten ?? '',
+	                'type_data' => $tipe_data,
+	                'id_data'   => $id_data ?? '',
+	                'btn_data'  => $btn_data ?? '',
                 ];
-
-
-//                $tags = json_encode(Tag::tambahTag($datas), true);
-//                $text = '#️⃣ #' . $pecah[0] .
-//                    "\n<b>Status : </b>" . $tags['code'] .
-//                    "\n<b>Hasil : </b>" . $tags['message'];
-
-//                Request::deleteMessage([
-//                    'chat_id' => $chatid,
-//                    'message_id' => $mssg_id
-//                ]);
-
-                $text = json_encode($datas);
+		
+		        $tags = json_decode(Tags::addTags($datas), true);
+		        $text = '#️⃣ #' . $pecah[0] .
+			        "\n<b>Status : </b>" . $tags['status'] .
+			        "\n<b>Hasil : </b>" . $tags['message'];
+		
+		        Request::deleteMessage([
+			        'chat_id'    => $chatid,
+			        'message_id' => $mssg_id,
+		        ]);
 	        } else if (Words::cekKandungan($pecah[0], '-')) {
-                $hapus = Tag::hapusTag([
-                    'tag' => str_replace('-', '', $pecah[0]),
-                    'chat_id' => $chatid
+		        $hapus = Tags::deleteTags([
+			        'tag'     => str_replace('-', '', $pecah[0]),
+			        'id_chat' => $chatid,
                 ]);
                 $hapus = json_decode($hapus, true);
                 $text = ' ️Delete ' . $pecah[0] .
                     "\n<b>Status : </b>" . $hapus['code'] .
                     "\n<b>Hasil : </b> " . $hapus['message'];
             } else if (strlen($pecah[0]) < 3) {
-                $text = '📛 Tag minimal 3 karakter';
+		        $text = 'ℹ  Reply message for save into Cloud Tags' .
+			        "\n<b>Example:\n</b><code>/tag your_tag [button|link.button]</code> - InReply" .
+			        "\n<code>/tag your_tag content</code> - InMessage" .
+			        "\nLength <code>your_tag</code> minimum 3 characters.\nMark [ ] is optional";
             }
 	
 	        $time2 = Time::jedaNew($time);
