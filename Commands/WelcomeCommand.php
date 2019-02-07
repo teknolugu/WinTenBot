@@ -8,13 +8,13 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use src\Model\Group;
-use src\Utils\Words;
-use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
+use src\Model\Group;
 use src\Model\Settings;
+use src\Utils\Time;
+use src\Utils\Words;
 
 class WelcomeCommand extends UserCommand
 {
@@ -62,39 +62,39 @@ class WelcomeCommand extends UserCommand
 					'property' => $property,
 					'value'    => $welcome_data,
 				]);
-				$time2 = Time::jedaNew($time);
-			} else if ($pecah[0] == '') {
+			} elseif ($pecah[0] === '' || $pecah[0] === '-r') {
 				$json = json_decode(Settings::get(['chat_id' => $chat_id]), true);
 				$datas = $json['result']['data'][0];
-				if($datas['welcome_message'] != '') {
+				if ($datas['welcome_message'] !== '') {
 					$text = '<b>Welcome Message</b>' .
 						"\n<code>" . $datas['welcome_message'] . '</code>';
-				}else {
+				} else {
 					$text = 'Tidak ada konfigurasi pesan welcome, silakan konfigurasi dulu';
 				}
-				if ($datas['welcome_button'] != '') {
+				if ($datas['welcome_button'] !== '') {
 					$btn_data = $datas['welcome_button'];
-					$btn_datas = explode(',', $btn_data);
-					foreach ($btn_datas as $key => $val) {
-						$btn_row = explode('|', $val);
-						$btn .= $key . ' - ' . $btn_row[0] . ' ' . $btn_row[1] . "\n";
-						$btn_markup[] = ['text' => $btn_row[0], 'url' => $btn_row[1]];
+					if ($pecah[0] !== '-r') {
+						$btn_markup = [];
+						$btn_datas = explode(',', $btn_data);
+						foreach ($btn_datas as $key => $val) {
+							$btn_row = explode('|', $val);
+							$btn_markup[] = ['text' => $btn_row[0], 'url' => $btn_row[1]];
+						}
+						
+						$data['reply_markup'] = new InlineKeyboard([
+							'inline_keyboard' => array_chunk($btn_markup, 2),
+						]);
+					} else {
+						$text .= "\n\nButton\n" . $btn_data;
 					}
-//					$text .= "\n\nWelcome Buton";
-					$data['reply_markup'] = new InlineKeyboard([
-						'inline_keyboard' => array_chunk($btn_markup, 2),
-					]);
 				}
-				$time2 = Time::jedaNew($time);
 			} else {
 				$text = "Invalid parameters.\nExample /welcome message|button [data]";
-				$time2 = Time::jedaNew($time);
 			}
 			$data['message_id'] = $mssg->result->message_id;
-		} else {
-			$text = 'wtf';
 		}
 		
+		$time2 = Time::jedaNew($time);
 		$time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 		
 		$data['text'] = $text . $time;
