@@ -75,7 +75,7 @@ class GetCommand extends UserCommand
 							"\n" . $tag[0]['content'];
 						
 						if ($btn_data != null) {
-							if ($pecah[1] != '-r') {
+//							if ($pecah[1] != '-r') {
 								$btns = [];
 								$abtn_data = explode(',', $btn_data); // teks1|link1.com teks2|link2.com
 								foreach ($abtn_data as $btn) {
@@ -90,9 +90,9 @@ class GetCommand extends UserCommand
 								$data['reply_markup'] = new InlineKeyboard([
 									'inline_keyboard' => $btns,
 								]);
-							} else {
-								$text .= "\n" . $btn_data;
-							}
+//							} else {
+//								$text .= "\n" . $btn_data;
+//							}
 						}
 						
 						$text .= $time;
