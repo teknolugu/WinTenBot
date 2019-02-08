@@ -10,8 +10,13 @@ date_default_timezone_set('Asia/Jakarta');
 
 define('bot_username', 'YourBotUsername');
 define('bot_token', 'YOUR BOT TOKEN HERE');
-define('versi','1.201808.01');
+define('versi','2.201812.14');
 define('isBeta', true);
+
+define('descBot',"ℹ Official Telegram bot based on <b>WinTen API</b>.\nfor management & utility group");
+define('descBeta',"\n<b>I'm still beta, maybe contains bug and unstable. not recomended for your group</b>");
+
+define('botData','./Data/');
 
 // API key Thumbnail.ws
 define('thumbws_token', 'YOUR API TOKEN HERE');
@@ -26,4 +31,9 @@ define('winten_key', "YOUR API TOKEN HERE");
 define('sudoer',[
     '236205726', // Azhe Kun
     '1234567890' // Your Sudoer
+]);
+
+define('restrictArea',[
+    '-1001387872546', // TgBotID
+    // Add more group here
 ]);

@@ -8,13 +8,17 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
-use App\Kata;
+use src\Utils\Words;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
 class AdminCommand extends UserCommand
 {
+    protected $name = 'admin';
+    protected $description = 'Get list all Admins group and current bot (if admin)';
+    protected $usage = '<admin>';
+    protected $version = '1.0.0';
     /**
      * Execute command
      *
@@ -29,39 +33,50 @@ class AdminCommand extends UserCommand
         $mssg_id = $message->getMessageId();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
 
-        $atext = explode(' ', $message->getText())[1];
-        if ($atext != '') {
-            $data1 = [
-                'chat_id' => $atext,
+        $pecah = explode(' ', $message->getText(true));
+        if ($pecah[0] != '') {
+            $param = $pecah[0];
+            if ($pecah[0][0] != '-') {
+                $param = '@' . $pecah[0];
+            }
+
+            $chat = [
+                'chat_id' => $param,
             ];
         } else {
-            $data1 = [
+            $chat = [
                 'chat_id' => $chat_id,
             ];
         }
 
-        $respon = Request::getChatAdministrators($data1);
+        $respon = Request::getChatAdministrators($chat);
+
         $respon = json_decode($respon, true);
-        $respon = $respon['result'];
+        $result = $respon['result'];
         $ngadmins = [];
-        if ($respon !== null) {
-            $num = 1;
-            foreach ($respon as $admin) {
+        if (count($result) > 0) {
+            foreach ($result as $admin) {
                 $fullname = trim($admin['user']['first_name'] . ' ' . $admin['user']['last_name']);
-                $fullname = Kata::substrteks($fullname, 30);
+	            $fullname = Words::substrteks($fullname, 30);
+                $fullname = htmlspecialchars($fullname);
                 if ($fullname == null) {
-                    $fullname = 'Deletted accunnt';
+                    $fullname = 'Akun terhapus';
                 }
-                if ($admin['status'] === 'creator') {
+                if ($admin['status'] == 'creator') {
                     $creator = "<a href='tg://user?id=" . $admin['user']['id'] . "'>" . $fullname . '</a>';
                 } else {
-                    $ngadmins[] = "<a href='tg://user?id=" . $admin['user']['id'] . "'>" . $fullname . '</a>';
+                    $admins = "<a href='tg://user?id=" . $admin['user']['id'] . "'>" . $fullname . '</a>';
+                    if ($admin['user']['is_bot']) {
+                        $admins .= " 🤖";
+                    }
+                    $ngadmins[] = $admins;
                 }
                 sort($ngadmins);
             }
         }
+
         $ngadmin = '';
         $noAdm = 1;
         $lastAdm = end($ngadmins);
@@ -82,8 +97,8 @@ class AdminCommand extends UserCommand
             $text .= "\n\n👥️ <b>Administrators: " . count($ngadmins) . "</b>" .
                 "\n" . $ngadmin;
         }
-
-        $time2 = Waktu::jedaNew($time);
+	
+	    $time2 = Time::jedaNew($time);
         $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
 
         $data = [

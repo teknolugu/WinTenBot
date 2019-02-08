@@ -6,12 +6,12 @@
  * Time: 08.20
  */
 
-namespace App;
+namespace src\Model;
 
 use GuzzleHttp\Client;
 use Longman\TelegramBot\Request;
 
-class Grup
+class Group
 {
     public static function idAdmins($chatid)
     {
@@ -55,6 +55,15 @@ class Grup
     public static function isSudoer($fromid)
     {
         if (in_array($fromid, sudoer)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function isMustLeft($id_chat)
+    {
+        if (!in_array($id_chat, restrictArea)) {
             return true;
         } else {
             return false;

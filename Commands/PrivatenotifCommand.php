@@ -8,7 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Waktu\Waktu;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;
@@ -29,7 +29,7 @@ class PrivatenotifCommand extends SystemCommand
         $chatp_id = $message->getReplyToMessage();
 
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
+	    $time = Time::jeda($time);
 
         $data = [
             'chat_id' => $chatp_id,

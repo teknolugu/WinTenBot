@@ -6,24 +6,24 @@
  * Time: 03.27
  */
 
-namespace App;
+namespace src\Utils;
 
-class Waktu
+class Time
 {
     /**
      * @param $time
-     * @return string
+     * @return Words
      */
     public static function jeda($time)
     {
         $time = microtime(true) - $_SERVER['request_time_float'] - $time;
-        return "\n\n<code>⏱ " . number_format((float)$time, 3, '.', '') . ' ms</code>';
+        return "\n\n<code>⏱ " . number_format((float)$time, 3, '.', '') . ' s</code>';
     }
 
     public static function jedaNew($time)
     {
         $time = microtime(true) - $_SERVER['request_time_float'] - $time;
-        return '<code>' . number_format((float)$time, 3, '.', '') . ' ms</code>';
+        return '<code>' . number_format((float)$time, 3, '.', '') . ' s</code>';
     }
 
     public static function sambuts()
@@ -44,5 +44,10 @@ class Waktu
         }
 
         return $sambut;
+    }
+
+    public static function formatUnix($unixDate)
+    {
+        return date("d M Y H:i:s", $unixDate);
     }
 }

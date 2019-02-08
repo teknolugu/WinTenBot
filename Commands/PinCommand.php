@@ -8,13 +8,18 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Grup;
-use App\Waktu;
+use src\Model\Group;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
 class PinCommand extends UserCommand
 {
+    protected $name = 'pin';
+    protected $description = 'Reply message become Pinned Message';
+    protected $usage = '/pin';
+    protected $version = '1.0.0';
+
     /**
      * Execute command
     *
@@ -29,11 +34,11 @@ class PinCommand extends UserCommand
         $repMssg = $message->getReplyToMessage();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
         $pecah = explode(' ', $message->getText());
-
-        $isAdmin = Grup::isAdmin($from_id, $chat_id);
-        $isSudoer = Grup::isSudoer($from_id);
+	
+	    $isAdmin = Group::isAdmin($from_id, $chat_id);
+	    $isSudoer = Group::isSudoer($from_id);
         if ($isAdmin || $isSudoer) {
             if ($repMssg != null) {
                 $pin_data = [
@@ -65,8 +70,8 @@ class PinCommand extends UserCommand
         }else{
             $text = '📛 <i>Anda tidak punya hak akses</i>';
         }
-
-        $time2 = Waktu::jedaNew($time);
+	
+	    $time2 = Time::jedaNew($time);
         $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
         $data = [

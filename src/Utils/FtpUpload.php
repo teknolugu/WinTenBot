@@ -6,7 +6,7 @@
  * Time: 14.37
  */
 
-namespace App;
+namespace src\Utils;
 
 class FtpUpload
 {

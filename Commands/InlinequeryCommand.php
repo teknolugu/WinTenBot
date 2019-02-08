@@ -8,11 +8,12 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Kata;
+use src\Utils\Words;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineQuery\InlineQueryResultArticle;
 use Longman\TelegramBot\Entities\InputMessageContent\InputTextMessageContent;
 use Longman\TelegramBot\Request;
+use src\Model\Notes;
 
 class InlinequeryCommand extends SystemCommand
 {
@@ -26,30 +27,28 @@ class InlinequeryCommand extends SystemCommand
         $query = $inline_query->getQuery();
         $data = ['inline_query_id' => $inline_query->getId()];
         $query = trim($query);
-
-        $url = winten_api . "pembaruan/$query?api_token=" . winten_key;
-        $json = file_get_contents($url);
-        $datas = json_decode($json, true);
+	
+	    $notes = Notes::getNotes('-1001387872546');
+	    $datas = json_decode($notes, true)['result']['data'];
 
         $results = [];
-
         $articles2 = [];
-        foreach ($datas['message'] as $anu) {
-            $url = "https://api.winten.tk/pembaruan/get/" . $anu['id'] . "?api_token=" . winten_key;
+	    foreach ($datas as $anu) {
+//            $url = "https://api.winten.tk/pembaruan/get/" . $anu['id'] . "?api_token=" . winten_key;
 
             $articles2[] = [
-                'id' => $anu['id'],
-                'title' => $anu['kb'] . ' - ' . $anu['tanggal'] . ' [' . $anu['ukuran'] . ']',
-                'description' => "Versi : " . $anu['versi'] . ", Build : " . $anu['build'],
-                'input_message_content' => new InputTextMessageContent(
+	            'id'                    => $anu['id'],
+	            'title'                 => $anu['title'],
+	            'description'           => $anu['content'],
+	            'input_message_content' => new InputTextMessageContent(
                     [
-                        'parse_mode' => 'HTML',
+//                        'parse_mode' => 'HTML',
                         'message_text' =>
-                            "<b>Versi \t\t : </b>" . $anu['versi'] .
-                            "\n<b>Build \t : </b>" . $anu['build'] .
-                            "\n<b>Ukuran \t : </b>" . $anu['ukuran'] .
-                            "\n<b>Tanggal \t : </b>" . $anu['tanggal'] .
-                            "\n<b>Unduh \t : </b><a href='$url'>Download</a>"
+	                        "<b>Versi \t\t : </b>" . $anu['title'] .
+	                        "\n<b>Build \t : </b>" . $anu['content']
+//                            "\n<b>Ukuran \t : </b>" . $anu['ukuran'] .
+//                            "\n<b>Tanggal \t : </b>" . $anu['tanggal'] .
+//                            "\n<b>Unduh \t : </b><a href='$url'>Download</a>"
                     ]
                 ),
             ];

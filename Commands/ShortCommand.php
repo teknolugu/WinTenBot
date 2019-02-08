@@ -8,14 +8,17 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
-use App\Kata;
+use src\Utils\Words;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
 class ShortCommand extends UserCommand
 {
-
+    protected $name = 'short';
+    protected $description = 'URL Shortener based Bitly API';
+    protected $usage = '/short <url>';
+    protected $version = '1.0.0';
     /**
      * Execute command
      *
@@ -37,7 +40,7 @@ class ShortCommand extends UserCommand
                 $links = '';
                 $inEntity = '';
                 $num = 1;
-                $linkArr = Kata::extrlinkArr($repMssg->getText());
+	            $linkArr = Words::extrlinkArr($repMssg->getText());
                 $inEntities = json_decode($repMssg->getEntities(), true);
                 foreach ($inEntities as $inE) {
                     if ($inE['type'] == 'text_link') {
@@ -46,7 +49,7 @@ class ShortCommand extends UserCommand
                 }
 
                 foreach ($linkArr as $link) {
-                    $link = Kata::addhttp($link);
+	                $link = Words::addhttp($link);
                     $result = json_decode(file_get_contents("http://api.bit.ly/v3/shorten?login=" .
                         bitly_username . "&apiKey=" . bitly_token . "&longUrl=" . urlencode($link) .
                         "&format=json"))->data;
@@ -55,7 +58,7 @@ class ShortCommand extends UserCommand
                 }
                 $text = "<b>Short all </b>\n" . $links;
             } else if (is_numeric($pecah[1])) {
-                $url = Kata::extrlink($repMssg->getText(), $pecah[1] ?? '0');
+	            $url = Words::extrlink($repMssg->getText(), $pecah[1] ?? '0');
                 $result = json_decode(file_get_contents("http://api.bit.ly/v3/shorten?login=" .
                     bitly_username . "&apiKey=" . bitly_token . "&longUrl=" . urlencode($url) .
                     "&format=json"))->data;
@@ -64,7 +67,7 @@ class ShortCommand extends UserCommand
                     "<b>Shorten : </b>" . $result->url;
             }
         } else {
-            $url = Kata::addhttp($pecah[1]);
+	        $url = Words::addhttp($pecah[1]);
             $result = json_decode(file_get_contents("http://api.bit.ly/v3/shorten?login=" .
                 bitly_username . "&apiKey=" . bitly_token . "&longUrl=" . urlencode($url) .
                 "&format=json"));
@@ -77,8 +80,8 @@ class ShortCommand extends UserCommand
                     "\n<b>Message : </b>" . $result->status_txt;
             }
         }
-
-        $time = Waktu::jeda($time);
+	
+	    $time = Time::jeda($time);
         $data = [
             'chat_id' => $chat_id,
             'text' => $text . $time,

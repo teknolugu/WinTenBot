@@ -6,7 +6,7 @@
  * Time: 16.01
  */
 
-namespace App;
+namespace src\Model;
 
 use GuzzleHttp\Client;
 

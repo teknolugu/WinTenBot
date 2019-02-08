@@ -8,13 +8,17 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
 
 class InfoCommand extends UserCommand
 {
+    protected $name = 'info';
+    protected $description = 'Get information about Me';
+    protected $usage = '<info>';
+    protected $version = '1.0.0';
     /**
      * Execute command
      *
@@ -25,31 +29,35 @@ class InfoCommand extends UserCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $mssg_id = $message->getMessageId();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
 
-        $text = "🤖 <b>WinTen Beta Bot</b> <code>versi " . versi . "</code>\n" .
-            "ℹ️ Official Telegram bot based on <b>WinTen API</b>.\n" .
-            "for management & utility group";
+        $text = '🤖 <b>WinTen Beta Bot</b> <code>' . versi . "</code>\n" . descBot;
+
+        if (isBeta) {
+            $text .= descBeta;
+        }
 
         $inline_keyboard = new InlineKeyboard([
             ['text' => '👥 WinTen Group', 'url' => 'https://t.me/WinTenGroup'],
-            ['text' => 'Made With ❤️ by WinTenDev', 'url' => 'https://t.me/WinTenDev'],
+            ['text' => '❤ by WinTenDev', 'url' => 'https://t.me/WinTenDev'],
         ], [
             ['text' => '👥 Redmi 5A (Riva) ID', 'url' => 'https://t.me/Redmi5AID'],
+            ['text' => '👥 Telegram Bot API', 'url' => 'https://t.me/TgBotID'],
+        ], [
             ['text' => '💽 Source code', 'url' => 'https://github.com/WinTenGroup/WinTenBot'],
+            ['text' => '🏗 Akmal Projext', 'url' => 'https://t.me/AkmalProjext'],
         ]);
-
-        $time2 = Waktu::jedaNew($time);
-        $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
+	
+	    $time2 = Time::jedaNew($time);
+        $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
         $data = [
-            'chat_id' => $chat_id,
-            'text' => $text . $time,
+            'chat_id'      => $chat_id,
+            'text'         => $text . $time,
             'reply_markup' => $inline_keyboard,
-            'parse_mode' => 'HTML'
+            'parse_mode'   => 'HTML'
         ];
 
         return Request::sendMessage($data);

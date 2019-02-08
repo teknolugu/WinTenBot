@@ -8,13 +8,16 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
-use App\Kata;
+use src\Utils\Words;
+use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 
-class LinkssCommand extends UserCommand
+class SsCommand extends UserCommand
 {
+    protected $name = 'ss';
+    protected $description = 'Capture web screenshot based on Thumbnail.ws API';
+    protected $usage = '/ss <url>';
     protected $version = '1.0.0';
 
     /**
@@ -31,26 +34,37 @@ class LinkssCommand extends UserCommand
         $chat_id = $message->getChat()->getId();
         $mssg_id = $message->getMessageId();
         $from_id = $message->getFrom()->getId();
-        $atext = explode(' ', $message->getText());
+        $pecah = explode(' ', $message->getText());
         $repMssg = $message->getReplyToMessage();
 
         $time = $message->getDate();
-        $time = Waktu::jeda($time);
+	    $time = Time::jeda($time);
 
         if ($repMssg != null) {
-            $url = Kata::extrlink($repMssg->getText(), $atext[1] ?? '0');
+	        $url = Words::extrlink($repMssg->getText(true), $pecah[1] ?? '0');
             if ($url != '') {
                 $link = $url;
             } else {
                 $text = "Tidak ada URL di temukan \n";
             }
-        } else if ($atext[1] != '') {
-            $link = $atext[1];
+        } else if ($pecah[1] != '') {
+            $link = $pecah[1];
+        } else {
+            $text = '<b>Grab web page screenshot.</b>' .
+                "\n<b>Usage : </b><code>/ss</code> (In-Reply)" .
+                "\n                <code>/ss index</code> (In-Reply)" .
+                "\n                <code>/ss your url here</code> (In-Message)";
+            return Request::sendMessage([
+                'chat_id' => $chat_id,
+                'text' => $text . $time,
+                'reply_to_message_id' => $mssg_id,
+                'parse_mode' => 'HTML'
+            ]);
         }
 
         $base_url = 'https://api.thumbnail.ws/api/' . thumbws_token . '/thumbnail/get?url=' . $link . '/&width=1280';
-        $img = $this->telegram->getDownloadPath() . '/pictures/' . $chat_id . $from_id . $mssg_id . 'azhekun.jpg';
-        copy($base_url, $img);
+//        $img = $this->telegram->getDownloadPath() . '/pictures/' . $chat_id . $from_id . $mssg_id . 'azhekun.jpg';
+//        copy($base_url, $img);
         $text .= 'Ini SS dari ' . $link;
 
         return Request::sendPhoto([

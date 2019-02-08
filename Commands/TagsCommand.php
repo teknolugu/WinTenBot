@@ -8,18 +8,25 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use App\Waktu;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
+use src\Model\Tags;
+use src\Utils\Time;
 
 class TagsCommand extends UserCommand
 {
-    /**
-     * Execute command
-     *
-     * @return \Longman\TelegramBot\Entities\ServerResponse
-     * @throws \Longman\TelegramBot\Exception\TelegramException
-     */
+    protected $name = 'tags';
+    protected $description = 'Get cloud tags in current chat';
+    protected $usage = '/tags';
+    protected $version = '1.0.0';
+	
+	/**
+	 * Execute command
+	 *
+	 * @return \Longman\TelegramBot\Entities\ServerResponse
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @throws \Longman\TelegramBot\Exception\TelegramException
+	 */
     public function execute()
     {
         $message = $this->getMessage();
@@ -27,20 +34,21 @@ class TagsCommand extends UserCommand
         $mssg_id = $message->getMessageId();
 
         $time = $message->getDate();
-        $time1 = Waktu::jedaNew($time);
+	    $time1 = Time::jedaNew($time);
 
-        $url = winten_api . "tag/$chat_id?api_token=" . winten_key;
-        $json = file_get_contents($url);
-        $datas = json_decode($json, true);
-        if (count($datas['message']) > 0) {
-            $hit = count($datas['message']);
+//        $url = winten_api . "tag/$chat_id?api_token=" . winten_key;
+//        $json = file_get_contents($url);
+	    $json = Tags::getTags($chat_id);
+	    $datas = json_decode($json, true)['result'];
+	    if (count($datas['data']) > 0) {
+		    $hit = count($datas['data']);
             $text = "#️⃣  <b>$hit Tags</b>\n-------\n";
-            foreach ($datas['message'] as $data) {
-                $text .= " #" . $data['tag'];
+		    foreach ($datas['data'] as $data) {
+			    $text .= "<code>#" . $data['tag'] . '</code> ';
             }
         }
-
-        $time2 = Waktu::jedaNew($time);
+	
+	    $time2 = Time::jedaNew($time);
         $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
 
         $data = [
