@@ -72,18 +72,6 @@ class GenericmessageCommand extends SystemCommand
 			Request::leaveChat(['chat_id' => $chat_id]);
 		}
 		
-		// Save some data into DB, for analytic purposed only.
-		Analytic::logChat([
-			'from_id'         => $from_id,
-			'from_first_name' => $from_first_name,
-			'from_last_name'  => $from_last_name,
-			'from_username'   => $from_username,
-			'chat_id'         => $chat_id,
-			'chat_username'   => $chat_username,
-			'chat_type'       => $chat_type,
-			'chat_title'      => $chat_title,
-		]);
-		
 		// Command Aliases
 		switch ($pesanCmd) {
 			case 'ping':
