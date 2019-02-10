@@ -8,6 +8,7 @@
 
 namespace src\Handlers;
 
+use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
 use src\Utils\Time;
 
@@ -42,29 +43,64 @@ class MessageHandlers
 	 * @return \Longman\TelegramBot\Entities\ServerResponse
 	 * @throws \Longman\TelegramBot\Exception\TelegramException
 	 */
-	final public function sendText($text, $reply = false)
+	final public function sendText($text, $messageId = null, $keyboard = null)
 	{
 		$this->timeProc = Time::jedaNew($this->date);
-		$this->responses = Request::sendMessage([
-			'chat_id'             => $this->chat_id,
-			'text'                => $text . $this->timeInit . ' | ' . $this->timeProc,
-			'parse_mode'          => 'HTML',
-			'reply_to_message_id' => $reply ? $this->reply_to_message_id : null,
-		]);
+		$data = [
+			'chat_id'    => $this->chat_id,
+			'text'       => $text . $this->timeInit . ' | ' . $this->timeProc,
+			'parse_mode' => 'HTML',
+		];
+		
+		if ($messageId !== '') {
+			$data['reply_to_message_id'] = $messageId;
+		} elseif ($messageId === '-1') {
+			$data['reply_to_message_id'] = null;
+		} else {
+			$data['reply_to_message_id'] = $this->message_id;
+		}
+		
+		if ($keyboard !== null) {
+			$data['reply_markup'] = new InlineKeyboard([
+				'inline_keyboard' => array_chunk($keyboard, 3),
+			]);
+		}
+		$this->responses = Request::sendMessage($data);
 		
 		return $this->responses;
 	}
 	
-	public function editText($text)
+	/**
+	 * @param      $text
+	 * @param null $messageId
+	 * @param null $keyboard
+	 * @return \Longman\TelegramBot\Entities\ServerResponse
+	 * @throws \Longman\TelegramBot\Exception\TelegramException
+	 */
+	public function editText($text, $messageId = null, $keyboard = null)
 	{
 		$mssg_id = $this->responses->result->message_id;
 		$this->timeProc = Time::jedaNew($this->date);
-		return Request::editMessageText([
+		$data = [
 			'chat_id'    => $this->chat_id,
 			'text'       => $text . $this->timeInit . ' | ' . $this->timeProc,
 			'message_id' => $mssg_id,
 			'parse_mode' => 'HTML',
-		]);
+		];
+		if ($messageId !== '') {
+			$data['reply_to_message_id'] = $messageId;
+		} elseif ($messageId === '-1') {
+			$data['reply_to_message_id'] = null;
+		} else {
+			$data['reply_to_message_id'] = $this->message_id;
+		}
+		
+		if ($keyboard !== null) {
+			$data['reply_markup'] = new InlineKeyboard([
+				'inline_keyboard' => array_chunk($keyboard, 3),
+			]);
+		}
+		return Request::editMessageText($data);
 	}
 	
 	/**
@@ -76,5 +112,9 @@ class MessageHandlers
 			'chat_id'    => $this->chat_id,
 			'message_id' => $id ?? $this->message_id,
 		]);
+	}
+	
+	public function forwardMessage()
+	{
 	}
 }

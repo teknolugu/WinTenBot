@@ -9,7 +9,8 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Request;
+use src\Handlers\MessageHandlers;
+use src\Model\Group;
 use src\Model\Spell;
 
 class SpellCommand extends UserCommand
@@ -20,53 +21,39 @@ class SpellCommand extends UserCommand
 	protected $version = '1.0.0';
 	
 	/**
-	 * @return \Longman\TelegramBot\Entities\ServerResponse
+	 * @return void
 	 * @throws \Longman\TelegramBot\Exception\TelegramException
-	 * @throws \Exception
-	 * @throws \GuzzleHttp\Exception\GuzzleException
 	 */
 	public function execute()
 	{
 		$message = $this->getMessage();
-		
-		$chat_id = $message->getChat()->getId();
-		$mssg_id = $message->getMessageId();
-		
-		$time = $message->getDate();
+		$mHandler = new MessageHandlers($message);
 		
 		$repMssg = $message->getReplyToMessage();
-		
-		$text = "ℹ️ <i>Reply</i> pesan yang mau Spell";
+		$data = explode(' ', $message->getText(true));
 		
 		if ($repMssg != '') {
 			$typoMssg = $repMssg->getText();
-			
-			$spell = Spell::fixTypo($typoMssg);
-			$result = json_encode($spell);
-			$text = "✅ Mungkin yang di maksud adalah:\n" . $result;
+			$mHandler->deleteMessage();
+			$mHandler->sendText('Initializing..');
+			$typoMssg = Spell::spellText($typoMssg);
 			$mssg_id = $repMssg->getMessageId();
+			$mHandler->editText("✅ Mungkin yang di maksud adalah:\n" . $typoMssg, $mssg_id);
+		} elseif (count($data) == 2) {
+			$isSudoer = Group::isSudoer($message->getFrom()->getId());
+			if ($isSudoer) {
+				$datas = [
+					'typo'    => $data[0],
+					'fix'     => $data[1],
+					'chat_id' => $message->getChat()->getId(),
+					'user_id' => $message->getFrom()->getId(),
+				];
+				
+				$result = Spell::addSpell($datas);
+				$mHandler->sendText("Ya \n" . $result);
+			}
 		} else {
-			$data = explode(' ', $message->getText(true));
-			$datas = [
-				'typo'    => $data[0],
-				'fix'     => $data[1],
-				'id_chat' => $message->getChat()->getId(),
-				'id_user' => $message->getFrom()->getId(),
-			];
-			
-			$result = Spell::addSpell($datas);
-			$result = json_encode($result);
-			
-			$text = "Ya \n" . $result;
+			$mHandler->sendText('ℹ <i>Reply</i> pesan yang mau Spell');
 		}
-		
-		$data = [
-			'chat_id'             => $chat_id,
-			'text'                => $text,
-			'reply_to_message_id' => $mssg_id,
-			'parse_mode'          => 'HTML',
-		];
-		
-		return Request::sendMessage($data);
 	}
 }
