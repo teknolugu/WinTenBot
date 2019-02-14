@@ -48,8 +48,8 @@ class WelcomeCommand extends UserCommand
 					'welcome_' . $pecah[0] => $welcome_data,
 					'chat_id'              => $chat_id,
 				], ['chat_id' => $chat_id]);
-				$mHandler->editText('✅ Welcome ' . $pecah[0] . ' saved (y)');
-			} elseif ($pecah[0] == '') {
+				$r = $mHandler->editText('✅ Welcome ' . $pecah[0] . ' saved (y)');
+			} elseif ($pecah[0] == '' || $pecah[0] == '-r') {
 				$datas = Settings::getNew(['chat_id' => $message->getChat()->getId()]);
 				if ($datas[0]['welcome_message'] != '') {
 					$text = '<b>Welcome Message</b>' .
@@ -61,25 +61,25 @@ class WelcomeCommand extends UserCommand
 				$btn_markup = [];
 				if ($datas[0]['welcome_button'] != '') {
 					$btn_data = $datas[0]['welcome_button'];
-//					if ($pecah[0] !== '-r') {
-					$btn_datas = explode(',', $btn_data);
-					foreach ($btn_datas as $key => $val) {
-						$btn_row = explode('|', $val);
-						$btn_markup[] = ['text' => $btn_row[0], 'url' => $btn_row[1]];
+					if ($pecah[0] !== '-r') {
+						$btn_datas = explode(',', $btn_data);
+						foreach ($btn_datas as $key => $val) {
+							$btn_row = explode('|', $val);
+							$btn_markup[] = ['text' => $btn_row[0], 'url' => $btn_row[1]];
+						}
+					} else {
+						$text .= "\n\n<b>Button markup</b>\n" . $btn_data;
 					}
-
-//					} else {
-//						$text .= "\n\nButton\n" . $btn_data;
-//					}
 				}
 				
-				$mHandler->editText($text, null, $btn_markup);
+				$r = $mHandler->editText($text, null, $btn_markup);
 			} else {
-				$mHandler->sendText("Invalid parameters.\nExample /welcome message|button [data]");
+				$r = $mHandler->editText("Invalid parameters.\nExample /welcome message|button [data]");
 			}
 //			$data['message_id'] = $mssg->result->message_id;
 		}
-		
-		return $mHandler->editText($text);
+
+//		$r = $mHandler->editText($text, null, $btn_markup);
+		return $r;
 	}
 }
