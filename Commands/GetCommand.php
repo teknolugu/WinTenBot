@@ -9,10 +9,9 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
+use src\Handlers\MessageHandlers;
 use src\Model\Tags;
-use src\Utils\Time;
 use src\Utils\Words;
 
 class GetCommand extends UserCommand
@@ -26,20 +25,17 @@ class GetCommand extends UserCommand
 	 * Execute command
 	 *
 	 * @return void
-	 * @throws \GuzzleHttp\Exception\GuzzleException
 	 * @throws \Longman\TelegramBot\Exception\TelegramException
 	 */
 	public function execute()
 	{
 		$message = $this->getMessage();
+		$mHandler = new MessageHandlers($message);
 		$chatid = $message->getChat()->getId();
 		$fromid = $message->getFrom()->getId();
 		$mssg_id = $message->getMessageId();
 		$pecah = explode(' ', $message->getText());
 		$repMssg = $message->getReplyToMessage();
-		
-		$time = $message->getDate();
-		$time1 = Time::jedaNew($time);
 		
 		if (Words::cekKandungan($message->getText(), '#')) {
 			foreach ($pecah as $pecahan) {
@@ -47,11 +43,10 @@ class GetCommand extends UserCommand
 					$pecahan = ltrim($pecahan, '#');
 					$hashtag = Words::cekKandungan($pecahan, '#');
 					if (!$hashtag && strlen($pecahan) >= 3) {
-						$tag = Tags::selectTags([
+						$tag = Tags::getTags([
 							'id_chat' => $chatid,
 							'tag'     => $pecahan,
 						]);
-						$tag = json_decode($tag, true)['result']['data'];
 						
 						if ($repMssg != null) {
 							$mssg_id = $repMssg->getMessageId();
@@ -61,49 +56,37 @@ class GetCommand extends UserCommand
 						$tipe_data = $tag[0]['type_data'];
 						$btn_data = $tag[0]['btn_data']; // teks1|link1.com, teks2|link2.com
 						
-						$data = [
-							'chat_id'                  => $chatid,
-							'parse_mode'               => 'HTML',
-							'reply_to_message_id'      => $mssg_id,
-							'disable_web_page_preview' => true,
-						];
-						
-						$time2 = Time::jedaNew($time);
-						$time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
-						
 						$text = '#️⃣<code>#' . $tag[0]['tag'] . '</code>' .
 							"\n" . $tag[0]['content'];
 						
+						$btns = [];
 						if ($btn_data != null) {
 //							if ($pecah[1] != '-r') {
-								$btns = [];
-								$abtn_data = explode(',', $btn_data); // teks1|link1.com teks2|link2.com
-								foreach ($abtn_data as $btn) {
-									$abtn = explode('|', trim($btn));
-									$btns[] = [
-										'text' => $abtn[0],
-										'url'  => $abtn[1],
-									];
-								}
-								sort($btns);
-								$btns = array_chunk($btns, 3);
-								$data['reply_markup'] = new InlineKeyboard([
-									'inline_keyboard' => $btns,
-								]);
+							$abtn_data = explode(',', $btn_data); // teks1|link1.com teks2|link2.com
+							foreach ($abtn_data as $btn) {
+								$abtn = explode('|', trim($btn));
+								$btns[] = [
+									'text' => trim($abtn[0]),
+									'url'  => trim($abtn[1]),
+								];
+							}
+//
 //							} else {
 //								$text .= "\n" . $btn_data;
 //							}
 						}
 						
-						$text .= $time;
-						
 						if ($tipe_data == 'text') {
 							$data['text'] = $text;
-							Request::sendMessage($data);
+							$mHandler->sendText($text, $mssg_id, $btns);
 						} else {
-							$data += [
-								$tipe_data => $id_data,
-								'caption'  => $text,
+							$data = [
+								'chat_id'                  => $chatid,
+								'parse_mode'               => 'HTML',
+								'reply_to_message_id'      => $mssg_id,
+								'disable_web_page_preview' => true,
+								$tipe_data                 => $id_data,
+								'caption'                  => $text,
 							];
 							
 							switch ($tipe_data) {
