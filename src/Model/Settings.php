@@ -14,15 +14,6 @@ use src\Utils\DatabaseProvider;
 
 class Settings
 {
-	protected static $DB;
-	protected static $table;
-	
-	public function __construct()
-	{
-		$db = new DatabaseProvider();
-		self::$DB = $db->makeInstance();
-		self::$table = 'settings';
-	}
 	
 	/**
 	 * @param $data
@@ -44,6 +35,31 @@ class Settings
 		]);
 		
 		return $response->getBody();
+	}
+	
+	/**
+	 * @param array $datas
+	 * @param array $where
+	 * @return bool|\PDOStatement
+	 */
+	public static function saveNew(array $datas, array $where)
+	{
+		$db = new Medoo(db_data);
+		$table = 'group_settings';
+		$p = $db->count($table, ['chat_id' => $datas['chat_id']]);
+		if ($p > 0) {
+			$q = $db->update($table, $datas, $where);
+		} else {
+			$q = $db->insert($table, $datas);
+		}
+		
+		return $q;
+	}
+	
+	public static function getNew($where)
+	{
+		$db = new Medoo(db_data);
+		return $db->select('group_settings', '*', $where);
 	}
 	
 	/**
