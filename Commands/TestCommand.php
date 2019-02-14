@@ -9,11 +9,13 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 ;
 
-use src\Utils\Time;
+use http\Message;
+use Medoo\Medoo;
+use src\Handlers\MessageHandlers;
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Request;
-use src\Model\Notes;
+use src\Model\DB;
 use src\Model\Settings;
+use src\Model\Spell;
 
 class TestCommand extends UserCommand
 {
@@ -21,23 +23,18 @@ class TestCommand extends UserCommand
 	protected $description = 'Labs for feature update';
 	protected $usage = '/test';
 	protected $version = '1.0.0';
-
-    /**
-     * Execute command
-     *
-     * @return \Longman\TelegramBot\Entities\ServerResponse
-     * @throws \Longman\TelegramBot\Exception\TelegramException
-     */
-    public function execute()
-    {
-        $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
-        $mssg_id = $message->getMessageId();
-
-        $time = $message->getDate();
-	    $time = Time::jeda($time);
 	
-	    $pecah = explode(' ', $message->getText(true));
+	/**
+	 * Execute command
+	 *
+	 * @return \Longman\TelegramBot\Entities\ServerResponse
+	 * @throws \Longman\TelegramBot\Exception\TelegramException
+	 */
+	public function execute()
+	{
+		$mssg = $this->getMessage();
+		$mssgText = $mssg->getText(true);
+		$pecah = explode(' ', $mssgText);
 
 //        $entity_data = null;
 //        $entities = $repMssg->getEntities();
@@ -56,85 +53,46 @@ class TestCommand extends UserCommand
 //        $entities = $pecah[0];
 
 //        $cmds = json_encode($this->telegram->getCommandConfig("ping"));
+		
+		$mHandler = new MessageHandlers($mssg);
 
-//        $cmds = 'test';
-//        $data = Crud::baca('spell');
-//        $cmds = json_encode($data, true);
-//        error_log("Method name must be a string\n");
-//        $d = new Crud();
-//        $cmds = $d->masuk('spell',[
-//           'typo' => 'a',
-//           'fix' => 'sd'
-//        ]);
-//        $data = $d->baca('spell');
+//		$mHandler->sendText('lorem','');
+		
+		$mHandler->deleteMessage();
+		$mHandler->sendText('Initializing..');
+//		sleep(1);
+//		$mHandler->editText('Collecting data..', null, BTN_EXAMPLE);
+//		$mHandler->editText('Calculating data..');
+//		sleep(1);
+//		$mHandler->editText('Processing..', null, BTN_EXAMPLE);
+//		$mHandler->editText('Expanding all..');
+//		$mHandler->editText('Processing 99999..');
 
-//        $db = new Medoo(db_data);
-//        $data = db_data['server'];
+//		$s = Spell::spellTest($mssgText);
+//		$s = Spell::listSpell();
+//		foreach ($s as $e) {
+//			$mssgText = str_replace($e['typo'], $e['fix'], $mssgText);
+//			$mHandler->editText("Spelling...\n" . $mssgText);
+//		}
 
-//        try {
-//            $db = new PDO('mysql:host=' .db_data['server'].
-//                ';dbname='.db_data['database_name'],
-//                db_data['username'], db_data['password']);
-//            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//
-//            $sql = "INSERT INTO spell (typo, fix) VALUES('mavar','mabar')";
-//            $db->exec($sql);
+//		DB::insert('test', ['data' => 'lorem']);
+//		$d = DB::insertOrUpdate('test', ['name' => 'Fulan 2'], ['data' => 'lorem']);
+//		$d = Settings::saveNew([
+//			'last_welcome_message_id' => 'lorem',
+//			'chat_id' => 'asd'
+//		], [
+//			'chat_id' => 'asd',
+//		]);
+		$d = Settings::getNew(['chat_id' => $mssg->getChat()->getId()]);
+		$welcome = $d[0]['welcome_message'];
+//		$mHandler->editText('Finalizing..', null, BTN_EXAMPLE);
+//		$mHandler->editText('F*cking finalizing..');
+//		sleep(0.5);
 
-//                        $db = new Medoo(db_data);
-//
-//            $data = 'succes';
-
-//
-//                    $data = $db->select('spell','*');
-//            $data =  $db->debug();
-//
-//            $data = $db->insert('spell', [
-//                'typo' => 'a',
-//                'fix' => 'sd'
-//            ]);
-
-//            $data = Crud::tambah('spell',[
-//                'typo' => 'a',
-//                'fix' => 'sd'
-//            ]);
-
-//
-//            $data = json_encode($data, true);
-
-//            file_put_contents(log_file, $db->info()."Wik\n", FILE_APPEND);
-//        } catch (PDOException $ex) {
-//            file_put_contents(log_file, $ex->getMessage()."\n", FILE_APPEND);
-//        }
-
-//        $builder = new MySqlBuilder();
-//        $query = $builder->insert()
-//            ->setTable('spell')
-//            ->setValues([
-//                'typo' => 'a',
-//                'fix' => 'sd'
-//            ]);
-//
-//        $data = $builder->write($query);
-//            ."\n"
-//        . $builder->getValues();
-
-//        file_put_contents(log_file, "Wik\n", FILE_APPEND);
-//        $data = 'test'.Notes::getNotes($chat_id);
-	
-	    $text = Settings::save([
-		    'chat_id'  => $chat_id,
-		    'property' => $pecah[0],
-		    'value'    => $pecah[1],
-	    ]);
-	    
-        $data = [
-	        'chat_id'                  => $chat_id,
-	        'text'                     => $text . $time,
-	        'reply_to_message_id'      => $mssg_id,
-	        'disable_web_page_preview' => true,
-	        'parse_mode'               => 'HTML',
-        ];
-
-        return Request::sendMessage($data);
-    }
+//		for ($i = 0; $i <= 3; $i++) {
+//			$mHandler->editText('test ' . $i);
+//		}
+		
+		return $mHandler->editText( $welcome. "\nCompleted.", null, BTN_OK_NO_CANCEL);
+	}
 }
