@@ -8,6 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use src\Handlers\MessageHandlers;
 use src\Model\Group;
 use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
@@ -30,6 +31,7 @@ class ReportCommand extends UserCommand
     public function execute()
     {
         $message = $this->getMessage();
+        $mHandler = new MessageHandlers($message);
         $chat_id = $message->getChat()->getId();
         $chat_user = $message->getChat()->getUsername();
         $mssg_id = $message->getMessageId();
@@ -53,8 +55,9 @@ class ReportCommand extends UserCommand
                 'parse_mode' => 'HTML'
             ];
 
-            Request::sendMessage($data);
-
+//            Request::sendMessage($data);
+	        $mHandler->sendText($text);
+	        
             foreach ($idAdmins as $idAdmin) {
                 $fullname = trim($message->getFrom()->getFirstName() . ' ' . $message->getFrom()->getLastName());
                 $pesan = '<b>🛎 Ada pesan laporan</b>' .
@@ -84,9 +87,11 @@ class ReportCommand extends UserCommand
                 ]);
             }
         }
+        
+        $mHandler->editText('Selesai melaporkan!');
 
-        return Request::deleteMessage([
-            'chat_id' => $chat_id, 'message_id' => $mssg_id
-        ]);
+//        return Request::deleteMessage([
+//            'chat_id' => $chat_id, 'message_id' => $mssg_id
+//        ]);
     }
 }
