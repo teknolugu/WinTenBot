@@ -142,10 +142,10 @@ class NewchatmembersCommand extends SystemCommand
 				$btn_row = explode('|', $val);
 				$btn_markup[] = ['text' => $btn_row[0], 'url' => $btn_row[1]];
 			}
-			
-			if ($no_username_count > 0) {
-				$btn_markup[] = ['text' => 'Pasang username', 'url' => urlStart . '=username'];
-			}
+		}
+		
+		if ($no_username_count > 0) {
+			$btn_markup[] = ['text' => 'Pasang username', 'url' => urlStart . '=username'];
 		}
 		
 		$mHandler->deleteMessage($welcome_data[0]['last_welcome_message_id']);
