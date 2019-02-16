@@ -38,45 +38,50 @@ class WelcomeCommand extends UserCommand
 		$isAdmin = Group::isAdmin($from_id, $chat_id);
 		$isSudoer = Group::isSudoer($from_id);
 		if ($isAdmin || $isSudoer) {
-			$pecah = explode(' ', $message->getText(true));
-			$mHandler->sendText('Initializing..');
-			$commands = ['message', 'button'];
-			if (Words::cekKata($pecah[0], $commands)) {
-				$welcome_data = trim(str_replace($pecah[0], '', $message->getText(true)));
-				$mHandler->editText('Saving settings..');
-				$text = Settings::saveNew([
-					'welcome_' . $pecah[0] => $welcome_data,
-					'chat_id'              => $chat_id,
-				], ['chat_id' => $chat_id]);
-				$r = $mHandler->editText('✅ Welcome ' . $pecah[0] . ' saved (y)');
-			} elseif ($pecah[0] == '' || $pecah[0] == '-r') {
-				$datas = Settings::getNew(['chat_id' => $message->getChat()->getId()]);
-				if ($datas[0]['welcome_message'] != '') {
-					$text = '<b>Welcome Message</b>' .
-						"\n<code>" . $datas[0]['welcome_message'] . '</code>';
-				} else {
-					$text = 'Tidak ada konfigurasi pesan welcome, silakan konfigurasi dulu';
-				}
-				
-				$btn_markup = [];
-				if ($datas[0]['welcome_button'] != '') {
-					$btn_data = $datas[0]['welcome_button'];
-					if ($pecah[0] !== '-r') {
-						$btn_datas = explode(',', $btn_data);
-						foreach ($btn_datas as $key => $val) {
-							$btn_row = explode('|', $val);
-							$btn_markup[] = ['text' => $btn_row[0], 'url' => $btn_row[1]];
-						}
+			if ($message->getChat()->getType() != 'private') {
+				$pecah = explode(' ', $message->getText(true));
+				$mHandler->sendText('Initializing..');
+				$commands = ['message', 'button'];
+				if (Words::cekKata($pecah[0], $commands)) {
+					$welcome_data = trim(str_replace($pecah[0], '', $message->getText(true)));
+					$mHandler->editText('Saving settings..');
+					$text = Settings::saveNew([
+						'welcome_' . $pecah[0] => $welcome_data,
+						'chat_id'              => $chat_id,
+					], ['chat_id' => $chat_id]);
+					$r = $mHandler->editText('✅ Welcome ' . $pecah[0] . ' saved (y)');
+				} elseif ($pecah[0] == '' || $pecah[0] == '-r') {
+					$datas = Settings::getNew(['chat_id' => $message->getChat()->getId()]);
+					if ($datas[0]['welcome_message'] != '') {
+						$text = '<b>Welcome Message</b>' .
+							"\n<code>" . $datas[0]['welcome_message'] . '</code>';
 					} else {
-						$text .= "\n\n<b>Button markup</b>\n" . $btn_data;
+						$text = 'Tidak ada konfigurasi pesan welcome, pesan default akan di terapkan';
 					}
+					
+					$btn_markup = [];
+					if ($datas[0]['welcome_button'] != '') {
+						$btn_data = $datas[0]['welcome_button'];
+						if ($pecah[0] !== '-r') {
+							$btn_datas = explode(',', $btn_data);
+							foreach ($btn_datas as $key => $val) {
+								$btn_row = explode('|', $val);
+								$btn_markup[] = ['text' => $btn_row[0], 'url' => $btn_row[1]];
+							}
+						} else {
+							$text .= "\n\n<b>Button markup</b>\n" . $btn_data;
+						}
+					}
+					
+					$r = $mHandler->editText($text, null, $btn_markup);
+				} else {
+					$r = $mHandler->editText('ℹ Parameter tidak valid.' .
+						"\nContoh:\n/welcome message pesan" .
+						"\n/welcome button text_tombol|link.com");
 				}
-				
-				$r = $mHandler->editText($text, null, $btn_markup);
 			} else {
-				$r = $mHandler->editText("Invalid parameters.\nExample /welcome message|button [data]");
+				$r = $mHandler->sendText('Perintah /welcome hanya di dalam grup');
 			}
-//			$data['message_id'] = $mssg->result->message_id;
 		}
 
 //		$r = $mHandler->editText($text, null, $btn_markup);
