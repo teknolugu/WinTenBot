@@ -19,35 +19,46 @@ class Time
         $time = microtime(true) - $_SERVER['request_time_float'] - $time;
         return "\n\n<code>⏱ " . number_format((float)$time, 3, '.', '') . ' s</code>';
     }
-
-    public static function jedaNew($time)
+	
+	/**
+	 * @param $time
+	 * @return string
+	 */
+	public static function jedaNew($time)
     {
         $time = microtime(true) - $_SERVER['request_time_float'] - $time;
         return '<code>' . number_format((float)$time, 3, '.', '') . ' s</code>';
     }
-
-    public static function sambuts()
+	
+	/**
+	 * @return string
+	 */
+	public static function sambuts()
     {
-        $jam_now = date("H");
+	    $jam_now = date('H');
         if ($jam_now < 24 && $jam_now > 18) {
-            $sambut = "selamat malam 🌙";
+	        $sambut = 'malam 🌙';
         } else if ($jam_now <= 18 && $jam_now >= 17) {
-            $sambut = "selamat petang 🌥";
+	        $sambut = 'petang 🌥';
         } else if ($jam_now <= 17 && $jam_now >= 15) {
-            $sambut = "selamat sore ⛅️";
+	        $sambut = 'sore ⛅';
         } else if ($jam_now <= 15 && $jam_now >= 12) {
-            $sambut = "selamat siang ☀️";
+	        $sambut = 'siang ☀';
         } else if ($jam_now <= 12 && $jam_now >= 4) {
-            $sambut = "selamat pagi 🌤";
+	        $sambut = 'pagi 🌤';
         } else if ($jam_now <= 4 && $jam_now >= 0) {
-            $sambut = "selamat dini hari 🌚";
+	        $sambut = 'dini hari 🌚';
         }
 
         return $sambut;
     }
-
-    public static function formatUnix($unixDate)
+	
+	/**
+	 * @param $unixDate
+	 * @return false|string
+	 */
+	public static function formatUnix($unixDate)
     {
-        return date("d M Y H:i:s", $unixDate);
+	    return date('d M Y H:i:s', $unixDate);
     }
 }
