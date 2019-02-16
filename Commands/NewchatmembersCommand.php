@@ -92,15 +92,38 @@ class NewchatmembersCommand extends SystemCommand
 			
 			$welcome_message = explode("\n\n", $welcome_data[0]['welcome_message']);
 			if (count($member_names) > 0) {
-				$new_welcome_message = $welcome_message[0] . "\n\n";
+				if ($welcome_message[0] != '') {
+					$new_welcome_message = $welcome_message[0];
+				} else {
+					$new_welcome_message = "Anggota baru : $new_members_count" .
+						"\n👤Hai $new_members, selamat $time_current." .
+						"\nSelamat datang di kontrakan $chat_title";
+				}
+				$new_welcome_message .= "\n\n";
+//				$new_welcome_message .= $welcome_message[0] . "\n\n";
 			}
 			
 			if (count($member_bots) > 0) {
-				$new_welcome_message .= $welcome_message[1] . "\n\n";
+				if ($welcome_message[1] != '') {
+					$new_welcome_message = $welcome_message[0];
+				} else {
+					$new_welcome_message = "🤖 Bot baru: {$new_bots_count}" .
+						"\nHai {$new_bots}, siapa yang menambahkan kamu?.";
+				}
+				$new_welcome_message .= "\n\n";
+//				$new_welcome_message .= $welcome_message[1] . "\n\n";
 			}
 			
 			if (count($member_nounames) > 0) {
-				$new_welcome_message .= $welcome_message[2] . "\n\n";
+				if ($welcome_message[2] != '') {
+					$new_welcome_message = $welcome_message[0];
+				} else {
+					$new_welcome_message = "⚠ Tanpa username: {$no_username_count}" .
+						"\nHai {$no_username}, tolong pasang username." .
+						"\nJika tidak tahu caranya, klik tombol di bawah ini.";
+				}
+				$new_welcome_message .= "\n\n";
+//				$new_welcome_message .= $welcome_message[2] . "\n\n";
 			}
 
 //			if (count($member_lnames) > 0) {
@@ -135,7 +158,7 @@ class NewchatmembersCommand extends SystemCommand
 		$text = Words::resolveVariable(trim($new_welcome_message), $replacement);
 		
 		$btn_markup = [];
-		if ($welcome_data[0]['welcome_button'] !== '') {
+		if ($welcome_data[0]['welcome_button'] != '') {
 			$btn_data = $welcome_data[0]['welcome_button'];
 			$btn_datas = explode(',', $btn_data);
 			foreach ($btn_datas as $key => $val) {
@@ -145,7 +168,7 @@ class NewchatmembersCommand extends SystemCommand
 		}
 		
 		if ($no_username_count > 0) {
-			$btn_markup[] = ['text' => 'Pasang username', 'url' => urlStart . '=username'];
+			$btn_markup[] = ['text' => 'Pasang username', 'url' => urlStart . '?start=username'];
 		}
 		
 		$mHandler->deleteMessage($welcome_data[0]['last_welcome_message_id']);
