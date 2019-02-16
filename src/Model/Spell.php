@@ -8,50 +8,44 @@
 
 namespace src\Model;
 
-use GuzzleHttp\Client;
+use Medoo\Medoo;
 
 class Spell
 {
-	protected static $DB;
-	protected static $table;
-	
+	/**
+	 * @param $datas
+	 * @return bool|\PDOStatement
+	 */
 	public static function addSpell($datas)
 	{
-		self::$client = new Client(['base_uri' => new_api]);
-		$response = self::$client->request('POST', '/spell', [
-			'headers'     => [
-				'token' => new_token,
-			],
-			'form_params' => $datas,
-		]);
-		
-		return $response->getBody();
+		$db = new Medoo(db_data);
+		return $db->insert('spells', $datas);
 	}
 	
 	/**
-	 * @param $text
-	 * @return \Psr\Http\Message\StreamInterface
-	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @return array|bool
 	 */
-	public static function fixTypo($text)
+	public static function spellText($text)
 	{
-		$client = new Client(['base_uri' => new_api]);
-		$response = $client->request('GET', '/spell', [
-			'query' => [
-				'text' => $text,
-			],
-		]);
-		
-		return $response->getBody();
+		$db = new Medoo(db_data);
+		$d = $db->select('spells', '*');
+		foreach ($d as $e) {
+			$text = str_replace($e['typo'], $e['fix'], $text);
+		}
+		return $text;
 	}
 	
 	/**
-	 * @param $text
-	 * @return false|string
+	 * @return array|bool
 	 */
-	public static function typo($text)
+	public static function listSpell()
 	{
-		$url = new_api . "/spell?text=$text";
-		return file_get_contents($url);
+		$db = new Medoo(db_data);
+		return $db->select('spells', '*');
+	}
+	
+	public static function canInsert()
+	{
+		//
 	}
 }

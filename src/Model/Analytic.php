@@ -6,7 +6,9 @@
  * Time: 3:37 PM
  */
 
-namespace app;
+namespace src\Model;
+
+use Medoo\Medoo;
 
 class Analytic
 {
@@ -16,5 +18,8 @@ class Analytic
 	 */
 	public static function logChat($datas)
 	{
+		$db = new Medoo(db_data);
+		$db->insert('subscribers', $datas);
+		
 	}
 }

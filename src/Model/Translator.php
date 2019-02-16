@@ -29,14 +29,15 @@ class Translator
         } else {
             $tr->setSource(null);
             $tr->setTarget($from);
-            $to = $from;
-            $from = 'auto';
+	        $to = $from;
+	        $translated = $tr->translate($text);
+	        $from = $tr->getLastDetectedSource();
         }
 
         $result = [
-            'from' => $from,
-            'to' => $to,
-            'text' => $tr->translate($text)
+	        'from' => $from,
+	        'to'   => $to,
+	        'text' => $translated,
         ];
 
         return $result;
