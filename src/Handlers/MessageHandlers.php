@@ -47,9 +47,10 @@ class MessageHandlers
 	{
 		$this->timeProc = Time::jedaNew($this->date);
 		$data = [
-			'chat_id'    => $this->chat_id,
-			'text'       => $text . $this->timeInit . ' | ' . $this->timeProc,
-			'parse_mode' => 'HTML',
+			'chat_id'                  => $this->chat_id,
+			'text'                     => $text . $this->timeInit . ' | ' . $this->timeProc,
+			'parse_mode'               => 'HTML',
+			'disable_web_page_preview' => true,
 		];
 		
 		if ($messageId !== '') {
@@ -82,10 +83,11 @@ class MessageHandlers
 		$mssg_id = $this->responses->result->message_id;
 		$this->timeProc = Time::jedaNew($this->date);
 		$data = [
-			'chat_id'    => $this->chat_id,
-			'text'       => $text . $this->timeInit . ' | ' . $this->timeProc,
-			'message_id' => $mssg_id,
-			'parse_mode' => 'HTML',
+			'chat_id'                  => $this->chat_id,
+			'text'                     => $text . $this->timeInit . ' | ' . $this->timeProc,
+			'message_id'               => $mssg_id,
+			'parse_mode'               => 'HTML',
+			'disable_web_page_preview' => true,
 		];
 		if ($messageId !== '') {
 			$data['reply_to_message_id'] = $messageId;
