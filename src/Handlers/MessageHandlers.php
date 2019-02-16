@@ -62,7 +62,7 @@ class MessageHandlers
 		
 		if ($keyboard !== null) {
 			$data['reply_markup'] = new InlineKeyboard([
-				'inline_keyboard' => array_chunk($keyboard, 3),
+				'inline_keyboard' => array_chunk($keyboard, 2),
 			]);
 		}
 		$this->responses = Request::sendMessage($data);
@@ -97,7 +97,7 @@ class MessageHandlers
 		
 		if ($keyboard !== null) {
 			$data['reply_markup'] = new InlineKeyboard([
-				'inline_keyboard' => array_chunk($keyboard, 3),
+				'inline_keyboard' => array_chunk($keyboard, 2),
 			]);
 		}
 		return Request::editMessageText($data);
