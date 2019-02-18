@@ -105,9 +105,9 @@ class NewchatmembersCommand extends SystemCommand
 			
 			if (count($member_bots) > 0) {
 				if ($welcome_message[1] != '') {
-					$new_welcome_message = $welcome_message[0];
+					$new_welcome_message .= $welcome_message[1];
 				} else {
-					$new_welcome_message = "🤖 Bot baru: {$new_bots_count}" .
+					$new_welcome_message .= "🤖 Bot baru: {$new_bots_count}" .
 						"\nHai {$new_bots}, siapa yang menambahkan kamu?.";
 				}
 				$new_welcome_message .= "\n\n";
@@ -116,9 +116,9 @@ class NewchatmembersCommand extends SystemCommand
 			
 			if (count($member_nounames) > 0) {
 				if ($welcome_message[2] != '') {
-					$new_welcome_message = $welcome_message[0];
+					$new_welcome_message .= $welcome_message[2];
 				} else {
-					$new_welcome_message = "⚠ Tanpa username: {$no_username_count}" .
+					$new_welcome_message .= "⚠ Tanpa username: {$no_username_count}" .
 						"\nHai {$no_username}, tolong pasang username." .
 						"\nJika tidak tahu caranya, klik tombol di bawah ini.";
 				}
