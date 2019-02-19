@@ -12,6 +12,7 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;
 use src\Handlers\MessageHandlers;
 use src\Model\Group;
+use src\Model\Members;
 use src\Model\Settings;
 use src\Utils\Time;
 use src\Utils\Words;
@@ -50,6 +51,7 @@ class NewchatmembersCommand extends SystemCommand
 			$member_lnames = [];
 			$time_current = Time::sambuts();
 			$new_welcome_message = '';
+			$member_ids = [];
 			$member_count = json_decode(Request::getChatMembersCount(['chat_id' => $chat_id]), true)['result'];
 			$welcome_data = Settings::getNew(['chat_id' => $chat_id]);
 			
@@ -62,6 +64,9 @@ class NewchatmembersCommand extends SystemCommand
 						$member_nounames[] = $nameLink;
 						$no_username_count = count($member_nounames);
 						$no_username = implode(', ', $member_nounames);
+						
+						$member_ids[] = $member->getId();
+						$member_id = implode(', ', $member_ids);
 					} elseif ($member->getIsBot() === true) {
 						$member_bots [] = $nameLink . ' 🤖';
 						$new_bots_count = count($member_bots);
@@ -70,6 +75,9 @@ class NewchatmembersCommand extends SystemCommand
 						$member_names[] = $nameLink;
 						$new_members_count = count($member_names);
 						$new_members = implode(', ', $member_names);
+						
+						$member_ids[] = $member->getId();
+						$member_id = implode(', ', $member_ids);
 					}
 				} else {
 					$member_lnames [] = $nameLink;
@@ -171,7 +179,16 @@ class NewchatmembersCommand extends SystemCommand
 			$btn_markup[] = ['text' => 'Pasang username', 'url' => urlStart . '?start=username'];
 		}
 		
-		$mHandler->deleteMessage($welcome_data[0]['last_welcome_message_id']);
+		if (count($member_ids) > 0 && $welcome_data[0]['enable_human_verification'] == '1') {
+			foreach ($member_ids as $id) {
+				Members::muteMember($chat_id, $id, 1);
+			}
+			$text .= "\n\nUntuk alasan keamanan, silakan klik tombol <b>Verifikasi</b> di bawah ini untuk meyakinkan bawha kamu bukan robot!";
+			$btn_markup[] = ['text' => '✅ Verifikasi saya!', 'callback_data' => 'verify_' . $member_id];
+		} else {
+			$mHandler->deleteMessage($welcome_data[0]['last_welcome_message_id']);
+		}
+		
 		$r = $mHandler->sendText($text, null, $btn_markup);
 		
 		Settings::saveNew([
