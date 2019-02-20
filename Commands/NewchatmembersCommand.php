@@ -64,9 +64,6 @@ class NewchatmembersCommand extends SystemCommand
 						$member_nounames[] = $nameLink;
 						$no_username_count = count($member_nounames);
 						$no_username = implode(', ', $member_nounames);
-						
-						$member_ids[] = $member->getId();
-						$member_id = implode(', ', $member_ids);
 					} elseif ($member->getIsBot() === true) {
 						$member_bots [] = $nameLink . ' 🤖';
 						$new_bots_count = count($member_bots);
@@ -75,10 +72,9 @@ class NewchatmembersCommand extends SystemCommand
 						$member_names[] = $nameLink;
 						$new_members_count = count($member_names);
 						$new_members = implode(', ', $member_names);
-						
-						$member_ids[] = $member->getId();
-						$member_id = implode(', ', $member_ids);
 					}
+					$member_ids[] = $member->getId();
+					$member_id = implode(', ', $member_ids);
 				} else {
 					$member_lnames [] = $nameLink;
 					$data = [
@@ -183,7 +179,7 @@ class NewchatmembersCommand extends SystemCommand
 			foreach ($member_ids as $id) {
 				Members::muteMember($chat_id, $id, 1);
 			}
-			$text .= "\n\nUntuk alasan keamanan, silakan klik tombol <b>Verifikasi</b> di bawah ini untuk meyakinkan bawha kamu bukan robot!";
+			$text .= "\n\nAnggota baru di Mute untuk sementara, silakan klik tombol <b>Verifikasi</b> di bawah ini agar tidak di Mute!";
 			$btn_markup[] = ['text' => '✅ Verifikasi saya!', 'callback_data' => 'verify_' . $member_id];
 		} else {
 			$mHandler->deleteMessage($welcome_data[0]['last_welcome_message_id']);
