@@ -9,37 +9,35 @@
 namespace src\Model;
 
 use Exception;
-use Stichoza\GoogleTranslate\TranslateClient;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class Translator
 {
-    /**
-     * @param $text
-     * @param $from
-     * @param $to
-     * @return array
-     * @throws Exception
-     */
-    public static function Exe($text, $from, $to)
-    {
-        $tr = new TranslateClient(); // Default is from 'auto' to 'en'
-
-        if ($to !== null) {
-            $tr->setTarget($to); // Translate to
-        } else {
-            $tr->setSource(null);
-            $tr->setTarget($from);
-	        $to = $from;
-	        $translated = $tr->translate($text);
-	        $from = $tr->getLastDetectedSource();
-        }
-
-        $result = [
-	        'from' => $from,
-	        'to'   => $to,
-	        'text' => $translated,
-        ];
-
-        return $result;
-    }
+	/**
+	 * @param $text
+	 * @param $from
+	 * @param $to
+	 * @return array
+	 * @throws Exception
+	 */
+	public static function Exe($text, $from, $to)
+	{
+		$tr = new GoogleTranslate(); // Default is from 'auto' to 'en'
+		
+		if ($to !== null) {
+			$tr->setTarget($to); // Translate to
+		} else {
+			$tr->setSource();
+			$tr->setTarget($from);
+			$to = $from;
+			$translated = $tr->translate($text);
+			$from = $tr->getLastDetectedSource();
+		}
+		
+		return [
+			'from' => $from,
+			'to'   => $to,
+			'text' => $translated,
+		];
+	}
 }
