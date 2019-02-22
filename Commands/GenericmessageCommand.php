@@ -12,7 +12,7 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;
-use src\Model\Analytic;
+use src\Handlers\MessageHandlers;
 use src\Model\Group;
 use src\Utils\Words;
 
@@ -35,6 +35,7 @@ class GenericmessageCommand extends SystemCommand
 	{
 		$pesan = $this->getMessage()->getText();
 		$message = $this->getMessage();
+		$mHandler = new MessageHandlers($message);
 		$from_id = $message->getFrom()->getId();
 		$from_first_name = $message->getFrom()->getFirstName();
 		$from_last_name = $message->getFrom()->getLastName();
@@ -50,12 +51,7 @@ class GenericmessageCommand extends SystemCommand
 		
 		// Pindai kata
 		if (Words::isBadword($kata)) {
-			$data = [
-				'chat_id'    => $chat_id,
-				'message_id' => $message->getMessageId(),
-			];
-			
-			Request::deleteMessage($data);
+			$mHandler->deleteMessage();
 		}
 		
 		// Perika apakah Aku harus keluar grup?
@@ -64,12 +60,8 @@ class GenericmessageCommand extends SystemCommand
 			&& Group::isMustLeft($message->getChat()->getId())) {
 			$text = 'Sepertinya saya salah alamat. Saya pamit dulu..' .
 				"\nGunakan @WinTenBot";
-			Request::sendMessage([
-				'chat_id'    => $chat_id,
-				'text'       => $text,
-				'parse_mode' => 'HTML',
-			]);
-			Request::leaveChat(['chat_id' => $chat_id]);
+			$mHandler->sendText($text);
+			return Request::leaveChat(['chat_id' => $chat_id]);
 		}
 		
 		// Command Aliases
@@ -88,20 +80,7 @@ class GenericmessageCommand extends SystemCommand
 				break;
 		}
 		
-		//Cek Makasih
-		$makasih = Words::cekKata($kata, thanks);
-		if ($makasih) {
-			$text = 'Sama-sama, senang bisa membantu gan...';
-			Request::sendMessage([
-				'chat_id'             => $chat_id,
-				'text'                => $text,
-				'reply_to_message_id' => $message->getMessageId(),
-				'parse_mode'          => 'HTML',
-			]);
-		}
-		
 		// Chatting
-		$chat = '';
 		switch (true) {
 			case Words::cekKata($kata, 'gan'):
 				$chat = 'ya gan, gimana';
@@ -109,27 +88,25 @@ class GenericmessageCommand extends SystemCommand
 			case Words::cekKata($kata, 'mau tanya'):
 				$chat = 'Langsung aja tanya gan';
 				break;
+			case Words::cekKata($kata, thanks):
+				$chat = 'Sama-sama, senang bisa membantu gan...';
+				break;
 			
 			default:
 				break;
 		}
 		
-		Request::sendMessage([
-			'chat_id'             => $chat_id,
-			'text'                => $chat,
-			'reply_to_message_id' => $message->getMessageId(),
-			'parse_mode'          => 'HTML',
-		]);
+		$chat != '' ? $mHandler->sendText($chat) : false;
 		
 		if ($repMsg !== null) {
 			if ($message->getChat()->getType() != "private") {
-				$text = "<a href='tg://user?id=" . $from_id . "'>" . $from_first_name . '</a>' . ' mereply ' .
+				$chat = "<a href='tg://user?id=" . $from_id . "'>" . $from_first_name . '</a>' . ' mereply ' .
 					"<a href='https://t.me/" . $chat_username . '/' .
-					$message->getMessageId() . "'>pesan kamu" . '</a>' . ' di grup <b>' . $chat_title . '</b>';
-				$text .= "\n" . $message->getText();
+					$message->getMessageId() . "'>pesan kamu" . '</a>' . ' di grup <b>' . $chat_title . '</b>'
+					. "\n" . $message->getText();
 				$data = [
 					'chat_id'                  => $repMsg->getFrom()->getId(),
-					'text'                     => $text,
+					'text'                     => $chat,
 					'parse_mode'               => 'HTML',
 					'disable_web_page_preview' => true,
 				];
