@@ -11,6 +11,7 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
 use src\Handlers\MessageHandlers;
 use src\Model\Group;
@@ -100,9 +101,10 @@ class GenericmessageCommand extends SystemCommand
 		
 		if ($repMsg !== null) {
 			if ($message->getChat()->getType() != "private") {
-				$chat = "<a href='tg://user?id=" . $from_id . "'>" . $from_first_name . '</a>' . ' mereply ' .
-					"<a href='https://t.me/" . $chat_username . '/' .
-					$message->getMessageId() . "'>pesan kamu" . '</a>' . ' di grup <b>' . $chat_title . '</b>'
+				$mssgLink = 'https://t.me/' . $chat_username . '/' . $message->getMessageId();
+				$chat = "<a href='tg://user?id=" . $from_id . "'>" . $from_first_name . '</a>' .
+					" mereply <a href='" . $mssgLink . "'>pesan kamu" . '</a>' .
+					' di grup <b>' . $chat_title . '</b>'
 					. "\n" . $message->getText();
 				$data = [
 					'chat_id'                  => $repMsg->getFrom()->getId(),
@@ -110,6 +112,13 @@ class GenericmessageCommand extends SystemCommand
 					'parse_mode'               => 'HTML',
 					'disable_web_page_preview' => true,
 				];
+				
+				if ($chat_username != '') {
+					$btn_markup = [['text' => '💬 Balas Pesan', 'url' => $mssgLink]];
+					$data['reply_markup'] = new InlineKeyboard([
+						'inline_keyboard' => array_chunk($btn_markup, 2),
+					]);
+				}
 				
 				return Request::sendMessage($data);
 			} else {
