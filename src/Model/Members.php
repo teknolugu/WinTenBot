@@ -43,4 +43,48 @@ class Members
 		$data = $until > 0 ? $mute : $unmute;
 		return Request::restrictChatMember($data);
 	}
+	
+	/**
+	 * @param $chat_id
+	 * @param $user_id
+	 * @return \Longman\TelegramBot\Entities\ServerResponse
+	 */
+	public static function promote($chat_id, $user_id)
+	{
+		$promote_data = [
+			'chat_id'              => $chat_id,
+			'user_id'              => $user_id,
+			'can_change_info'      => false,
+			'can_post_messages'    => false,
+			'can_edit_messages'    => false,
+			'can_delete_messages'  => true,
+			'can_invite_users'     => true,
+			'can_restrict_members' => true,
+			'can_pin_messages'     => true,
+			'can_promote_members'  => false,
+		];
+		return Request::promoteChatMember($promote_data);
+	}
+	
+	/**
+	 * @param $chat_id
+	 * @param $user_id
+	 * @return \Longman\TelegramBot\Entities\ServerResponse
+	 */
+	public static function demote($chat_id, $user_id)
+	{
+		$depromote_data = [
+			'chat_id'              => $chat_id,
+			'user_id'              => $user_id,
+			'can_change_info'      => false,
+			'can_post_messages'    => false,
+			'can_edit_messages'    => false,
+			'can_delete_messages'  => false,
+			'can_invite_users'     => false,
+			'can_restrict_members' => false,
+			'can_pin_messages'     => false,
+			'can_promote_members'  => false,
+		];
+		return Request::promoteChatMember($depromote_data);
+	}
 }
