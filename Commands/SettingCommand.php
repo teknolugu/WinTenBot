@@ -62,7 +62,7 @@ class SettingCommand extends UserCommand
                 return $mHandler->sendText($text);
             } else {
                 $mHandler->deleteMessage();
-                $mHandler->sendText('🔄 Loading settings..');
+                $mHandler->sendText('🔄 Loading settings..','-1');
                 $btns = Settings::getForTombol(['chat_id' => $chat_id]);
                 $btn_markup = [];
                 $btns = array_map(null, ...$btns);

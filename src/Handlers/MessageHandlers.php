@@ -46,17 +46,18 @@ class MessageHandlers
 	final public function sendText($text, $messageId = null, $keyboard = null)
 	{
 		$this->timeProc = Time::jedaNew($this->date);
+		if($text !=''){
+            $text .= $this->timeInit . ' | ' . $this->timeProc;
+        }
 		$data = [
 			'chat_id'                  => $this->chat_id,
-			'text'                     => $text . $this->timeInit . ' | ' . $this->timeProc,
+			'text'                     => $text,
 			'parse_mode'               => 'HTML',
 			'disable_web_page_preview' => true,
 		];
 		
-		if ($messageId !== '') {
+		if ($messageId != '') {
 			$data['reply_to_message_id'] = $messageId;
-		} elseif ($messageId === '-1') {
-			$data['reply_to_message_id'] = null;
 		} else {
 			$data['reply_to_message_id'] = $this->message_id;
 		}
@@ -82,17 +83,18 @@ class MessageHandlers
 	{
 		$mssg_id = $this->responses->result->message_id;
 		$this->timeProc = Time::jedaNew($this->date);
+        if($text !=''){
+            $text .= $this->timeInit . ' | ' . $this->timeProc;
+        }
 		$data = [
 			'chat_id'                  => $this->chat_id,
-			'text'                     => $text . $this->timeInit . ' | ' . $this->timeProc,
+			'text'                     => $text,
 			'message_id'               => $mssg_id,
 			'parse_mode'               => 'HTML',
 			'disable_web_page_preview' => true,
 		];
-		if ($messageId !== '') {
+		if ($messageId != '') {
 			$data['reply_to_message_id'] = $messageId;
-		} elseif ($messageId === '-1') {
-			$data['reply_to_message_id'] = null;
 		} else {
 			$data['reply_to_message_id'] = $this->message_id;
 		}
