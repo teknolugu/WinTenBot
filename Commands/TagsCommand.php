@@ -40,8 +40,11 @@ class TagsCommand extends UserCommand
 		if ($hit > 0) {
 			$text = "#️⃣  <b>$hit Tags</b>\n-------\n";
 			foreach ($tags_data as $data) {
-				$text .= '<code>#' . $data['tag'] . '</code> ';
+				$arr[] = '<code>#' . $data['tag'] . '</code>';
 			}
+			sort($arr);
+			$tag = implode(' ', $arr);
+			$text .= $tag;
 		} else {
 			$text = 'Tidak ada tags di hatiqu';
 		}

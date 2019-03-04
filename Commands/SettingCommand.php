@@ -8,84 +8,89 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use src\Model\Group;
-use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\InlineKeyboard;
-use Longman\TelegramBot\Request;
+use src\Handlers\MessageHandlers;
+use src\Model\Group;
 use src\Model\Settings;
+use src\Utils\Converters;
 
 class SettingCommand extends UserCommand
 {
-	protected $name = 'set';
-	protected $description = 'Seting up group';
-	protected $usage = '/set <param> <value>';
-	protected $version = '1.0.0';
-	
-	/**
-	 * Execute command
-	 *
-	 * @return \Longman\TelegramBot\Entities\ServerResponse
-	 * @throws \Longman\TelegramBot\Exception\TelegramException
-	 */
-	public function execute()
-	{
-		$message = $this->getMessage();
-		$chat_id = $message->getChat()->getId();
-		$mssg_id = $message->getMessageId();
-		$from_id = $message->getFrom()->getId();
-		$time = $message->getDate();
-		$time1 = Time::jedaNew($time);
-		$pecah = explode(' ', $message->getText(true));
-		
-		$isAdmin = Group::isAdmin($from_id, $chat_id);
-		$isSudoer = Group::isSudoer($from_id);
-		if ($isAdmin || $isSudoer) {
-//            $data = [
-//                'chat_id' => $chat_id,
-//                'parse_mode' => 'HTML'
-//            ];
-//
-			if ($pecah[0] != '') {
-//                $hasil = Grup::simpanSet([
-//                    'id_grup' => $chat_id,
-//                    'properti' => $pecah[1],
-//                    'data' => $pecah[2]
+    protected $name = 'set';
+    protected $description = 'Change settings for current group';
+    protected $usage = '/set <param>';
+    protected $version = '1.0.0';
+
+    /**
+     * Execute command
+     *
+     * @return \Longman\TelegramBot\Entities\ServerResponse
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     */
+    public function execute()
+    {
+        $message = $this->getMessage();
+        $mHandler = new MessageHandlers($message);
+        $chat_id = $message->getChat()->getId();
+        $mssg_id = $message->getMessageId();
+        $from_id = $message->getFrom()->getId();
+        $pecah = explode(' ', $message->getText(true));
+
+        $isAdmin = Group::isAdmin($from_id, $chat_id);
+        $isSudoer = Group::isSudoer($from_id);
+        if ($isAdmin || $isSudoer && !$message->getChat()->isPrivateChat()) {
+            if ($pecah[0] != '') {
+//                $text = Settings::inlineSetting([
+//                    'chat_id' => $chat_id,
+//                    'inline' => $pecah
 //                ]);
-//                $hasil = json_decode($hasil, true);
-//                $text = 'Set' . "\n " . $pecah[1] . ' ' . $pecah[2] . ' ' . $hasil['status'];
-//                $text = json_encode($hasil);
-				
-				Settings::save($chat_id, 'test', 'wik');
-				$text = 'wik';
-			} else {
-				$switch_element = mt_rand(0, 9) < 5 ? 'true' : 'false';
-				$inline_keyboard = new InlineKeyboard([
-					['text' => 'inline', 'switch_inline_query' => $switch_element],
-					['text' => 'inline current chat', 'switch_inline_query_current_chat' => $switch_element],
-				], [
-					['text' => 'Welcome', 'callback_data' => 'identifier'],
-					['text' => 'Username', 'url' => 'https://github.com/php-telegram-bot/core'],
-				], [
-					['text' => 'callback', 'callback_data' => 'identifier'],
-					['text' => 'open url', 'url' => 'https://github.com/php-telegram-bot/core'],
-				]);
-				$data['chat_id'] = $from_id;
-				$data['reply_markup'] = $inline_keyboard;
-				$text = "Lorem ipsum dolor";
-			}
-		}
-		
-		$time2 = Time::jedaNew($time);
-		$time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
-		
-		Request::deleteMessage([
-			'chat_id'    => $chat_id,
-			'message_id' => $mssg_id,
-		]);
-		
-		$data['text'] = $text . $time;
-		
-		return Request::sendMessage($data);
-	}
+
+                $pecah1 = explode('_', $pecah[0]); // enable_bot || disable_bot
+                if (in_array($pecah1[0], ['enable', 'disable'])) {
+                    $col = 'enable' . ltrim($pecah[0], $pecah1[0]); // enable_bot
+                    $int = Converters::stringToInt($pecah[0]);
+
+                    $text = Settings::saveNew([
+                        $col => $int,
+                        'chat_id' => $chat_id,
+                    ], [
+                        'chat_id' => $chat_id,
+                    ]);
+                } else {
+                    $text = 'Parameter invalid';
+                }
+                return $mHandler->sendText($text);
+            } else {
+                $mHandler->deleteMessage();
+                $mHandler->sendText('🔄 Loading settings..','-1');
+                $btns = Settings::getForTombol(['chat_id' => $chat_id]);
+                $btn_markup = [];
+                $btns = array_map(null, ...$btns);
+                foreach ($btns as $key => $val) {
+                    $p = explode('_', $key);
+                    $cek = Converters::intToEmoji($val);
+                    $callback = ltrim($key, $p[0]);
+                    $btn_text = str_replace('_', ' ', ltrim($callback, '_'));
+                    $btn_markup[] = [
+                        'text' => $cek . ' ' . ucfirst($btn_text),
+                        'callback_data' => 'setting' . $callback
+                    ];
+                }
+
+                $text = "⚙ Group settings for <b>" . $message->getChat()->getTitle() . '</b>' .
+                    "\n<i>Click for enable/disable</i>";
+                $group_data = Settings::getNew(['chat_id' => $chat_id]);
+                $r = $mHandler->editText($text, null, $btn_markup);
+                $mHandler->deleteMessage($group_data[0]['last_setting_message_id']);
+                Settings::saveNew([
+                    'last_setting_message_id' => $r->result->message_id,
+                    'chat_id' => $chat_id,
+                ], [
+                    'chat_id' => $chat_id,
+                ]);
+            }
+        }
+
+        return $r;
+    }
 }

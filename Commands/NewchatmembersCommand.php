@@ -12,6 +12,7 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;
 use src\Handlers\MessageHandlers;
 use src\Model\Group;
+use src\Model\Members;
 use src\Model\Settings;
 use src\Utils\Time;
 use src\Utils\Words;
@@ -50,6 +51,7 @@ class NewchatmembersCommand extends SystemCommand
 			$member_lnames = [];
 			$time_current = Time::sambuts();
 			$new_welcome_message = '';
+			$member_ids = [];
 			$member_count = json_decode(Request::getChatMembersCount(['chat_id' => $chat_id]), true)['result'];
 			$welcome_data = Settings::getNew(['chat_id' => $chat_id]);
 			
@@ -71,6 +73,8 @@ class NewchatmembersCommand extends SystemCommand
 						$new_members_count = count($member_names);
 						$new_members = implode(', ', $member_names);
 					}
+					$member_ids[] = $member->getId();
+					$member_id = implode(', ', $member_ids);
 				} else {
 					$member_lnames [] = $nameLink;
 					$data = [
@@ -105,9 +109,9 @@ class NewchatmembersCommand extends SystemCommand
 			
 			if (count($member_bots) > 0) {
 				if ($welcome_message[1] != '') {
-					$new_welcome_message = $welcome_message[0];
+					$new_welcome_message .= $welcome_message[1];
 				} else {
-					$new_welcome_message = "🤖 Bot baru: {$new_bots_count}" .
+					$new_welcome_message .= "🤖 Bot baru: {$new_bots_count}" .
 						"\nHai {$new_bots}, siapa yang menambahkan kamu?.";
 				}
 				$new_welcome_message .= "\n\n";
@@ -116,9 +120,9 @@ class NewchatmembersCommand extends SystemCommand
 			
 			if (count($member_nounames) > 0) {
 				if ($welcome_message[2] != '') {
-					$new_welcome_message = $welcome_message[0];
+					$new_welcome_message .= $welcome_message[2];
 				} else {
-					$new_welcome_message = "⚠ Tanpa username: {$no_username_count}" .
+					$new_welcome_message .= "⚠ Tanpa username: {$no_username_count}" .
 						"\nHai {$no_username}, tolong pasang username." .
 						"\nJika tidak tahu caranya, klik tombol di bawah ini.";
 				}
@@ -171,7 +175,16 @@ class NewchatmembersCommand extends SystemCommand
 			$btn_markup[] = ['text' => 'Pasang username', 'url' => urlStart . '?start=username'];
 		}
 		
-		$mHandler->deleteMessage($welcome_data[0]['last_welcome_message_id']);
+		if (count($member_ids) > 0 && $welcome_data[0]['enable_human_verification'] == '1') {
+			foreach ($member_ids as $id) {
+				Members::muteMember($chat_id, $id, 1);
+			}
+			$text .= "\n\nAnggota baru di Mute untuk sementara, silakan klik tombol <b>Verifikasi</b> di bawah ini agar tidak di Mute!";
+			$btn_markup[] = ['text' => '✅ Verifikasi saya!', 'callback_data' => 'verify_' . $member_id];
+		} else {
+			$mHandler->deleteMessage($welcome_data[0]['last_welcome_message_id']);
+		}
+		
 		$r = $mHandler->sendText($text, null, $btn_markup);
 		
 		Settings::saveNew([
