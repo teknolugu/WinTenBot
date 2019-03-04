@@ -40,11 +40,13 @@ class ChatHandler
 			'user_id' => $user_id,
 		];
 		
+		$r = Request::kickChatMember($kick_data);
+		
 		if ($unban) {
 			Request::unbanChatMember($kick_data);
 		}
 		
-		return Request::kickChatMember($kick_data);
+		return $r;
 	}
 	
 	public function unbanMember()
