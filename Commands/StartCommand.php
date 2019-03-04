@@ -44,9 +44,10 @@ class StartCommand extends SystemCommand
 		$pecah = explode('_', $message->getText(true));
 		switch ($pecah[0]) {
 			case 'username':
+			    $file_id = isBeta ? 'CgADBQADIgADzjAhVzAzhd8G8GtBAg' : 'CgADBQADIgADzjAhV33L1C0iEGCyAg';
 				return Request::sendDocument([
 					'chat_id'                  => $chat_id,
-					'document'                 => 'CgADBQADIgADzjAhVzAzhd8G8GtBAg',
+					'document'                 => $file_id,
 					'caption'                  => 'Buka aplikasi Telegram > Settings > Username, lalu isi Username-nya.',
 					'parse_mode'               => 'HTML',
 					'reply_to_message_id'      => $mssg_id,
