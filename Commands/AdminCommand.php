@@ -32,74 +32,76 @@ class AdminCommand extends UserCommand
         $chat_id = $message->getChat()->getId();
         $mssg_id = $message->getMessageId();
 
-        $time = $message->getDate();
-	    $time1 = Time::jedaNew($time);
 
-        $pecah = explode(' ', $message->getText(true));
-        if ($pecah[0] != '') {
-            $param = $pecah[0];
-            if ($pecah[0][0] != '-') {
-                $param = '@' . $pecah[0];
-            }
-
-            $chat = [
-                'chat_id' => $param,
-            ];
-        } else {
-            $chat = [
-                'chat_id' => $chat_id,
-            ];
-        }
-
-        $respon = Request::getChatAdministrators($chat);
-
-        $respon = json_decode($respon, true);
-        $result = $respon['result'];
-        $ngadmins = [];
-        if (count($result) > 0) {
-            foreach ($result as $admin) {
-                $fullname = trim($admin['user']['first_name'] . ' ' . $admin['user']['last_name']);
-	            $fullname = Words::substrteks($fullname, 30);
-                $fullname = htmlspecialchars($fullname);
-                if ($fullname == null) {
-                    $fullname = 'Akun terhapus';
+        if(!$message->getChat()->isPrivateChat()) {
+            $time = $message->getDate();
+            $time1 = Time::jedaNew($time);
+            $pecah = explode(' ', $message->getText(true));
+            if ($pecah[0] != '') {
+                $param = $pecah[0];
+                if ($pecah[0][0] != '-') {
+                    $param = '@' . $pecah[0];
                 }
-                if ($admin['status'] == 'creator') {
-                    $creator = "<a href='tg://user?id=" . $admin['user']['id'] . "'>" . $fullname . '</a>';
-                } else {
-                    $admins = "<a href='tg://user?id=" . $admin['user']['id'] . "'>" . $fullname . '</a>';
-                    if ($admin['user']['is_bot']) {
-                        $admins .= " 🤖";
-                    }
-                    $ngadmins[] = $admins;
-                }
-                sort($ngadmins);
-            }
-        }
 
-        $ngadmin = '';
-        $noAdm = 1;
-        $lastAdm = end($ngadmins);
-        foreach ($ngadmins as $adminl) {
-            if ($adminl != $lastAdm) {
-                $ngadmin .= '├ ' . $noAdm . ' . ' . $adminl . "\n";
+                $chat = [
+                    'chat_id' => $param,
+                ];
             } else {
-                $ngadmin .= '└ ' . $noAdm . ' . ' . $adminl . "\n";
+                $chat = [
+                    'chat_id' => $chat_id,
+                ];
             }
-            $noAdm++;
+
+            $respon = Request::getChatAdministrators($chat);
+
+            $respon = json_decode($respon, true);
+            $result = $respon['result'];
+            $ngadmins = [];
+            if (count($result) > 0) {
+                foreach ($result as $admin) {
+                    $fullname = trim($admin['user']['first_name'] . ' ' . $admin['user']['last_name']);
+                    $fullname = Words::substrteks($fullname, 30);
+                    $fullname = htmlspecialchars($fullname);
+                    if ($fullname == null) {
+                        $fullname = 'Akun terhapus';
+                    }
+                    if ($admin['status'] == 'creator') {
+                        $creator = "<a href='tg://user?id=" . $admin['user']['id'] . "'>" . $fullname . '</a>';
+                    } else {
+                        $admins = "<a href='tg://user?id=" . $admin['user']['id'] . "'>" . $fullname . '</a>';
+                        if ($admin['user']['is_bot']) {
+                            $admins .= " 🤖";
+                        }
+                        $ngadmins[] = $admins;
+                    }
+                    sort($ngadmins);
+                }
+            }
+
+            $ngadmin = '';
+            $noAdm = 1;
+            $lastAdm = end($ngadmins);
+            foreach ($ngadmins as $adminl) {
+                if ($adminl != $lastAdm) {
+                    $ngadmin .= '├ ' . $noAdm . ' . ' . $adminl . "\n";
+                } else {
+                    $ngadmin .= '└ ' . $noAdm . ' . ' . $adminl . "\n";
+                }
+                $noAdm++;
+            }
+
+            if ($creator != '') {
+                $text .= "👤 <b>Creator</b>\n└ " . $creator;
+            }
+
+            if ($ngadmin != '') {
+                $text .= "\n\n👥️ <b>Administrators: " . count($ngadmins) . "</b>" .
+                    "\n" . $ngadmin;
+            }
+            $time2 = Time::jedaNew($time);
+            $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
         }
 
-        if ($creator != '') {
-            $text .= "👤 <b>Creator</b>\n└ " . $creator;
-        }
-
-        if ($ngadmin != '') {
-            $text .= "\n\n👥️ <b>Administrators: " . count($ngadmins) . "</b>" .
-                "\n" . $ngadmin;
-        }
-	
-	    $time2 = Time::jedaNew($time);
-        $time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
 
         $data = [
             'chat_id' => $chat_id,
