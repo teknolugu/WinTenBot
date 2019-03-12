@@ -172,7 +172,7 @@ class NewchatmembersCommand extends SystemCommand
 		}
 		
 		if ($no_username_count > 0) {
-			$btn_markup[] = ['text' => 'Pasang username', 'url' => urlStart . '?start=username'];
+			$btn_markup[] = ['text' => 'Pasang username', 'url' => urlStart . 'username'];
 		}
 		
 		if (count($member_ids) > 0 && $welcome_data[0]['enable_human_verification'] == '1') {
@@ -185,7 +185,7 @@ class NewchatmembersCommand extends SystemCommand
 			$mHandler->deleteMessage($welcome_data[0]['last_welcome_message_id']);
 		}
 		
-		$r = $mHandler->sendText($text, null, $btn_markup);
+		$r = $mHandler->sendText($text, '-1', $btn_markup);
 		
 		Settings::saveNew([
 			'last_welcome_message_id' => $r->result->message_id,
