@@ -10,6 +10,7 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
 use src\Handlers\MessageHandlers;
+use src\Model\Settings;
 use src\Model\Tags;
 
 class TagsCommand extends UserCommand
@@ -30,8 +31,8 @@ class TagsCommand extends UserCommand
 		$message = $this->getMessage();
 		$mHandler = new MessageHandlers($message);
 		$chat_id = $message->getChat()->getId();
-		
-		$mHandler->sendText('Loading Tags..');
+
+        $mHandler->sendText('🔄 Loading Tags..');
 		$tags_data = Tags::getTags([
 			'id_chat' => $chat_id,
 		]);
@@ -46,9 +47,21 @@ class TagsCommand extends UserCommand
 			$tag = implode(' ', $arr);
 			$text .= $tag;
 		} else {
-			$text = 'Tidak ada tags di hatiqu';
+            $text = 'Tidak ada Tags di hatiqu';
 		}
-		
-		return $mHandler->editText($text);
+
+        $r = $mHandler->editText($text);
+
+        $welcome_data = Settings::getNew(['chat_id' => $chat_id]);
+        $mHandler->deleteMessage($welcome_data[0]['last_tags_message_id']);
+
+        Settings::saveNew([
+            'last_tags_message_id' => $r->result->message_id,
+            'chat_id' => $chat_id,
+        ], [
+            'chat_id' => $chat_id,
+        ]);
+
+        return $r;
 	}
 }
