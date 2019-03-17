@@ -8,94 +8,85 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Request;
+use src\Handlers\MessageHandlers;
 use src\Model\Resi;
 
 class ResiCommand extends UserCommand
 {
     protected $name = 'resi';
     protected $description = 'Cek resi';
-    protected $usage = '/resi';
+    protected $usage = '/resi jne/jnt no_resi';
     protected $version = '1.0.0';
 
     /**
      * Execute command
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Longman\TelegramBot\Exception\TelegramException
      */
     public function execute()
     {
         $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
-        $mssg_id = $message->getMessageId();
-        $time = $message->getDate();
-        $cocot = explode(' ', $message->getText(true));
+        $mHandler = new MessageHandlers($message);
+        $cocot = explode(' ', strtolower($message->getText(true)));
 
-        $kurirs = ['jne', 'pos','jnt','jne'];
-        $r = Request::sendMessage([
-            'chat_id' => $chat_id,
-            'text'    => 'Sedang mengecek, silakan tunggu..'
-        ]);
-        usleep(1000000);
+        if ($cocot[0] != '') {
+//        $kurirs = ['jne', 'pos', 'jnt', 'jne'];
+            $mHandler->sendText("🔍 Sedang mengecek, silakan tunggu..");
+//            if (in_array($cocot[0], $kurirs)) {
+//                $kurir = array_search($cocot[0], $kurirs);
+//                $kurir = $kurirs[$kurir];
 
-        if (in_array($cocot[0], $kurirs)) {
-            $kurir = array_search($cocot[0], $kurirs);
-            $kurir = $kurirs[$kurir];
+            $cek = json_decode(Resi::cekResi($cocot[0], $cocot[1]), true);
+//            }
+//            else if ($cocot[0] != '') {
+//                foreach ($kurirs as $kurir) {
+//                    $mHandler->editText('Cek kurir ' . ucfirst($kurir) . ' resi ' . $cocot[0]);
+//                    $cek = json_decode(Resi::cekResi($kurir, $cocot[0]), true);
+//                    $mHandler->editText('Cek kurir ' . ucfirst($kurir) . ' resi ' . $cocot[0] .
+//                        "\nHasil : " . $cek->informasi_pengiriman->no_resi);
+//                    if ($cek->informasi_pengiriman->no_resi != '') {
+//                        $mHandler->editText("Ditemukn..");
+//                        break;
+//                    }
+//                }
+//                $kurir = $cocot[0];
+//            }
 
-            $cek = json_decode(Resi::cekResi($kurir, $cocot[1]));
-        } else if($cocot[0] !='') {
-            foreach ($kurirs as $kurir) {
-                $r = Request::editMessageText([
-                    'chat_id' => $chat_id,
-                    'message_id' => $r->result->message_id,
-                    'text'    => 'Cek kurir '.ucfirst($kurir).' resi '.$cocot[0]
-                ]);
 
-                $cek = json_decode(Resi::cekResi($kurir, $cocot[0]));
-                $r = Request::editMessageText([
-                    'chat_id' => $chat_id,
-                    'message_id' => $r->result->message_id,
-                    'text'    => 'Cek kurir '.ucfirst($kurir).' resi '.$cocot[0].
-                        "\nHasil : ".$cek->informasi_pengiriman->no_resi
-                ]);
-                if($cek->informasi_pengiriman->no_resi != ''){
-                    break;
+            if (count($cek['informasi_pengiriman']) > 0) {
+                $mHandler->editText("🔍 Saya menemukan resi, tunggu sebentar lagi..");
+                sleep(1);
+                $info = '';
+                $outbond = '';
+                $infoResi = $cek['informasi_pengiriman'];
+                foreach ($infoResi as $key => $value) {
+                    $info .= "\n<b>" . ucfirst(str_replace('_', ' ', $key)) . '</b> : <code>' .
+                        str_replace(["\n", ':'], '', $value) . '</code>';
                 }
+
+                $outbonds = $cek['status_pengiriman']['outbond'];
+                foreach ($outbonds as $key => $value) {
+                    $outbond .= "\n<b>" . $key . "</b>: <code>" . $value . '</code>';
+                }
+
+                $text = '<b>Kurir :</b> ' . ucfirst($cocot[0]) . $info . "\n" . $outbond;
+            } else {
+
+                $text = 'No resi ' . $cocot[1] . ' tidak di temukan ' .
+                    "\nPerika kembali kurir dan no_resi";
             }
 
-            $infoResi = $cek->informasi_pengiriman;
-            foreach ($infoResi as $key => $value) {
-                $info .= "\n<b>" . ucfirst(str_replace('_', ' ', $key)) . '</b> : <code>' .
-                    str_replace(["\n", ':'], '', $value) . '</code>';
-            }
-
-            $outbonds = $cek->status_pengiriman->outbond;
-            foreach ($outbonds as $key => $value) {
-                $outbond .= "\n<b>" . $key . "</b>\n <code>" . $value . '</code>';
-            }
-
-            if($infoResi->informasi_pengiriman->no_resi != '') {
-                $text = 'Kurir : ' . ucfirst($kurir) . $info . "\n" . $outbond;
-            }else{
-                $text = 'No resi tidak di temukan '.$infoResi->informasi_pengiriman->no_resi;
-            }
-        }else{
-            $text = 'ℹ️ <b>Kurir tidak terdefinisi</b>';
+//            $text = json_encode($cek, 128);
+            return $mHandler->editText($text);
+        } else {
+            $text = 'ℹ <b>Parameter</b> tidak valid' .
+                "\n<b>Example</b>" .
+                "\n<code>/resi jne|jnt no_resi</code>";
+//                "\n<code>/resi no_resi</code> - AutoFind kurir";
+            return $mHandler->sendText($text);
         }
-	
-	    $time = Time::jeda($time);
-        $data = [
-            'chat_id'                  => $chat_id,
-            'text'                     => $text . $time,
-            'message_id' => $r->result->message_id,
-            'reply_to_message_id'      => $mssg_id,
-            'disable_web_page_preview' => true,
-            'parse_mode'               => 'HTML'
-        ];
-
-        Request::editMessageText($data);
     }
 }
