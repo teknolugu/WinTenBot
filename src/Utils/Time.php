@@ -16,7 +16,7 @@ class Time
      */
     public static function jeda($time)
     {
-        $time = microtime(true) - $_SERVER['request_time_float'] - $time + 225;
+        $time = microtime(true) - $time;
         return "\n\n<code>⏱ " . number_format((float)$time, 3, '.', '') . ' s</code>';
     }
 	
@@ -27,7 +27,7 @@ class Time
 	public static function jedaNew($time)
     {
 //        $time =  $_SERVER['request_time_float'] - $time;
-        $time = microtime(true) - $time + 225;
+        $time = microtime(true) - $time;
         return '<code>' . number_format((float)$time, 3, '.', '') . ' s</code>';
     }
 	
