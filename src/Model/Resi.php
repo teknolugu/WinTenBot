@@ -9,6 +9,7 @@
 namespace src\Model;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 
 class Resi
 {
@@ -16,7 +17,7 @@ class Resi
      * @param $kurir
      * @param $resi
      * @return string
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public static function cekResi($kurir, $resi)
     {
@@ -24,7 +25,8 @@ class Resi
 //        return file_get_contents($url);
 
         $client = new Client(['base_uri' => new_api]);
-        $response = $client->request('GET', '/resi', [
+//        $client = new Client(['base_uri' => ians_api]);
+        $response = $client->request('GET', 'resi', [
             'query' => [
                 'kurir' => $kurir,
                 'resi' => $resi

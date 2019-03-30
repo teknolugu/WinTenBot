@@ -8,7 +8,10 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use GuzzleHttp\Exception\GuzzleException;
 use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Entities\ServerResponse;
+use Longman\TelegramBot\Exception\TelegramException;
 use src\Handlers\MessageHandlers;
 use src\Model\Resi;
 
@@ -22,9 +25,9 @@ class ResiCommand extends UserCommand
     /**
      * Execute command
      *
-     * @return \Longman\TelegramBot\Entities\ServerResponse
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Longman\TelegramBot\Exception\TelegramException
+     * @return ServerResponse
+     * @throws GuzzleException
+     * @throws TelegramException
      */
     public function execute()
     {
@@ -32,15 +35,20 @@ class ResiCommand extends UserCommand
         $mHandler = new MessageHandlers($message);
         $cocot = explode(' ', strtolower($message->getText(true)));
 
-        if ($cocot[0] != '') {
-//        $kurirs = ['jne', 'pos', 'jnt', 'jne'];
-            $mHandler->sendText("🔍 Sedang mengecek, silakan tunggu..");
+        $kurirs = ['jne', 'pos', 'jnt', 'jne'];
+        if ($cocot[0] != '' && in_array($cocot[0], $kurirs)) {
+            if($cocot[1] != "") {
+                $mHandler->sendText("🔍 Sedang mengecek, silakan tunggu..");
+
 //            if (in_array($cocot[0], $kurirs)) {
 //                $kurir = array_search($cocot[0], $kurirs);
 //                $kurir = $kurirs[$kurir];
 
-            $cek = json_decode(Resi::cekResi($cocot[0], $cocot[1]), true);
+//            $text = $this->cekResi($cocot[0], $cocot[1]);
+//
+                $cek = json_decode(Resi::cekResi($cocot[0], $cocot[1]), true);
 //            }
+//
 //            else if ($cocot[0] != '') {
 //                foreach ($kurirs as $kurir) {
 //                    $mHandler->editText('Cek kurir ' . ucfirst($kurir) . ' resi ' . $cocot[0]);
@@ -56,37 +64,45 @@ class ResiCommand extends UserCommand
 //            }
 
 
-            if (count($cek['informasi_pengiriman']) > 0) {
-                $mHandler->editText("🔍 Saya menemukan resi, tunggu sebentar lagi..");
-                sleep(1);
-                $info = '';
-                $outbond = '';
-                $infoResi = $cek['informasi_pengiriman'];
-                foreach ($infoResi as $key => $value) {
-                    $info .= "\n<b>" . ucfirst(str_replace('_', ' ', $key)) . '</b> : <code>' .
-                        str_replace(["\n", ':'], '', $value) . '</code>';
+                if (count($cek['informasi_pengiriman']) > 0) {
+                    //$mHandler->editText("🔍 Saya menemukan resi, tunggu sebentar lagi..");
+
+                    $text = '<b>Kurir :</b> <code>' . strtoupper($cocot[0]).'</code>' . $this->parseCek($cek);
+                } else {
+
+                    $text = 'No resi ' . $cocot[1] . ' tidak di temukan ' .
+                        "\nPerika kembali kurir dan no_resi";
                 }
 
-                $outbonds = $cek['status_pengiriman']['outbond'];
-                foreach ($outbonds as $key => $value) {
-                    $outbond .= "\n<b>" . $key . "</b>: <code>" . $value . '</code>';
-                }
-
-                $text = '<b>Kurir :</b> ' . ucfirst($cocot[0]) . $info . "\n" . $outbond;
-            } else {
-
-                $text = 'No resi ' . $cocot[1] . ' tidak di temukan ' .
-                    "\nPerika kembali kurir dan no_resi";
+                return $mHandler->editText($text);
+            }else{
+                $mHandler->sendText("Resinya mana?");
             }
-
-//            $text = json_encode($cek, 128);
-            return $mHandler->editText($text);
         } else {
             $text = 'ℹ <b>Parameter</b> tidak valid' .
                 "\n<b>Example</b>" .
-                "\n<code>/resi jne|jnt no_resi</code>";
+                "\n<code>/resi nama_kurir no_resi</code>";
 //                "\n<code>/resi no_resi</code> - AutoFind kurir";
             return $mHandler->sendText($text);
         }
+    }
+
+    private function parseCek($cek)
+    {
+        $info = '';
+        $outbond = '';
+        $infoResi = $cek['informasi_pengiriman'];
+        foreach ($infoResi as $key => $value) {
+            $info .= "\n<b>" . ucfirst(str_replace('_', ' ', $key)) .
+                '</b> : <code>' . str_replace(["\n", ':'], '', $value) . '</code>';
+        }
+
+        $outbonds = $cek['status_pengiriman']['outbond'];
+        foreach ($outbonds as $key => $value) {
+            $outbond .= "\n<b>" . $key . "</b>:\n" . $value;
+        }
+
+        $text = $info . "\n" . $outbond;
+        return $text;
     }
 }
