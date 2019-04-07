@@ -67,11 +67,10 @@ class NewchatmembersCommand extends SystemCommand
                         $new_members_count = count($member_names);
                         $new_members = implode(', ', $member_names);
                     } else {
-                        if ($member->getUsername() === null) {
-                            $member_nounames[] = $nameLink;
-                            $no_username_count = count($member_nounames);
-                            $no_username = implode(', ', $member_nounames);
-                        } elseif ($member->getIsBot() === true) {
+//                        if ($member->getUsername() === null) {
+
+//                        } else
+                        if ($member->getIsBot() === true) {
                             $member_bots [] = $nameLink . ' 🤖';
                             $new_bots_count = count($member_bots);
                             $new_bots = implode(', ', $member_bots);
@@ -81,6 +80,10 @@ class NewchatmembersCommand extends SystemCommand
                             $new_members = implode(', ', $member_names);
                         }
                     }
+                    $member_nounames[] = $nameLink;
+                    $no_username_count = count($member_nounames);
+                    $no_username = implode(', ', $member_nounames);
+
                     $member_ids[] = $member->getId();
                     $member_id = implode(', ', $member_ids);
                 } else {
