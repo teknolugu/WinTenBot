@@ -56,7 +56,7 @@ class NewchatmembersCommand extends SystemCommand
             $time_current = Time::sambuts();
             $fixed_welcome_message = '';
             $member_ids = [];
-            //$member_count = json_decode(Request::getChatMembersCount(['chat_id' => $chat_id]), true)['result'];
+            $member_count = json_decode(Request::getChatMembersCount(['chat_id' => $chat_id]), true)['result'];
             $welcome_data = Settings::getNew(['chat_id' => $chat_id]);
             $human_verification = $welcome_data[0]['enable_human_verification'];
             $unified_welcome = $welcome_data[0]['enable_unified_welcome'];
@@ -146,7 +146,7 @@ class NewchatmembersCommand extends SystemCommand
                     $fixed_welcome_message .= "\n\n";
                 }
 
-                if (count($member_nounames) > 0) {
+                if (count($member_nounames) > 0 && $unified_welcome == '0') {
                     if ($splitted_welcome_message[2] != '') {
                         $fixed_welcome_message .= $splitted_welcome_message[2];
                     } else {
@@ -215,6 +215,7 @@ class NewchatmembersCommand extends SystemCommand
             'last_welcome_message_id' => $r->result->message_id,
             'chat_title' => $chat_title,
             'chat_id' => $chat_id,
+            'members_count' => $member_count
         ], [
             'chat_id' => $chat_id,
         ]);
