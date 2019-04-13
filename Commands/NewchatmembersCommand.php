@@ -16,6 +16,7 @@ use src\Handlers\MessageHandlers;
 use src\Model\Group;
 use src\Model\Members;
 use src\Model\Settings;
+use src\Utils\Buttons;
 use src\Utils\Time;
 use src\Utils\Words;
 
@@ -39,11 +40,12 @@ class NewchatmembersCommand extends SystemCommand
         $isKicked = false;
 
         // Perika apakah Aku harus keluar grup?
-        if (isRestricted
-            && !$message->getChat()->isPrivateChat()
+        if (isRestricted){
+            if($message->getChat()->isPrivateChat()
             && Group::isMustLeft($message->getChat()->getId())) {
-            $mHandler->sendText('Sepertinya saya salah alamat. Saya pamit dulu..' . "\nGunakan @WinTenBot");
-            return Request::leaveChat(['chat_id' => $chat_id]);
+                $mHandler->sendText('Sepertinya saya salah alamat. Saya pamit dulu..' . "\nGunakan @WinTenBot");
+                return Request::leaveChat(['chat_id' => $chat_id]);
+            }
         }
 
         if ($message->botAddedInChat() || $message->getNewChatMembers()) {
@@ -52,16 +54,24 @@ class NewchatmembersCommand extends SystemCommand
             $member_bots = [];
             $member_lnames = [];
             $time_current = Time::sambuts();
-            $new_welcome_message = '';
+            $fixed_welcome_message = '';
             $member_ids = [];
             //$member_count = json_decode(Request::getChatMembersCount(['chat_id' => $chat_id]), true)['result'];
             $welcome_data = Settings::getNew(['chat_id' => $chat_id]);
+            $human_verification = $welcome_data[0]['enable_human_verification'];
+            $unified_welcome = $welcome_data[0]['enable_unified_welcome'];
+            $raw_welcome_message = $welcome_data[0]['splitted_welcome_message'];
+            $raw_welcome_button = $welcome_data[0]['welcome_button'];
+            $last_welcome_message_id = $welcome_data[0]['last_welcome_message_id'];
 
             foreach ($members as $member) {
                 $full_name = trim($member->getFirstName() . ' ' . $member->getLastName());
-                $nameLen = strlen($full_name);
+                $nameLen = strlen(trim($full_name));
                 $nameLink = "<a href='tg://user?id=" . $member->getId() . "'>" . $full_name . '</a>';
                 if ($nameLen < 140) {
+                    if ($human_verification == '1') {
+                        Members::muteMember($chat_id, $member->getId(), 1);
+                    }
                     if ($welcome_data[0]['enable_unified_welcome'] == '1') {
                         $member_names[] = $nameLink;
                         $new_members_count = count($member_names);
@@ -105,63 +115,60 @@ class NewchatmembersCommand extends SystemCommand
                 }
             }
 
-            if ($welcome_data[0]['enable_unified_welcome'] == '1') {
-                if ($welcome_data[0]['welcome_message'] != '') {
-                    $new_welcome_message = $welcome_data[0]['welcome_message'];
+            if ($unified_welcome == '1') {
+                if ($raw_welcome_message != '') {
+                    $fixed_welcome_message = $raw_welcome_message;
                 } else {
-                    $new_welcome_message = "Anggota baru : {$new_members_count}" .
+                    $fixed_welcome_message = "Anggota baru : {$new_members_count}" .
                         "\n👤Hai {$new_members}, selamat {$time_current}." .
                         "\nSelamat datang di kontrakan {$chat_title}";
                 }
             } else {
-                $welcome_message = explode("\n\n", $welcome_data[0]['welcome_message']);
+                $splitted_welcome_message = explode("\n\n", $raw_welcome_message);
                 if (count($member_names) > 0) {
-                    if ($welcome_message[0] != '') {
-                        $new_welcome_message = $welcome_message[0];
+                    if ($splitted_welcome_message[0] != '') {
+                        $fixed_welcome_message = $splitted_welcome_message[0];
                     } else {
-                        $new_welcome_message = "Anggota baru : {$new_members_count}" .
+                        $fixed_welcome_message = "Anggota baru : {$new_members_count}" .
                             "\n👤Hai {$new_members}, selamat {$time_current}." .
                             "\nSelamat datang di kontrakan {$chat_title}";
                     }
-                    $new_welcome_message .= "\n\n";
-//				$new_welcome_message .= $welcome_message[0] . "\n\n";
+                    $fixed_welcome_message .= "\n\n";
                 }
 
                 if (count($member_bots) > 0) {
-                    if ($welcome_message[1] != '') {
-                        $new_welcome_message .= $welcome_message[1];
+                    if ($splitted_welcome_message[1] != '') {
+                        $fixed_welcome_message .= $splitted_welcome_message[1];
                     } else {
-                        $new_welcome_message .= "🤖 Bot baru: {$new_bots_count}" .
+                        $fixed_welcome_message .= "🤖 Bot baru: {$new_bots_count}" .
                             "\nHai {$new_bots}, siapa yang menambahkan kamu?.";
                     }
-                    $new_welcome_message .= "\n\n";
-//				$new_welcome_message .= $welcome_message[1] . "\n\n";
+                    $fixed_welcome_message .= "\n\n";
                 }
 
                 if (count($member_nounames) > 0) {
-                    if ($welcome_message[2] != '') {
-                        $new_welcome_message .= $welcome_message[2];
+                    if ($splitted_welcome_message[2] != '') {
+                        $fixed_welcome_message .= $splitted_welcome_message[2];
                     } else {
-                        $new_welcome_message .= "⚠ Tanpa username: {$no_username_count}" .
+                        $fixed_welcome_message .= "⚠ Tanpa username: {$no_username_count}" .
                             "\nHai {$no_username}, tolong pasang username." .
                             "\nJika tidak tahu caranya, klik tombol di bawah ini.";
                     }
-                    $new_welcome_message .= "\n\n";
-//				$new_welcome_message .= $welcome_message[2] . "\n\n";
+                    $fixed_welcome_message .= "\n\n";
                 }
             }
-//			if (count($member_lnames) > 0) {
-//				if ($isKicked['ok'] != false) {
-//					$text .=
-//						'🚷 < b>Ditendang: </b > (<code > ' . count($member_lnames) . ')</code > ' .
-//						"\n" . implode(', ', $member_lnames) . ', Namamu panjang gan!';
-//				} else {
-//					$text .=
-//						' < b>Eksekusi : </b > Mencoba untuk menendang spammer' .
-//						"\n < b>Status : </b > " . $isKicked['error_code'] .
-//						"\n < b>Result : </b > " . $isKicked['description'];
-//				}
-//			}
+			if (count($member_lnames) > 0) {
+				if ($isKicked['ok'] != false) {
+					$text .=
+						'🚷 < b>Ditendang: </b > (<code > ' . count($member_lnames) . ')</code > ' .
+						"\n" . implode(', ', $member_lnames) . ', Spammer detected!';
+				} else {
+					$text .=
+						' < b>Eksekusi : </b > Mencoba untuk menendang spammer' .
+						"\n < b>Status : </b > " . $isKicked['error_code'] .
+						"\n < b>Result : </b > " . $isKicked['description'];
+				}
+			}
             //$text .= "\n < b>Total : </b > " . $chatCount . 'Anggota';
         }
 
@@ -179,31 +186,27 @@ class NewchatmembersCommand extends SystemCommand
             'member_count' => $member_count ?? 0,
         ];
 
-        $text = Words::resolveVariable(trim($new_welcome_message), $replacement);
-        //$text = $new_welcome_message;
+        $text = Words::resolveVariable(trim($fixed_welcome_message), $replacement);
 
         $btn_markup = [];
-        if ($welcome_data[0]['welcome_button'] != '') {
-            $btn_data = $welcome_data[0]['welcome_button'];
-            $btn_datas = explode(',', $btn_data);
-            foreach ($btn_datas as $key => $val) {
-                $btn_row = explode('|', $val);
-                $btn_markup[] = ['text' => $btn_row[0], 'url' => $btn_row[1]];
-            }
+        if ($raw_welcome_button != '') {
+            $btn_markup = Buttons::Generate($raw_welcome_button);
+//            $btn_datas = explode(',', $raw_welcome_button);
+//            foreach ($btn_datas as $key => $val) {
+//                $btn_row = explode('|', $val);
+//                $btn_markup[] = ['text' => $btn_row[0], 'url' => $btn_row[1]];
+//            }
         }
 
         if ($no_username_count > 0) {
             $btn_markup[] = ['text' => 'Pasang username', 'url' => urlStart . 'username'];
         }
 
-        if (count($member_ids) > 0 && $welcome_data[0]['enable_human_verification'] == '1') {
-            foreach ($member_ids as $id) {
-                Members::muteMember($chat_id, $id, 1);
-            }
-            $text .= "\n\nAnggota baru di Mute untuk sementara, silakan klik tombol <b>Verifikasi</b> di bawah ini agar tidak di Mute!";
+        if (count($member_ids) > 0 && $human_verification == '1') {
+            $text .= "\n\nUntuk alasan keamanan, Silakan klik tombol <b>Verifikasi</b> di bawah ini agar tidak di Mute!";
             $btn_markup[] = ['text' => '✅ Verifikasi saya!', 'callback_data' => 'verify_' . $member_id];
         } else {
-            $mHandler->deleteMessage($welcome_data[0]['last_welcome_message_id']);
+            $mHandler->deleteMessage($last_welcome_message_id);
         }
 
         $r = $mHandler->sendText($text, '-1', $btn_markup);
