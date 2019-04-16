@@ -177,4 +177,13 @@ class Words
 			$string);
 		return $string_processed;
 	}
+
+	public static function randomizeCase($str){
+        for ($i=0, $c=strlen($str); $i<$c; $i++)
+            $str[$i] = (rand(0, 10) > 5
+                ? strtoupper($str[$i])
+                : strtolower($str[$i]));
+
+        return $str;
+    }
 }
