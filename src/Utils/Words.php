@@ -194,4 +194,8 @@ class Words
         $launch = explode($delimiters[0], $ready);
         return $launch;
     }
+
+    public static function clearAlphaNum($text){
+        return preg_replace("/[^a-zA-Z0-9\s]+/", "",  $text);
+    }
 }
