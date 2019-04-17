@@ -7,14 +7,11 @@
  */
 
 namespace Longman\TelegramBot\Commands\UserCommands;
-;
 
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use src\Handlers\MessageHandlers;
-use src\Model\Settings;
-use src\Utils\Converters;
 use src\Utils\Words;
 
 class StringCommand extends UserCommand
@@ -42,19 +39,24 @@ class StringCommand extends UserCommand
 
         $mHandler->sendText('Initializing..', '-1');
         if ($replyMssg != "") {
-            $raw_text = $replyMssg->getText();
+            $raw_text = $replyMssg->getText() ?? $replyMssg->getCaption();
             $replyTarget = $replyMssg->getMessageId();
         } else {
             $raw_text = $raw_message;
         }
 
-        if($raw_text != "") {
+        if ($raw_text != "") {
             $mHandler->editText('Randomizing case..');
             $text = Words::randomizeCase($raw_text);
-        }else{
+            if (!$mssg->getChat()->isPrivateChat()) {
+                $urlChatId = str_replace('-100', '', $chat_id);
+                $urlBtn = "https://t.me/c/$urlChatId/$replyTarget";
+                $btn_markup[] = ['text' => '🔍 Original message', 'url' => $urlBtn];
+            }
+        } else {
             $text = "You must reply message or give parameters";
         }
 
-        return $mHandler->editText($text);
+        return $mHandler->editText($text, '', $btn_markup);
     }
 }
