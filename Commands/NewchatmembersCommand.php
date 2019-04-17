@@ -38,14 +38,21 @@ class NewchatmembersCommand extends SystemCommand
 //		$pinned_msg = $message->getPinnedMessage()->getMessageId();
         $mHandler = new MessageHandlers($message);
         $isKicked = false;
+        $welcome_data = Settings::getNew(['chat_id' => $chat_id]);
 
         // Perika apakah Aku harus keluar grup?
-        if (isRestricted){
-            if($message->getChat()->isPrivateChat()
-            && Group::isMustLeft($message->getChat()->getId())) {
+        if (isRestricted) {
+            if ($message->getChat()->isPrivateChat()
+                && Group::isMustLeft($message->getChat()->getId())) {
                 $mHandler->sendText('Sepertinya saya salah alamat. Saya pamit dulu..' . "\nGunakan @WinTenBot");
                 return Request::leaveChat(['chat_id' => $chat_id]);
             }
+        }
+
+        $enable_restriction = $welcome_data[0]['enable_restriction'];
+        if($enable_restriction == '1'){
+            $mHandler->sendText('⚠ Saya benar-benar tidak untuk Grup ini!');
+            return Request::leaveChat(['chat_id' => $chat_id]);
         }
 
         if ($message->botAddedInChat() || $message->getNewChatMembers()) {
@@ -57,7 +64,6 @@ class NewchatmembersCommand extends SystemCommand
             $fixed_welcome_message = '';
             $member_ids = [];
             $member_count = json_decode(Request::getChatMembersCount(['chat_id' => $chat_id]), true)['result'];
-            $welcome_data = Settings::getNew(['chat_id' => $chat_id]);
             $human_verification = $welcome_data[0]['enable_human_verification'];
             $unified_welcome = $welcome_data[0]['enable_unified_welcome'];
             $raw_welcome_message = $welcome_data[0]['splitted_welcome_message'];
@@ -157,18 +163,18 @@ class NewchatmembersCommand extends SystemCommand
                     $fixed_welcome_message .= "\n\n";
                 }
             }
-			if (count($member_lnames) > 0) {
-				if ($isKicked['ok'] != false) {
-					$text .=
-						'🚷 < b>Ditendang: </b > (<code > ' . count($member_lnames) . ')</code > ' .
-						"\n" . implode(', ', $member_lnames) . ', Spammer detected!';
-				} else {
-					$text .=
-						' < b>Eksekusi : </b > Mencoba untuk menendang spammer' .
-						"\n < b>Status : </b > " . $isKicked['error_code'] .
-						"\n < b>Result : </b > " . $isKicked['description'];
-				}
-			}
+            if (count($member_lnames) > 0) {
+                if ($isKicked['ok'] != false) {
+                    $text .=
+                        '🚷 < b>Ditendang: </b > (<code > ' . count($member_lnames) . ')</code > ' .
+                        "\n" . implode(', ', $member_lnames) . ', Spammer detected!';
+                } else {
+                    $text .=
+                        ' < b>Eksekusi : </b > Mencoba untuk menendang spammer' .
+                        "\n < b>Status : </b > " . $isKicked['error_code'] .
+                        "\n < b>Result : </b > " . $isKicked['description'];
+                }
+            }
             //$text .= "\n < b>Total : </b > " . $chatCount . 'Anggota';
         }
 
