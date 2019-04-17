@@ -50,12 +50,23 @@ class NewchatmembersCommand extends SystemCommand
         }
 
         $enable_restriction = $welcome_data[0]['enable_restriction'];
-        if($enable_restriction == '1'){
+        if ($enable_restriction == '1') {
             $mHandler->sendText('⚠ Saya benar-benar tidak untuk Grup ini!');
             return Request::leaveChat(['chat_id' => $chat_id]);
         }
 
-        if ($message->botAddedInChat() || $message->getNewChatMembers()) {
+        if ($message->botAddedInChat()) {
+            $text = "🙋‍ Hai, perkenalkan saya <b>" . bot_name . '</b>!' .
+                "\nSaya adalah bot untuk debugging dan manajemen grup yang di lengkapi alat keamanan!" .
+                "\nAgar saya bekerja dengan fitur penuh, jadikan saya admin dengan level standard. " .
+                "Untuk melihat daftar perintah bisa ketikkan /help" .
+                "\n\nJika kamu ingin baca dokumentasi dapat di baca di web di bawah ini";
+            $btn_markup[] = ['text' => '📃 Dokumentasi', 'url' => 'https://dev.winten.tk/'];
+            $send = $mHandler->sendText($text, '-1', $btn_markup);
+            if (count($message->getNewChatMembers()) == 1) return $send;
+        }
+
+        if ($message->getNewChatMembers()) {
             $member_names = [];
             $member_nounames = [];
             $member_bots = [];
