@@ -58,6 +58,7 @@ class CallbackqueryCommand extends SystemCommand
         $callback_id = $callback_query->getMessage()->getMessageId();
         $callback_chat_id = $callback_query->getMessage()->getChat()->getId();
         $callback_from_id = $callback_query->getFrom()->getId();
+        $callback_from_username = $callback_query->getFrom()->getUsername();
         $callback_mssg_text = $callback_query->getMessage()->getText();
         $callback_chat_title = $callback_query->getMessage()->getChat()->getTitle();
         $message = $callback_query->getMessage();
@@ -232,6 +233,14 @@ class CallbackqueryCommand extends SystemCommand
                     $text = '401: Unauthorized.';
                 }
 
+                break;
+
+            case 'check':
+                if ($callback_from_username != "") {
+                    $text = "Username kamu adalah: $callback_from_username";
+                } else {
+                    $text = "Kamu belum menetapkan Username. Silakan ikuti tutorial video tersebut";
+                }
                 break;
         }
 

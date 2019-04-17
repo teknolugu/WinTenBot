@@ -12,11 +12,11 @@ class Time
 {
     /**
      * @param $time
-     * @return Words
+     * @return string
      */
     public static function jeda($time)
     {
-        $time = microtime(true) - $_SERVER['request_time_float'] - $time;
+        $time = microtime(true) - $time;
         return "\n\n<code>⏱ " . number_format((float)$time, 3, '.', '') . ' s</code>';
     }
 	
@@ -26,7 +26,8 @@ class Time
 	 */
 	public static function jedaNew($time)
     {
-        $time = microtime(true) - $_SERVER['request_time_float'] - $time;
+//        $time =  $_SERVER['request_time_float'] - $time;
+        $time = microtime(true) - $time;
         return '<code>' . number_format((float)$time, 3, '.', '') . ' s</code>';
     }
 	
@@ -35,6 +36,7 @@ class Time
 	 */
 	public static function sambuts()
     {
+        $sambut = '';
 	    $jam_now = date('H');
         if ($jam_now < 24 && $jam_now > 18) {
 	        $sambut = 'malam 🌙';
@@ -49,7 +51,6 @@ class Time
         } else if ($jam_now <= 4 && $jam_now >= 0) {
 	        $sambut = 'dini hari 🌚';
         }
-
         return $sambut;
     }
 	

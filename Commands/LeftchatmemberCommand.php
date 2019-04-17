@@ -8,6 +8,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use src\Handlers\MessageHandlers;
 use src\Utils\Time;
 use Longman\TelegramBot\Commands\SystemCommand;
 
@@ -26,26 +27,36 @@ class LeftchatmemberCommand extends SystemCommand
      */
     protected $version = '1.0.0';
 
+    /**
+     * @return \Longman\TelegramBot\Entities\ServerResponse|void
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     */
     public function execute()
     {
         $message = $this->getMessage();
+        $mHandler = new MessageHandlers($message);
         $chat_id = $message->getChat()->getId();
         $leftMem = $message->getLeftChatMember();
 
         $leftMemFname = $leftMem->getFirstName();
-        $time = $message->getDate();
-	    $time = Time::jeda($time);
+//        $time = $message->getDate();
+//	    $time = Time::jeda($time);
 
-        if (isset($leftMem)) {
-            $text = "<b>Dikeluarkan : </b> {$leftMemFname}";
-            $data = [
-                'chat_id' => $chat_id,
-                'text' => $text . $time,
-                'parse_mode' => 'HTML'
-            ];
-
-//            return Request::sendMessage($data);
+//        if (isset($leftMem)) {
+        if ($message->getFrom()->getId() != $leftMem->getId()) {
+            $text = "<b>Dikeluarkan : </b> {$leftMemFname} oleh " . $message->getFrom()->getFirstName();
+//            $data = [
+//                'chat_id' => $chat_id,
+//                'text' => $text . $time,
+//                'parse_mode' => 'HTML'
+//            ];
+        } else {
+            $text = "$leftMemFname Keluar dengan sendirinya";
         }
+        $text .= "\n\nasdasd";
+        $mHandler->sendText($text);
+//            return Request::sendMessage($data);
+//        }
     }
 
 }

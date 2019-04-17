@@ -16,6 +16,7 @@ use Longman\TelegramBot\Request;
 use src\Handlers\MessageHandlers;
 use src\Model\Group;
 use src\Model\Settings;
+use src\Model\Wordlists;
 use src\Utils\Words;
 
 /**
@@ -52,7 +53,9 @@ class GenericmessageCommand extends SystemCommand
         $pesanCmd = explode(' ', strtolower($pesan))[0];
 
         // Pindai kata
-        if (Words::isBadword($kata)) {
+        $forScan = $message->getText() ?? $message->getCaption();
+        $forScan = Words::clearAlphaNum($forScan);
+        if (Wordlists::isContainBadword(strtolower($forScan))) {
             $mHandler->deleteMessage();
         }
 

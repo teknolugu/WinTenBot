@@ -164,17 +164,38 @@ class Words
     {
         return preg_replace('/[^[:alnum:]]/', '', $teks);
     }
-	
-	public static function resolveVariable($string, $replacement)
-	{
-		$string_processed = preg_replace_callback(
-			'~\{\$(.*?)\}~si',
-			function ($match) use ($replacement) {
-				return str_replace($match[0], isset($replacement[$match[1]])
-					? $replacement[$match[1]]
-					: $match[0], $match[0]);
-			},
-			$string);
-		return $string_processed;
-	}
+
+    public static function resolveVariable($string, $replacement)
+    {
+        $string_processed = preg_replace_callback(
+            '~\{\$(.*?)\}~si',
+            function ($match) use ($replacement) {
+                return str_replace($match[0], isset($replacement[$match[1]])
+                    ? $replacement[$match[1]]
+                    : $match[0], $match[0]);
+            },
+            $string);
+        return $string_processed;
+    }
+
+    public static function randomizeCase($str)
+    {
+        for ($i = 0, $c = strlen($str); $i < $c; $i++)
+            $str[$i] = (rand(0, 10) > 5
+                ? strtoupper($str[$i])
+                : strtolower($str[$i]));
+
+        return $str;
+    }
+
+    public static function multiexplode($delimiters, $string)
+    {
+        $ready = str_replace($delimiters, $delimiters[0], $string);
+        $launch = explode($delimiters[0], $ready);
+        return $launch;
+    }
+
+    public static function clearAlphaNum($text){
+        return preg_replace("/[^a-zA-Z0-9\s]+/", "",  $text);
+    }
 }
