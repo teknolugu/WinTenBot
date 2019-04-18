@@ -242,6 +242,24 @@ class CallbackqueryCommand extends SystemCommand
                     $text = "Kamu belum menetapkan Username. Silakan ikuti tutorial video tersebut";
                 }
                 break;
+
+            case 'inbot-example':
+                $edit = Bot::loadInbotExample($bacot[1]);
+                $btn_markup = [
+                    ['text' => 'Contoh Message', 'callback_data' => 'inbot-example_welcome-message-example'],
+                    ['text' => 'Contoh Button', 'callback_data' => 'inbot-example_welcome-button-example'],
+                ];
+                return Request::editMessageText([
+                    'chat_id' => $callback_chat_id,
+                    'message_id' => $callback_id,
+                    'parse_mode' => 'HTML',
+                    'reply_markup' => new InlineKeyboard([
+                        'inline_keyboard' => array_chunk($btn_markup, 2),
+                    ]),
+                    'text' => $edit,
+                    'disable_web_page_preview' => true
+                ]);
+                break;
         }
 
 //        switch ($callback_data) {

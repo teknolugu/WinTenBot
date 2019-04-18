@@ -1,0 +1,6 @@
+[
+  {
+    'text': 'Contoh Welcome',
+    'callback_data' = 'inbot'
+  }
+]
