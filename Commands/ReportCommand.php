@@ -8,12 +8,14 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Entities\InlineKeyboard;
+use Longman\TelegramBot\Entities\ServerResponse;
+use Longman\TelegramBot\Exception\TelegramException;
+use Longman\TelegramBot\Request;
 use src\Handlers\MessageHandlers;
 use src\Model\Group;
 use src\Utils\Time;
-use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\InlineKeyboard;
-use Longman\TelegramBot\Request;
 
 class ReportCommand extends UserCommand
 {
@@ -25,8 +27,8 @@ class ReportCommand extends UserCommand
     /**
      * Execute command
      *
-     * @return \Longman\TelegramBot\Entities\ServerResponse
-     * @throws \Longman\TelegramBot\Exception\TelegramException
+     * @return ServerResponse
+     * @throws TelegramException
      */
     public function execute()
     {
@@ -39,59 +41,83 @@ class ReportCommand extends UserCommand
         $pecah = explode(' ', $message->getText());
 
         $time = $message->getDate();
-	    $time1 = Time::jedaNew($time);
+        $time1 = Time::jedaNew($time);
 
-        if ($repMssg != null) {
-	        $idAdmins = Group::idAdmins($chat_id);
+        if (!$message->getChat()->isPrivateChat()) {
+            if ($repMssg != null) {
+                $idAdmins = Group::idAdmins($chat_id);
 
-            $text = 'Pesan sedang di laporkan kesemua admin..';
-	
-	        $time2 = Time::jedaNew($time);
-            $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
+                $text = '🔄 Pesan sedang di laporkan kesemua admin..';
 
-            $data = [
-                'chat_id' => $chat_id,
-                'text' => $text . $time,
-                'parse_mode' => 'HTML'
-            ];
+//	        $time2 = Time::jedaNew($time);
+//            $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
+//
+//            $data = [
+//                'chat_id' => $chat_id,
+//                'text' => $text . $time,
+//                'parse_mode' => 'HTML'
+//            ];
+//
+////            Request::sendMessage($data);
+                $mHandler->deleteMessage();
+                $mHandler->sendText($text, '-1');
+                $mentionAdmin = [];
+                $count_admins = count($idAdmins);
+                $progress = 1;
+                foreach ($idAdmins as $idAdmin) {
+                    $fullname = trim($message->getFrom()->getFirstName() . ' ' . $message->getFrom()->getLastName());
+                    $alasan = $message->getText(true) ?? "<code>Tidak ada</code>";
+                    $pesan = '<b>🛎 Ada pesan laporan</b>' .
+                        "\n👤 <b>Pelapor : </b>" . $fullname .
+                        "\n👥 <b>Grup : </b>" . $message->getChat()->getTitle() .
+                        "\n🗒 <b>Alasan : </b>" . $alasan .
+                        "\n\n<i>Silakan di tindak lanjut</i>\n";
 
-//            Request::sendMessage($data);
-	        $mHandler->sendText($text);
-	        
-            foreach ($idAdmins as $idAdmin) {
-                $fullname = trim($message->getFrom()->getFirstName() . ' ' . $message->getFrom()->getLastName());
-                $pesan = '<b>🛎 Ada pesan laporan</b>' .
-                    "\n👤 <b>Pelaport : </b>" . $fullname .
-                    "\n👥 <b> Grup : </b>" . $message->getChat()->getTitle() .
-                    "\n🗒 <b>Alasan : </b>" . str_replace($pecah[0], '', $message->getText()) .
-                    "\n\n<i>Silakan di tindak lanjut</i>\n";
+                    $keyboard = [
+                        ['text' => '👥 Ke pesan', 'url' => 'https://t.me/c/' . str_replace('-100', '', $chat_id) . '/' . $repMssg->getMessageId()],
+                        ['text' => '❌ Delete Message', 'callback_data' => 'action_delete-message_' . $repMssg->getMessageId() . '_' . $chat_id],
+                        ['text' => '💤 Kick Member', 'callback_data' => 'action_kick-member_' . $repMssg->getFrom()->getId() . '_' . $chat_id],
+                        ['text' => '❤ Ban Member', 'callback_data' => 'action_ban-member_' . $repMssg->getFrom()->getId() . '_' . $chat_id]
+                    ];
 
-                $inline_keyboard = new InlineKeyboard([
-                    ['text' => '👥 Ke pesan', 'url' => 'https://t.me/' . $chat_user . '/' . $repMssg->getMessageId()]
-                ]);
-	
-	            $time2 = Time::jedaNew($time);
-                $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
+                    $mHandler->editText("🔄 Melaporkan ke $idAdmin" .
+                        "\n $progress of $count_admins ");
 
-                Request::forwardMessage([
-                    'chat_id' => $idAdmin,
-                    'from_chat_id' => $chat_id,
-                    'message_id' => $repMssg->getMessageId()
-                ]);
+                    $time2 = Time::jedaNew($time);
+                    $time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
 
-                Request::sendMessage([
-                    'chat_id' => $idAdmin,
-                    'text' => $pesan . $time1,
-                    'reply_markup' => $inline_keyboard,
-                    'parse_mode' => 'HTML'
-                ]);
+//                $mentionAdmin[] = "<a href='tg://user?id=" . $idAdmin . "'>⁣</a>";
+//                $m = implode(' ', $mentionAdmin);
+                    Request::forwardMessage([
+                        'chat_id' => $idAdmin,
+                        'from_chat_id' => $chat_id,
+                        'message_id' => $repMssg->getMessageId()
+                    ]);
+
+                    Request::sendMessage([
+                        'chat_id' => $idAdmin,
+                        'text' => $pesan . $time1,
+                        'reply_markup' => new InlineKeyboard([
+                            'inline_keyboard' => array_chunk($keyboard, 2),
+                        ]),
+                        'parse_mode' => 'HTML'
+                    ]);
+                    $progress++;
+                }
+                $r = $mHandler->editText("✅ Selesai melaporkan! ke $count_admins Admins");
+                sleep(3);
+                $mHandler->deleteMessage($r->result->message_id);
+            } else {
+                $r = $mHandler->sendText("ℹ <b>Reply</b> pesan untuk melaporkan.");
             }
+        } else {
+            $r = $mHandler->sendText("ℹ Perintah ini hanya untuk Grup");
         }
-        
-        $mHandler->editText('Selesai melaporkan!');
 
 //        return Request::deleteMessage([
 //            'chat_id' => $chat_id, 'message_id' => $mssg_id
 //        ]);
+
+        return $r;
     }
 }

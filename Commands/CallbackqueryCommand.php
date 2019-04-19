@@ -165,6 +165,11 @@ class CallbackqueryCommand extends SystemCommand
                 break;
 
             case 'verify':
+//                $chatMember = Request::getChatMember([
+//                    'chat_id' => $callback_chat_id,
+//                    'user_id' => $callback_from_id
+//                ])->getResult();
+//
 //				$oldMessage = $callback_query->getMessage()->getText();
                 $need_verif = ltrim($callback_data, 'verify_');
                 $id_lists = explode(' ', $need_verif);
@@ -173,7 +178,7 @@ class CallbackqueryCommand extends SystemCommand
                         if ($id == $callback_from_id) {
 //							$will_verif = 'IS_YOU_AND_';
                             Members::muteMember($callback_chat_id, $id, -1);
-                            $text = 'Terima kasih sudah memverivikasi';
+                            $text = 'Terima kasih sudah memverifikasi';
                         }
                     }
 //					$will_verif .= 'IS_NEED_VERIFY';
@@ -193,6 +198,7 @@ class CallbackqueryCommand extends SystemCommand
 //					]),
 //					'text'         => $oldMessage . 'Terima kasih ',
 //				]);
+//                $text = $chatMember;
                 break;
 
             case 'setting':
@@ -244,21 +250,75 @@ class CallbackqueryCommand extends SystemCommand
                 break;
 
             case 'inbot-example':
-                $edit = Bot::loadInbotExample($bacot[1]);
-                $btn_markup = [
-                    ['text' => 'Contoh Message', 'callback_data' => 'inbot-example_welcome-message-example'],
-                    ['text' => 'Contoh Button', 'callback_data' => 'inbot-example_welcome-button-example'],
-                ];
-                return Request::editMessageText([
-                    'chat_id' => $callback_chat_id,
-                    'message_id' => $callback_id,
-                    'parse_mode' => 'HTML',
-                    'reply_markup' => new InlineKeyboard([
-                        'inline_keyboard' => array_chunk($btn_markup, 2),
-                    ]),
-                    'text' => $edit,
-                    'disable_web_page_preview' => true
-                ]);
+                $isAdmin = Group::isAdmin($callback_from_id, $callback_chat_id);
+                if ($isAdmin) {
+                    $edit = Bot::loadInbotExample($bacot[1]);
+                    $btn_markup = [
+                        ['text' => 'Contoh Message', 'callback_data' => 'inbot-example_welcome-message-example'],
+                        ['text' => 'Contoh Button', 'callback_data' => 'inbot-example_welcome-button-example'],
+                    ];
+                    return Request::editMessageText([
+                        'chat_id' => $callback_chat_id,
+                        'message_id' => $callback_id,
+                        'parse_mode' => 'HTML',
+                        'reply_markup' => new InlineKeyboard([
+                            'inline_keyboard' => array_chunk($btn_markup, 2),
+                        ]),
+                        'text' => $edit,
+                        'disable_web_page_preview' => true
+                    ]);
+                }
+//                else{
+//                    $text = "You isn't Admin in this Group";
+//                }
+                break;
+
+            // Level 1
+            case 'action':
+
+                // SWITCH LEVEL 2
+                switch ($bacot[1]) {
+                    case 'delete-message':
+                        $r = Request::deleteMessage([
+                            'chat_id' => $bacot[3],
+                            'message_id' => $bacot[2]
+                        ]);
+                        break;
+
+                    case 'kick-member':
+                        $r = Request::kickChatMember([
+                            'chat_id' => $bacot[3],
+                            'user_id' => $bacot[2]
+                        ]);
+                        $r = Request::unbanChatMember([
+                            'chat_id' => $bacot[3],
+                            'user_id' => $bacot[2]
+                        ]);
+                        break;
+
+                    case 'ban-member':
+                        $r = Request::kickChatMember([
+                            'chat_id' => $bacot[3],
+                            'user_id' => $bacot[2]
+                        ]);
+                        break;
+                }
+
+                $aksi = str_replace('-', ' ', ucwords($bacot[1]));
+                if ($r->isOk()) {
+                    $text = "Aksi $aksi berhasil.";
+                    $reportAction = "Wih siapa yg anuin?" .
+                        "\nAksi <b>$aksi</b> di lakukan oleh $callback_from_id";
+                    Request::sendMessage([
+                        'chat_id' => $bacot[3],
+                        'parse_mode' => 'HTML',
+                        'text' => $reportAction,
+                    ]);
+                } else {
+                    $text = "Aksi $aksi gagal." .
+                        "\n" . $r->getDescription();
+                }
+
                 break;
         }
 
