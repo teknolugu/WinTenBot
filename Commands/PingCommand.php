@@ -8,11 +8,14 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use src\Handlers\MessageHandlers;
+use Exception;
+use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Entities\ServerResponse;
+use Longman\TelegramBot\Exception\TelegramException;
+use Longman\TelegramBot\Request;
+use src\Handlers\ChatHandler;
 use src\Model\Group;
 use src\Utils\Time;
-use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Request;
 
 class PingCommand extends UserCommand
 {
@@ -22,16 +25,16 @@ class PingCommand extends UserCommand
     protected $version = '1.0.0';
 
     /**
-     * @return \Longman\TelegramBot\Entities\ServerResponse
-     * @throws \Longman\TelegramBot\Exception\TelegramException
-     * @throws \Exception
+     * @return ServerResponse
+     * @throws TelegramException
+     * @throws Exception
      */
     public function execute()
     {
         $message = $this->getMessage();
-	    $mHandler = new MessageHandlers($message);
+        $chatHandler = new ChatHandler($message);
 
-        $hook = json_decode(Request::getWebhookInfo(), true)->result;
+        $hook = json_decode(Request::getWebhookInfo(), true)['result'];
         $me = Request::getMe();
 
 //        if ($hook->pending_update_count > 5) {
@@ -50,10 +53,10 @@ class PingCommand extends UserCommand
 //        }
 
         $text = '<b>Pong..!!</b>';
-        if ($message->getChat()->getType() === 'private'
-	        && Group::isSudoer($message->getFrom()->getId())) {
+        if ($message->getChat()->isPrivateChat()
+            && Group::isSudoer($message->getFrom()->getId())) {
             $text .=
-                "\n<b>Your Access : </b> You is Sudoer!! " .
+                "\n<b>Your Access : </b> You is Sudoer!!" .
                 "\n<b>Username : </b> @" . $me->getBotUsername() .
                 "\n<b>Current Hook : </b><code>" . $hook['url'] . '</code>' .
                 "\n<b>Clean Hook : </b><code>" . clean_hook . '</code>' .
@@ -62,7 +65,7 @@ class PingCommand extends UserCommand
                 "\n<b>Last Error Mssg : </b> " . $hook['last_error_message'] .
                 "\n<b>Max Connection : </b> " . $hook['max_connections'];
         }
-        
-	    return $mHandler->sendText($text);
+
+        return $chatHandler->sendText($text);
     }
 }
