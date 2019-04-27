@@ -20,6 +20,15 @@ class Converters
     }
 
     /**
+     * @param $int
+     * @return string
+     */
+    public static function intToString($int)
+    {
+        return $int == 1 ? 'Success' : 'Failed';
+    }
+
+    /**
      * @param $string
      * @return integer
      */
