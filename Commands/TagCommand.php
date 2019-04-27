@@ -12,6 +12,7 @@ use Longman\TelegramBot\Commands\UserCommand;
 use src\Handlers\MessageHandlers;
 use src\Model\Group;
 use src\Model\Tags;
+use src\Utils\Entities;
 use src\Utils\Words;
 
 class TagCommand extends UserCommand
@@ -49,7 +50,9 @@ class TagCommand extends UserCommand
 
                 $tipe_data = 'text';
                 if ($repMssg !== null) {
-                    $konten = $repMssg->getText() ?? $repMssg->getCaption();
+//                    $konten = $repMssg->getText() ?? $repMssg->getCaption();
+                    $konten = Entities::getHtmlFormatting($message);
+
                     if ($repMssg->getSticker()) {
                         $tipe_data = 'sticker';
                         $id_data = $repMssg->getSticker()->getFileId();
@@ -72,7 +75,8 @@ class TagCommand extends UserCommand
 
                     $btn_data = ltrim($message->getText(true), $pecah[0]);
                 } else {
-                    $konten = ltrim($message->getText(true), $pecah[0]);
+                    //$konten = ltrim($message->getText(true), $pecah[0]);
+                    $konten = Entities::getHtmlFormatting($message);
                 }
 
                 $datas += [
