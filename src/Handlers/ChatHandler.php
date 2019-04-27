@@ -26,6 +26,10 @@ class ChatHandler
     protected $message_id;
     protected $timeInit;
     protected $timeProc;
+    protected $message_link;
+
+    protected $isPrivateChat = false;
+    protected $isPrivateGroup = false;
 
     /**
      * ChatHandler constructor.
@@ -39,8 +43,15 @@ class ChatHandler
         $this->from_id = $param->getFrom()->getId();
         $this->timeInit = "\n\n⏱ " . Time::jedaNew($this->date);
         $this->message_id = $param->getMessageId();
+        $this->message_link = str_replace('-100', '', $this->message_id);
+
         if ($param->getReplyToMessage() != '') {
             $this->reply_to_message_id = $param->getReplyToMessage()->getMessageId();
+        }
+
+        $this->isPrivateChat = $param->getChat()->isPrivateChat();
+        if ($param->getChat()->getUsername() == "") {
+            $this->isPrivateGroup = true;
         }
     }
 
@@ -55,7 +66,7 @@ class ChatHandler
     {
         $this->timeProc = Time::jedaNew($this->date);
         if ($text != '') {
-            $text .=  $this->timeInit . ' | ⌛ ' . $this->timeProc;
+            $text .= $this->timeInit . ' | ⌛ ' . $this->timeProc;
         }
         $data = [
             'chat_id' => $this->chat_id,
@@ -144,11 +155,23 @@ class ChatHandler
         ]);
     }
 
-    public function leaveChat(){
+    public function leaveChat()
+    {
         return Request::leaveChat(['chat_id' => $this->chat_id]);
     }
 
-    public function getSendedMessageId(){
+    public function getSendedMessageId()
+    {
         return $this->responses->result->message_id;
+    }
+
+    public function getMessageLink()
+    {
+        if ($this->isPrivateGroup) {
+            $message_link = "https://t.me/c/" . $this->message_link . '/' . $this->message_id;
+        }else{
+            $message_link = "https://t.me/" . $this->chat_id . '/' . $this->message_id;
+        }
+        return $message_link;
     }
 }
