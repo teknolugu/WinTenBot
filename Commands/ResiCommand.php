@@ -37,7 +37,7 @@ class ResiCommand extends UserCommand
 
         $kurirs = ['jne', 'pos', 'jnt', 'jne'];
         if ($cocot[0] != '' && in_array($cocot[0], $kurirs)) {
-            if($cocot[1] != "") {
+            if (strlen($cocot[1]) >= 10) {
                 $mHandler->sendText("🔍 Sedang mengecek, silakan tunggu..");
 
 //            if (in_array($cocot[0], $kurirs)) {
@@ -46,7 +46,7 @@ class ResiCommand extends UserCommand
 
 //            $text = $this->cekResi($cocot[0], $cocot[1]);
 //
-                $cek = json_decode(Resi::cekResi($cocot[0], $cocot[1]), true);
+                $cek = \GuzzleHttp\json_decode(Resi::cekResi($cocot[0], $cocot[1]), true);
 //            }
 //
 //            else if ($cocot[0] != '') {
@@ -67,7 +67,7 @@ class ResiCommand extends UserCommand
                 if (count($cek['informasi_pengiriman']) > 0) {
                     //$mHandler->editText("🔍 Saya menemukan resi, tunggu sebentar lagi..");
 
-                    $text = '<b>Kurir :</b> <code>' . strtoupper($cocot[0]).'</code>' . $this->parseCek($cek);
+                    $text = '<b>Kurir :</b> <code>' . strtoupper($cocot[0]) . '</code>' . $this->parseCek($cek);
                 } else {
 
                     $text = 'No resi ' . $cocot[1] . ' tidak di temukan ' .
@@ -75,7 +75,7 @@ class ResiCommand extends UserCommand
                 }
 
                 return $mHandler->editText($text);
-            }else{
+            } else {
                 $mHandler->sendText("Resinya mana?");
             }
         } else {
