@@ -12,10 +12,13 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
+use Longman\TelegramBot\Entities\ServerResponse;
+use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 use src\Handlers\MessageHandlers;
 use src\Model\Group;
 use src\Model\Settings;
+use src\Model\UrlLists;
 use src\Model\Wordlists;
 use src\Utils\Words;
 
@@ -31,8 +34,8 @@ class GenericmessageCommand extends SystemCommand
     /**
      * Execute command
      *
-     * @return \Longman\TelegramBot\Entities\ServerResponse
-     * @throws \Longman\TelegramBot\Exception\TelegramException
+     * @return ServerResponse
+     * @throws TelegramException
      */
     public function execute()
     {
@@ -54,8 +57,13 @@ class GenericmessageCommand extends SystemCommand
 
         // Pindai kata
         $forScan = $message->getText() ?? $message->getCaption();
-        $forScan = Words::clearAlphaNum($forScan);
-        if (Wordlists::isContainBadword(strtolower($forScan))) {
+        $wordScan = Words::clearAlphaNum($forScan);
+        if (Wordlists::isContainBadword(strtolower($wordScan))) {
+            $mHandler->deleteMessage();
+        }
+
+        // Scan url
+        if(UrlLists::isContainBadUrl($forScan)){
             $mHandler->deleteMessage();
         }
 
@@ -90,8 +98,11 @@ class GenericmessageCommand extends SystemCommand
             case Words::cekKata($kata, 'mau tanya'):
                 $chat = 'Langsung aja tanya gan';
                 break;
-            case Words::cekKata($kata, thanks):
+            case Words::cekKandungan($kata, thanks):
                 $chat = 'Sama-sama, senang bisa membantu gan...';
+                break;
+            case Words::cekKata($kata, yuk):
+                $chat = 'Ayuk, siapa takut 😂';
                 break;
 
             default:
