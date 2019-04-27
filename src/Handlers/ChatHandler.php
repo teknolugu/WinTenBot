@@ -143,4 +143,12 @@ class ChatHandler
             'message_id' => $id ?? $this->message_id,
         ]);
     }
+
+    public function leaveChat(){
+        return Request::leaveChat(['chat_id' => $this->chat_id]);
+    }
+
+    public function getSendedMessageId(){
+        return $this->responses->result->message_id;
+    }
 }
