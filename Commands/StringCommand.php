@@ -34,6 +34,7 @@ class StringCommand extends UserCommand
         $replyMssg = $mssg->getReplyToMessage();
         $mHandler = new MessageHandlers($mssg);
         $chat_id = $mssg->getChat()->getId();
+        $bacot = explode(' ', $raw_message);
 
 //        $mHandler->deleteMessage();
 
@@ -44,18 +45,36 @@ class StringCommand extends UserCommand
         } else {
             $raw_text = $raw_message;
         }
+        $btn_markup = [];
+        switch ($bacot[0]){
+            case 'stem':
+                $mHandler->editText('Stemming..');
+                $text = Words::stemText($raw_text); //
+                $mHandler->editText('WTF..');
+                break;
 
-        if ($raw_text != "") {
-            $mHandler->editText('Randomizing case..');
-            $text = Words::randomizeCase($raw_text);
-            if (!$mssg->getChat()->isPrivateChat()) {
-                $urlChatId = str_replace('-100', '', $chat_id);
-                $urlBtn = "https://t.me/c/$urlChatId/$replyTarget";
-                $btn_markup[] = ['text' => '🔍 Original message', 'url' => $urlBtn];
-            }
-        } else {
-            $text = "You must reply message or give parameters";
+            case 'rangkum':
+                $mHandler->editText("Sedang merankum..");
+                $text = \GuzzleHttp\json_encode(Words::rangkumText($raw_text), 128);
+                break;
+
+            default:
+                $mHandler->editText('Randomizing case..');
+                $text = Words::randomizeCase($raw_text);
+                break;
         }
+
+        if (!$mssg->getChat()->isPrivateChat()) {
+            $urlChatId = str_replace('-100', '', $chat_id);
+            $urlBtn = "https://t.me/c/$urlChatId/$replyTarget";
+            $btn_markup[] = ['text' => '🔍 Original message', 'url' => $urlBtn];
+        }
+
+//        if ($raw_text != "") {
+//
+//        } else {
+//            $text = "You must reply message or give parameters";
+//        }
 
         return $mHandler->editText($text, '', $btn_markup);
     }
