@@ -15,7 +15,9 @@ use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
+use src\Handlers\ChatHandler;
 use src\Handlers\MessageHandlers;
+use src\Model\Fbans;
 use src\Model\Group;
 use src\Model\Settings;
 use src\Model\UrlLists;
@@ -42,6 +44,7 @@ class GenericmessageCommand extends SystemCommand
         $pesan = $this->getMessage()->getText();
         $message = $this->getMessage();
         $mHandler = new MessageHandlers($message);
+        $chatHandler = new ChatHandler($message);
         $from_id = $message->getFrom()->getId();
         $from_first_name = $message->getFrom()->getFirstName();
         $from_last_name = $message->getFrom()->getLastName();
@@ -65,6 +68,18 @@ class GenericmessageCommand extends SystemCommand
         // Scan url
         if(UrlLists::isContainBadUrl($forScan)){
             $mHandler->deleteMessage();
+        }
+
+        if(Fbans::isBan($from_id)){
+            $text = "$from_id telah terdeteksi di " . federation_name;
+            $kickRes = $chatHandler->kickMember($from_id, true);
+            if($kickRes->isOk()){
+                $text .= " dan berhasil di tendang";
+            }else {
+                $text .= " dan gagal di tendang, karena <b>" . $kickRes->getDescription()."</b>. ".
+                "Pastikan saya Admin dengan level standard";
+            }
+            return $chatHandler->sendText($text,'-1');
         }
 
         // Perika apakah Aku harus keluar grup?
