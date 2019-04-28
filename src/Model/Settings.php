@@ -67,8 +67,11 @@ class Settings
     {
         $db = new Medoo(db_data);
         return $db->select('group_settings', [
+            'enable_badword_filter',
+            'enable_federation_ban',
             'enable_human_verification',
             'enable_unified_welcome',
+            'enable_url_filtering',
             'enable_warn_username'
         ], $where);
     }
