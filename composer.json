@@ -9,6 +9,8 @@
 	"longman/telegram-bot": "^0.55",
 	"ammarfaizi2/googletranslate": "^0.0.1",
 	"stichoza/google-translate-php": "^4.0.1",
-	"catfan/medoo": "^1.6.1"
+	"catfan/medoo": "^1.6.1",
+    "sastrawi/sastrawi": "1.1.x-dev",
+    "tediscript/perangkum": "dev-master"
   }
 }
