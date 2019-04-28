@@ -33,15 +33,15 @@ class FbanCommand extends UserCommand
         $from_id = $message->getFrom()->getId();
         $chat_id = $message->getChat()->getId();
         $chatHandler = new ChatHandler($message);
-        $federation_name = "<b>WinTenDev Federation Circle</b>";
+        $federation_name = federation_name;
         $not_registered = $text = "⚠ Kamu belum teregistrasi ke " . federation_name .
-            "\nKamu dapat register dengan <code>/fban register</code>" .
+            "\nKamu dapat register dengan <code>/fban reg</code>" .
             "\n\n<b>Warning: </b> Fake reports might make you unable to become an FBan Admin forever!";
 
         $repMssg = $message->getReplyToMessage();
         $data = explode(' ', $message->getText(true));
         $r = $chatHandler->sendText("🤔 Checking permission..", '-1');
-        $ignoreParams = ['register', 'all', 'admin-all'];
+        $ignoreParams = ['reg', 'all', 'admin-all'];
         if (Fbans::isAdminFbans($from_id) && !in_array($data[0], $ignoreParams)) {
             $r = $chatHandler->editText("🏗 Collecting data..");
             if ($repMssg != '') {
@@ -81,21 +81,25 @@ class FbanCommand extends UserCommand
                 $text = "✅ <b>User</b> failed to add or can't be updated";
             }
             return $chatHandler->editText($text);
-        } else if (Group::isAdmin($from_id, $chat_id)) {
-            if ($data[0] == "register") {
-                $reg_fban = [
-                    'user_id' => $from_id,
-                    'promoted_from' => $chat_id
-                ];
+        } else if (Group::isAdmin($from_id, $chat_id) || $message->getChat()->isPrivateChat()) {
+            if ($data[0] == "reg") {
+                if (!$message->getChat()->isPrivateChat()) {
+                    $reg_fban = [
+                        'user_id' => $from_id,
+                        'promoted_from' => $chat_id
+                    ];
 
-                $r = $chatHandler->editText("🏗 Adding to $federation_name");
-                $result = Fbans::saveAdminFBans($reg_fban);
-                if ($result->rowCount() > 0) {
-                    $chatHandler->editText("✍ Writing to cache..");
-                    Fbans::writeCacheFbans();
-                    $text = "✅ <b>You</b> succesfully added to Admins $federation_name";
+                    $r = $chatHandler->editText("🏗 Adding to $federation_name");
+                    $result = Fbans::saveAdminFBans($reg_fban);
+                    if ($result->rowCount() > 0) {
+                        $chatHandler->editText("✍ Writing to cache..");
+                        Fbans::writeCacheFbans();
+                        $text = "✅ <b>You</b> succesfully added to Admins $federation_name";
+                    } else {
+                        $text = "✅ <b>You</b> already joined to $federation_name";
+                    }
                 } else {
-                    $text = "✅ <b>You</b> already joined to $federation_name";
+                    $text = "ℹ Registrasi $federation_name hanya via Grub dimana kamu Admin.";
                 }
                 return $chatHandler->editText($text);
             } else if (Group::isSudoer($from_id)) {
