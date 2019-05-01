@@ -130,7 +130,7 @@ class GenericmessageCommand extends SystemCommand
                 $limit = $group_data[0]['warning_username_limit'];
 	            $chat = "Hey, Segera pasang username ya, jangan lupa.";
 //                    "\nPeringatan %2/$limit tersisa";
-                $btn_markup[] = ['text' => 'Pasang Username', 'url' => urlStart . '?start=username'];
+	            $btn_markup[] = ['text' => 'Pasang Username', 'url' => urlStart . 'username'];
                 $mHandler->deleteMessage($group_data[0]['last_warning_username_message_id']);
                 $r = $mHandler->sendText($chat, null, $btn_markup);
                 Settings::saveNew([
