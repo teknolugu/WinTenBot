@@ -34,9 +34,6 @@ class PingCommand extends UserCommand
         $message = $this->getMessage();
         $chatHandler = new ChatHandler($message);
 
-        $hook = json_decode(Request::getWebhookInfo(), true)['result'];
-        $me = Request::getMe();
-
 //        if ($hook->pending_update_count > 5) {
 //            $pesan = "Pending count lebih dari 5, dan di bersihkan otomatis\n";
 //            foreach (sudoer as $sudo) {
@@ -55,6 +52,8 @@ class PingCommand extends UserCommand
         $text = '<b>Pong..!!</b>';
         if ($message->getChat()->isPrivateChat()
             && Group::isSudoer($message->getFrom()->getId())) {
+	        $hook = \GuzzleHttp\json_decode(Request::getWebhookInfo(), true)['result'];
+	        $me = Request::getMe();
             $text .=
                 "\n<b>Your Access : </b> You is Sudoer!!" .
                 "\n<b>Username : </b> @" . $me->getBotUsername() .
