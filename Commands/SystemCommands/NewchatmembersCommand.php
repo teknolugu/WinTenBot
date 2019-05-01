@@ -12,7 +12,9 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
+use src\Handlers\ChatHandler;
 use src\Handlers\MessageHandlers;
+use src\Model\Fbans;
 use src\Model\Group;
 use src\Model\Members;
 use src\Model\Settings;
@@ -37,6 +39,7 @@ class NewchatmembersCommand extends SystemCommand
         $chat_username = $message->getChat()->getUsername();
 //		$pinned_msg = $message->getPinnedMessage()->getMessageId();
         $mHandler = new MessageHandlers($message);
+	    $chatHandler = new ChatHandler($message);
         $isKicked = false;
         $welcome_data = Settings::getNew(['chat_id' => $chat_id]);
 
@@ -85,6 +88,20 @@ class NewchatmembersCommand extends SystemCommand
                 $full_name = trim($member->getFirstName() . ' ' . $member->getLastName());
                 $nameLen = strlen(trim($full_name));
                 $nameLink = "<a href='tg://user?id=" . $member->getId() . "'>" . $full_name . '</a>';
+	            if (Fbans::isBan($member->getId())) {
+		            $text = "{$member->getId()} telah terdeteksi di " . federation_name;
+		            $kickRes = $chatHandler->kickMember($member->getId(), true);
+		            if ($kickRes->isOk()) {
+			            $text .= " dan berhasil di tendang";
+		            } else {
+			            $text .= " dan gagal di tendang, karena <b>" . $kickRes->getDescription() . "</b>. " .
+				            "Pastikan saya Admin dengan level standard";
+		            }
+		            $res = $chatHandler->sendText($text, '-1');
+		            if (count($message->getNewChatMembers()) == 1) {
+			            return $res;
+		            }
+	            }
                 if ($nameLen < 140) {
                     if ($human_verification == '1') {
                         Members::muteMember($chat_id, $member->getId(), 1);
