@@ -8,10 +8,6 @@
 
 date_default_timezone_set('Asia/Jakarta');
 
-define('bot_username', 'YourBotUsername');
-define('bot_token', 'YOUR BOT TOKEN HERE');
-define('versi','2.201903.17');
-define('isBeta', true); // Your bot is Beta?
 
 define('descBot',"ℹ Official Telegram bot based on <b>WinTen API</b>.\nfor management & utility group");
 define('descBeta',"\n<b>I'm still beta, maybe contains bug and unstable. not recomended for your group</b>");

@@ -37,7 +37,7 @@ class EditedmessageCommand extends SystemCommand
 		$edited_message = $this->getEditedMessage();
 		$chatHandler = new ChatHandler($edited_message);
 		if ($edited_message != "") {
-			$res = $chatHandler->sendText("Edit?");
+			$res = $chatHandler->sendText("TerEdit?");
 		}
 		
 		return $res;
