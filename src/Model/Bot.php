@@ -29,4 +29,11 @@ class Bot
         return $data;
     }
 
+    public static function loadInbotExample($slug)
+    {
+        $path = botData . 'inbot-example/' . $slug . '.html';
+        return trim(file_get_contents($path));
+//        return $path;
+    }
+
 }

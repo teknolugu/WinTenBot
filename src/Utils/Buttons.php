@@ -25,4 +25,10 @@ class Buttons
 		
 		return $btn_markup;
 	}
+
+	public static function loadFromJson($slug){
+	    $path = botData . 'button-json/' .$slug .'.json';
+	    $json = file_get_contents($path);
+	    return \GuzzleHttp\json_decode($json);
+    }
 }

@@ -1,0 +1,10 @@
+[
+  {
+	"text": "Contoh Welcome",
+	"callback_data": "inbot-example_welcome-message-example"
+  },
+  {
+	"text": "Contoh Welcome",
+	"callback_data": "inbot-example_welcome-button-example"
+  }
+]

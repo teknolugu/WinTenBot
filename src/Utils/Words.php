@@ -8,7 +8,10 @@
 
 namespace src\Utils;
 
+use Exception;
 use GuzzleHttp\Client;
+use Sastrawi\Stemmer\StemmerFactory;
+use Summarizer\Summarizer;
 
 class Words
 {
@@ -83,7 +86,7 @@ class Words
         $apesan = explode(' ', $pesans);
         if (is_array($apa)) {
             foreach ($apa as $anu) {
-                if (in_array($anu, $apesan, true)) {
+                if (in_array($anu, $apesan)) {
                     return true;
                 }
             }
@@ -195,7 +198,22 @@ class Words
         return $launch;
     }
 
-    public static function clearAlphaNum($text){
-        return preg_replace("/[^a-zA-Z0-9\s]+/", "",  $text);
+    public static function clearAlphaNum($text)
+    {
+        return preg_replace("/[^a-zA-Z0-9\s]+/", "", $text);
+    }
+
+    public static function stemText($text)
+    {
+        $stemmerFactory = new StemmerFactory();
+        $stemmer = $stemmerFactory->createStemmer();
+        $result = $stemmer->stem($text);
+        return $result;
+    }
+
+    public static function rangkumText($text){
+        $summarizer = new Summarizer();
+        $sentences = $summarizer->summarize($text);
+        return $sentences;
     }
 }

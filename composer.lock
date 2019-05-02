@@ -1,827 +1,1647 @@
 {
-  "_readme": [
-	"This file locks the dependencies of your project to a known state",
-	"Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-	"This file is @generated automatically"
-  ],
-  "content-hash": "9a2206fa41195c8d297dfa30ecedec6e",
-  "packages": [
-	{
-	  "name": "ammarfaizi2/googletranslate",
-	  "version": "0.0.1",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/ammarfaizi2/GoogleTranslate.git",
-		"reference": "6f819c31ceaef2dea1ebf5aa4623bb0610b94154"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/ammarfaizi2/GoogleTranslate/zipball/6f819c31ceaef2dea1ebf5aa4623bb0610b94154",
-		"reference": "6f819c31ceaef2dea1ebf5aa4623bb0610b94154",
-		"shasum": ""
-	  },
-	  "require": {
-		"php": ">=5.6"
-	  },
-	  "type": "library",
-	  "autoload": {
-		"psr-4": {
-		  "GoogleTranslate\\": "src/"
-		}
-	  },
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "Ammar Faizi",
-		  "email": "ammarfaizi2@gmail.com"
-		}
-	  ],
-	  "description": "Google Translate",
-	  "time": "2017-10-22T07:22:03+00:00"
-	},
-	{
-	  "name": "catfan/medoo",
-	  "version": "v1.6.1",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/catfan/Medoo.git",
-		"reference": "53a02b300d673f716cb06bf0e24fd774ec53939f"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/catfan/Medoo/zipball/53a02b300d673f716cb06bf0e24fd774ec53939f",
-		"reference": "53a02b300d673f716cb06bf0e24fd774ec53939f",
-		"shasum": ""
-	  },
-	  "require": {
-		"ext-pdo": "*",
-		"php": ">=5.4"
-	  },
-	  "suggest": {
-		"ext-pdo_dblib": "For MSSQL or Sybase database on Linux/UNIX platform",
-		"ext-pdo_mysql": "For MySQL or MariaDB database",
-		"ext-pdo_oci": "For Oracle database",
-		"ext-pdo_oci8": "For Oracle version 8 database",
-		"ext-pdo_pqsql": "For PostgreSQL database",
-		"ext-pdo_sqlite": "For SQLite database",
-		"ext-pdo_sqlsrv": "For MSSQL database"
-	  },
-	  "type": "framework",
-	  "autoload": {
-		"psr-4": {
-		  "Medoo\\": "/src"
-		}
-	  },
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "Angel Lai",
-		  "email": "angel@catfan.me"
-		}
-	  ],
-	  "description": "The lightest PHP database framework to accelerate development",
-	  "homepage": "https://medoo.in",
-	  "keywords": [
-		"database",
-		"lightweight",
-		"mariadb",
-		"mssql",
-		"mysql",
-		"oracle",
-		"php framework",
-		"postgresql",
-		"sql",
-		"sqlite"
-	  ],
-	  "time": "2018-12-08T20:24:23+00:00"
-	},
-	{
-	  "name": "guzzlehttp/guzzle",
-	  "version": "6.3.3",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/guzzle/guzzle.git",
-		"reference": "407b0cb880ace85c9b63c5f9551db498cb2d50ba"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/guzzle/guzzle/zipball/407b0cb880ace85c9b63c5f9551db498cb2d50ba",
-		"reference": "407b0cb880ace85c9b63c5f9551db498cb2d50ba",
-		"shasum": ""
-	  },
-	  "require": {
-		"guzzlehttp/promises": "^1.0",
-		"guzzlehttp/psr7": "^1.4",
-		"php": ">=5.5"
-	  },
-	  "require-dev": {
-		"ext-curl": "*",
-		"phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4 || ^7.0",
-		"psr/log": "^1.0"
-	  },
-	  "suggest": {
-		"psr/log": "Required for using the Log middleware"
-	  },
-	  "type": "library",
-	  "extra": {
-		"branch-alias": {
-		  "dev-master": "6.3-dev"
-		}
-	  },
-	  "autoload": {
-		"files": [
-		  "src/functions_include.php"
-		],
-		"psr-4": {
-		  "GuzzleHttp\\": "src/"
-		}
-	  },
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "Michael Dowling",
-		  "email": "mtdowling@gmail.com",
-		  "homepage": "https://github.com/mtdowling"
-		}
-	  ],
-	  "description": "Guzzle is a PHP HTTP client library",
-	  "homepage": "http://guzzlephp.org/",
-	  "keywords": [
-		"client",
-		"curl",
-		"framework",
-		"http",
-		"http client",
-		"rest",
-		"web service"
-	  ],
-	  "time": "2018-04-22T15:46:56+00:00"
-	},
-	{
-	  "name": "guzzlehttp/promises",
-	  "version": "v1.3.1",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/guzzle/promises.git",
-		"reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/guzzle/promises/zipball/a59da6cf61d80060647ff4d3eb2c03a2bc694646",
-		"reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646",
-		"shasum": ""
-	  },
-	  "require": {
-		"php": ">=5.5.0"
-	  },
-	  "require-dev": {
-		"phpunit/phpunit": "^4.0"
-	  },
-	  "type": "library",
-	  "extra": {
-		"branch-alias": {
-		  "dev-master": "1.4-dev"
-		}
-	  },
-	  "autoload": {
-		"psr-4": {
-		  "GuzzleHttp\\Promise\\": "src/"
-		},
-		"files": [
-		  "src/functions_include.php"
-		]
-	  },
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "Michael Dowling",
-		  "email": "mtdowling@gmail.com",
-		  "homepage": "https://github.com/mtdowling"
-		}
-	  ],
-	  "description": "Guzzle promises library",
-	  "keywords": [
-		"promise"
-	  ],
-	  "time": "2016-12-20T10:07:11+00:00"
-	},
-	{
-	  "name": "guzzlehttp/psr7",
-	  "version": "1.5.2",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/guzzle/psr7.git",
-		"reference": "9f83dded91781a01c63574e387eaa769be769115"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/guzzle/psr7/zipball/9f83dded91781a01c63574e387eaa769be769115",
-		"reference": "9f83dded91781a01c63574e387eaa769be769115",
-		"shasum": ""
-	  },
-	  "require": {
-		"php": ">=5.4.0",
-		"psr/http-message": "~1.0",
-		"ralouphie/getallheaders": "^2.0.5"
-	  },
-	  "provide": {
-		"psr/http-message-implementation": "1.0"
-	  },
-	  "require-dev": {
-		"phpunit/phpunit": "~4.8.36 || ^5.7.27 || ^6.5.8"
-	  },
-	  "type": "library",
-	  "extra": {
-		"branch-alias": {
-		  "dev-master": "1.5-dev"
-		}
-	  },
-	  "autoload": {
-		"psr-4": {
-		  "GuzzleHttp\\Psr7\\": "src/"
-		},
-		"files": [
-		  "src/functions_include.php"
-		]
-	  },
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "Michael Dowling",
-		  "email": "mtdowling@gmail.com",
-		  "homepage": "https://github.com/mtdowling"
-		},
-		{
-		  "name": "Tobias Schultze",
-		  "homepage": "https://github.com/Tobion"
-		}
-	  ],
-	  "description": "PSR-7 message implementation that also provides common utility methods",
-	  "keywords": [
-		"http",
-		"message",
-		"psr-7",
-		"request",
-		"response",
-		"stream",
-		"uri",
-		"url"
-	  ],
-	  "time": "2018-12-04T20:46:45+00:00"
-	},
-	{
-	  "name": "longman/telegram-bot",
-	  "version": "0.55.1",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/php-telegram-bot/core.git",
-		"reference": "2cfb8a7ea21fa244b1063ffe0f7250c4af30fcdf"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/php-telegram-bot/core/zipball/2cfb8a7ea21fa244b1063ffe0f7250c4af30fcdf",
-		"reference": "2cfb8a7ea21fa244b1063ffe0f7250c4af30fcdf",
-		"shasum": ""
-	  },
-	  "require": {
-		"ext-curl": "*",
-		"ext-json": "*",
-		"ext-mbstring": "*",
-		"ext-pdo": "*",
-		"guzzlehttp/guzzle": "^6.3",
-		"monolog/monolog": "^1.23",
-		"php": "^5.5|^7.0"
-	  },
-	  "require-dev": {
-		"phpunit/phpunit": "^4.8|^5.7|^6.5|^7.4",
-		"squizlabs/php_codesniffer": "^3.3"
-	  },
-	  "type": "library",
-	  "autoload": {
-		"psr-4": {
-		  "Longman\\TelegramBot\\": "src/"
-		}
-	  },
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "Avtandil Kikabidze aka LONGMAN",
-		  "email": "akalongman@gmail.com",
-		  "homepage": "http://longman.me",
-		  "role": "Developer"
-		},
-		{
-		  "name": "PHP Telegram Bot Team",
-		  "homepage": "https://github.com/php-telegram-bot/core/graphs/contributors",
-		  "role": "Developer"
-		}
-	  ],
-	  "description": "PHP Telegram bot",
-	  "homepage": "https://github.com/php-telegram-bot/core",
-	  "keywords": [
-		"api",
-		"bot",
-		"telegram"
-	  ],
-	  "time": "2019-01-06T20:07:04+00:00"
-	},
-	{
-	  "name": "monolog/monolog",
-	  "version": "1.24.0",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/Seldaek/monolog.git",
-		"reference": "bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/Seldaek/monolog/zipball/bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266",
-		"reference": "bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266",
-		"shasum": ""
-	  },
-	  "require": {
-		"php": ">=5.3.0",
-		"psr/log": "~1.0"
-	  },
-	  "provide": {
-		"psr/log-implementation": "1.0.0"
-	  },
-	  "require-dev": {
-		"aws/aws-sdk-php": "^2.4.9 || ^3.0",
-		"doctrine/couchdb": "~1.0@dev",
-		"graylog2/gelf-php": "~1.0",
-		"jakub-onderka/php-parallel-lint": "0.9",
-		"php-amqplib/php-amqplib": "~2.4",
-		"php-console/php-console": "^3.1.3",
-		"phpunit/phpunit": "~4.5",
-		"phpunit/phpunit-mock-objects": "2.3.0",
-		"ruflin/elastica": ">=0.90 <3.0",
-		"sentry/sentry": "^0.13",
-		"swiftmailer/swiftmailer": "^5.3|^6.0"
-	  },
-	  "suggest": {
-		"aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-		"doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-		"ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-		"ext-mongo": "Allow sending log messages to a MongoDB server",
-		"graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
-		"mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
-		"php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
-		"php-console/php-console": "Allow sending log messages to Google Chrome",
-		"rollbar/rollbar": "Allow sending log messages to Rollbar",
-		"ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-		"sentry/sentry": "Allow sending log messages to a Sentry server"
-	  },
-	  "type": "library",
-	  "extra": {
-		"branch-alias": {
-		  "dev-master": "2.0.x-dev"
-		}
-	  },
-	  "autoload": {
-		"psr-4": {
-		  "Monolog\\": "src/Monolog"
-		}
-	  },
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "Jordi Boggiano",
-		  "email": "j.boggiano@seld.be",
-		  "homepage": "http://seld.be"
-		}
-	  ],
-	  "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-	  "homepage": "http://github.com/Seldaek/monolog",
-	  "keywords": [
-		"log",
-		"logging",
-		"psr-3"
-	  ],
-	  "time": "2018-11-05T09:00:11+00:00"
-	},
-	{
-	  "name": "psr/http-message",
-	  "version": "1.0.1",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/php-fig/http-message.git",
-		"reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
-		"reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
-		"shasum": ""
-	  },
-	  "require": {
-		"php": ">=5.3.0"
-	  },
-	  "type": "library",
-	  "extra": {
-		"branch-alias": {
-		  "dev-master": "1.0.x-dev"
-		}
-	  },
-	  "autoload": {
-		"psr-4": {
-		  "Psr\\Http\\Message\\": "src/"
-		}
-	  },
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "PHP-FIG",
-		  "homepage": "http://www.php-fig.org/"
-		}
-	  ],
-	  "description": "Common interface for HTTP messages",
-	  "homepage": "https://github.com/php-fig/http-message",
-	  "keywords": [
-		"http",
-		"http-message",
-		"psr",
-		"psr-7",
-		"request",
-		"response"
-	  ],
-	  "time": "2016-08-06T14:39:51+00:00"
-	},
-	{
-	  "name": "psr/log",
-	  "version": "1.1.0",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/php-fig/log.git",
-		"reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/php-fig/log/zipball/6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
-		"reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
-		"shasum": ""
-	  },
-	  "require": {
-		"php": ">=5.3.0"
-	  },
-	  "type": "library",
-	  "extra": {
-		"branch-alias": {
-		  "dev-master": "1.0.x-dev"
-		}
-	  },
-	  "autoload": {
-		"psr-4": {
-		  "Psr\\Log\\": "Psr/Log/"
-		}
-	  },
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "PHP-FIG",
-		  "homepage": "http://www.php-fig.org/"
-		}
-	  ],
-	  "description": "Common interface for logging libraries",
-	  "homepage": "https://github.com/php-fig/log",
-	  "keywords": [
-		"log",
-		"psr",
-		"psr-3"
-	  ],
-	  "time": "2018-11-20T15:27:04+00:00"
-	},
-	{
-	  "name": "ralouphie/getallheaders",
-	  "version": "2.0.5",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/ralouphie/getallheaders.git",
-		"reference": "5601c8a83fbba7ef674a7369456d12f1e0d0eafa"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/ralouphie/getallheaders/zipball/5601c8a83fbba7ef674a7369456d12f1e0d0eafa",
-		"reference": "5601c8a83fbba7ef674a7369456d12f1e0d0eafa",
-		"shasum": ""
-	  },
-	  "require": {
-		"php": ">=5.3"
-	  },
-	  "require-dev": {
-		"phpunit/phpunit": "~3.7.0",
-		"satooshi/php-coveralls": ">=1.0"
-	  },
-	  "type": "library",
-	  "autoload": {
-		"files": [
-		  "src/getallheaders.php"
-		]
-	  },
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "Ralph Khattar",
-		  "email": "ralph.khattar@gmail.com"
-		}
-	  ],
-	  "description": "A polyfill for getallheaders.",
-	  "time": "2016-02-11T07:05:27+00:00"
-	},
-	{
-	  "name": "roave/security-advisories",
-	  "version": "dev-master",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/Roave/SecurityAdvisories.git",
-		"reference": "344bf4ed1263c75e7f96b87b80c52e8373561e19"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/344bf4ed1263c75e7f96b87b80c52e8373561e19",
-		"reference": "344bf4ed1263c75e7f96b87b80c52e8373561e19",
-		"shasum": ""
-	  },
-	  "conflict": {
-		"3f/pygmentize": "<1.2",
-		"adodb/adodb-php": "<5.20.12",
-		"alterphp/easyadmin-extension-bundle": ">=1.2,<1.2.11|>=1.3,<1.3.1",
-		"amphp/artax": "<1.0.6|>=2,<2.0.6",
-		"amphp/http": "<1.0.1",
-		"api-platform/core": ">=2.2,<2.2.10|>=2.3,<2.3.6",
-		"asymmetricrypt/asymmetricrypt": ">=0,<9.9.99",
-		"aws/aws-sdk-php": ">=3,<3.2.1",
-		"brightlocal/phpwhois": "<=4.2.5",
-		"bugsnag/bugsnag-laravel": ">=2,<2.0.2",
-		"cakephp/cakephp": ">=1.3,<1.3.18|>=2,<2.4.99|>=2.5,<2.5.99|>=2.6,<2.6.12|>=2.7,<2.7.6|>=3,<3.0.15|>=3.1,<3.1.4|>=3.4,<3.4.14|>=3.5,<3.5.17|>=3.6,<3.6.4",
-		"cart2quote/module-quotation": ">=4.1.6,<=4.4.5|>=5,<5.4.4",
-		"cartalyst/sentry": "<=2.1.6",
-		"codeigniter/framework": "<=3.0.6",
-		"composer/composer": "<=1.0.0-alpha11",
-		"contao-components/mediaelement": ">=2.14.2,<2.21.1",
-		"contao/core": ">=2,<3.5.35",
-		"contao/core-bundle": ">=4,<4.4.18|>=4.5,<4.5.8",
-		"contao/listing-bundle": ">=4,<4.4.8",
-		"contao/newsletter-bundle": ">=4,<4.1",
-		"david-garcia/phpwhois": "<=4.3.1",
-		"doctrine/annotations": ">=1,<1.2.7",
-		"doctrine/cache": ">=1,<1.3.2|>=1.4,<1.4.2",
-		"doctrine/common": ">=2,<2.4.3|>=2.5,<2.5.1",
-		"doctrine/dbal": ">=2,<2.0.8|>=2.1,<2.1.2",
-		"doctrine/doctrine-bundle": "<1.5.2",
-		"doctrine/doctrine-module": "<=0.7.1",
-		"doctrine/mongodb-odm": ">=1,<1.0.2",
-		"doctrine/mongodb-odm-bundle": ">=2,<3.0.1",
-		"doctrine/orm": ">=2,<2.4.8|>=2.5,<2.5.1",
-		"dompdf/dompdf": ">=0.6,<0.6.2",
-		"drupal/core": ">=7,<7.62|>=8,<8.5.9|>=8.6,<8.6.6",
-		"drupal/drupal": ">=7,<7.62|>=8,<8.5.9|>=8.6,<8.6.6",
-		"erusev/parsedown": "<1.7",
-		"ezsystems/ezpublish-kernel": ">=5.3,<5.3.12.1|>=5.4,<5.4.13.1|>=6,<6.7.9.1|>=6.8,<6.13.5.1|>=7,<7.2.4.1|>=7.3,<7.3.2.1",
-		"ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.6|>=5.4,<5.4.12.3|>=2011,<2017.12.4.3|>=2018.6,<2018.6.1.4|>=2018.9,<2018.9.1.3",
-		"ezsystems/repository-forms": ">=2.3,<2.3.2.1",
-		"ezyang/htmlpurifier": "<4.1.1",
-		"firebase/php-jwt": "<2",
-		"fooman/tcpdf": "<6.2.22",
-		"fossar/tcpdf-parser": "<6.2.22",
-		"friendsofsymfony/rest-bundle": ">=1.2,<1.2.2",
-		"friendsofsymfony/user-bundle": ">=1.2,<1.3.5",
-		"fuel/core": "<1.8.1",
-		"gree/jose": "<=2.2",
-		"gregwar/rst": "<1.0.3",
-		"guzzlehttp/guzzle": ">=6,<6.2.1|>=4.0.0-rc2,<4.2.4|>=5,<5.3.1",
-		"illuminate/auth": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.10",
-		"illuminate/cookie": ">=4,<=4.0.11|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.42|>=5.6,<5.6.30",
-		"illuminate/database": ">=4,<4.0.99|>=4.1,<4.1.29",
-		"illuminate/encryption": ">=4,<=4.0.11|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.40|>=5.6,<5.6.15",
-		"ivankristianto/phpwhois": "<=4.3",
-		"james-heinrich/getid3": "<1.9.9",
-		"joomla/session": "<1.3.1",
-		"jsmitty12/phpwhois": "<5.1",
-		"kazist/phpwhois": "<=4.2.6",
-		"kreait/firebase-php": ">=3.2,<3.8.1",
-		"la-haute-societe/tcpdf": "<6.2.22",
-		"laravel/framework": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.42|>=5.6,<5.6.30",
-		"laravel/socialite": ">=1,<1.0.99|>=2,<2.0.10",
-		"league/commonmark": ">=0.15.6,<0.18.1",
-		"magento/magento1ce": "<1.9.4",
-		"magento/magento1ee": ">=1.9,<1.14.4",
-		"magento/product-community-edition": ">=2,<2.2.7",
-		"monolog/monolog": ">=1.8,<1.12",
-		"namshi/jose": "<2.2",
-		"onelogin/php-saml": "<2.10.4",
-		"openid/php-openid": "<2.3",
-		"oro/crm": ">=1.7,<1.7.4",
-		"oro/platform": ">=1.7,<1.7.4",
-		"padraic/humbug_get_contents": "<1.1.2",
-		"pagarme/pagarme-php": ">=0,<3",
-		"paragonie/random_compat": "<2",
-		"paypal/merchant-sdk-php": "<3.12",
-		"pear/archive_tar": "<1.4.4",
-		"phpmailer/phpmailer": ">=5,<5.2.27|>=6,<6.0.6",
-		"phpoffice/phpexcel": "<=1.8.1",
-		"phpoffice/phpspreadsheet": "<=1.5",
-		"phpunit/phpunit": ">=4.8.19,<4.8.28|>=5.0.10,<5.6.3",
-		"phpwhois/phpwhois": "<=4.2.5",
-		"phpxmlrpc/extras": "<0.6.1",
-		"propel/propel": ">=2.0.0-alpha1,<=2.0.0-alpha7",
-		"propel/propel1": ">=1,<=1.7.1",
-		"pusher/pusher-php-server": "<2.2.1",
-		"robrichards/xmlseclibs": ">=1,<3.0.2",
-		"sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
-		"sensiolabs/connect": "<4.2.3",
-		"serluck/phpwhois": "<=4.2.6",
-		"shopware/shopware": "<5.3.7",
-		"silverstripe/cms": ">=3,<=3.0.11|>=3.1,<3.1.11",
-		"silverstripe/forum": "<=0.6.1|>=0.7,<=0.7.3",
-		"silverstripe/framework": ">=3,<3.3",
-		"silverstripe/userforms": "<3",
-		"simple-updates/phpwhois": "<=1",
-		"simplesamlphp/saml2": "<1.10.6|>=2,<2.3.8|>=3,<3.1.4",
-		"simplesamlphp/simplesamlphp": "<1.16.3",
-		"simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
-		"slim/slim": "<2.6",
-		"smarty/smarty": "<3.1.33",
-		"socalnick/scn-social-auth": "<1.15.2",
-		"spoonity/tcpdf": "<6.2.22",
-		"squizlabs/php_codesniffer": ">=1,<2.8.1|>=3,<3.0.1",
-		"stormpath/sdk": ">=0,<9.9.99",
-		"swiftmailer/swiftmailer": ">=4,<5.4.5",
-		"sylius/admin-bundle": ">=1,<1.0.17|>=1.1,<1.1.9|>=1.2,<1.2.2",
-		"sylius/sylius": ">=1,<1.0.17|>=1.1,<1.1.9|>=1.2,<1.2.2",
-		"symfony/dependency-injection": ">=2,<2.0.17",
-		"symfony/form": ">=2.3,<2.3.35|>=2.4,<2.6.12|>=2.7,<2.7.50|>=2.8,<2.8.49|>=3,<3.4.20|>=4,<4.0.15|>=4.1,<4.1.9|>=4.2,<4.2.1",
-		"symfony/framework-bundle": ">=2,<2.3.18|>=2.4,<2.4.8|>=2.5,<2.5.2",
-		"symfony/http-foundation": ">=2,<2.7.49|>=2.8,<2.8.44|>=3,<3.3.18|>=3.4,<3.4.14|>=4,<4.0.14|>=4.1,<4.1.3",
-		"symfony/http-kernel": ">=2,<2.3.29|>=2.4,<2.5.12|>=2.6,<2.6.8",
-		"symfony/intl": ">=2.7,<2.7.38|>=2.8,<2.8.31|>=3,<3.2.14|>=3.3,<3.3.13",
-		"symfony/polyfill": ">=1,<1.10",
-		"symfony/polyfill-php55": ">=1,<1.10",
-		"symfony/routing": ">=2,<2.0.19",
-		"symfony/security": ">=2,<2.7.50|>=2.8,<2.8.49|>=3,<3.4.19|>=4,<4.0.15|>=4.1,<4.1.9|>=4.2,<4.2.1",
-		"symfony/security-bundle": ">=2,<2.7.48|>=2.8,<2.8.41|>=3,<3.3.17|>=3.4,<3.4.11|>=4,<4.0.11",
-		"symfony/security-core": ">=2.4,<2.6.13|>=2.7,<2.7.9|>=2.7.30,<2.7.32|>=2.8,<2.8.37|>=3,<3.3.17|>=3.4,<3.4.7|>=4,<4.0.7",
-		"symfony/security-csrf": ">=2.4,<2.7.48|>=2.8,<2.8.41|>=3,<3.3.17|>=3.4,<3.4.11|>=4,<4.0.11",
-		"symfony/security-guard": ">=2.8,<2.8.41|>=3,<3.3.17|>=3.4,<3.4.11|>=4,<4.0.11",
-		"symfony/security-http": ">=2.3,<2.3.41|>=2.4,<2.7.50|>=2.8,<2.8.49|>=3,<3.4.20|>=4,<4.0.15|>=4.1,<4.1.9|>=4.2,<4.2.1",
-		"symfony/serializer": ">=2,<2.0.11",
-		"symfony/symfony": ">=2,<2.7.50|>=2.8,<2.8.49|>=3,<3.4.20|>=4,<4.0.15|>=4.1,<4.1.9|>=4.2,<4.2.1",
-		"symfony/translation": ">=2,<2.0.17",
-		"symfony/validator": ">=2,<2.0.24|>=2.1,<2.1.12|>=2.2,<2.2.5|>=2.3,<2.3.3",
-		"symfony/web-profiler-bundle": ">=2,<2.3.19|>=2.4,<2.4.9|>=2.5,<2.5.4",
-		"symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
-		"tecnickcom/tcpdf": "<6.2.22",
-		"thelia/backoffice-default-template": ">=2.1,<2.1.2",
-		"thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
-		"theonedemon/phpwhois": "<=4.2.5",
-		"titon/framework": ">=0,<9.9.99",
-		"truckersmp/phpwhois": "<=4.3.1",
-		"twig/twig": "<1.20",
-		"typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.32|>=8,<8.7.23|>=9,<9.5.4",
-		"typo3/cms-core": ">=8,<8.7.23|>=9,<9.5.4",
-		"typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
-		"typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
-		"ua-parser/uap-php": "<3.8",
-		"wallabag/tcpdf": "<6.2.22",
-		"willdurand/js-translation-bundle": "<2.1.1",
-		"yiisoft/yii": ">=1.1.14,<1.1.15",
-		"yiisoft/yii2": "<2.0.15",
-		"yiisoft/yii2-bootstrap": "<2.0.4",
-		"yiisoft/yii2-dev": "<2.0.15",
-		"yiisoft/yii2-elasticsearch": "<2.0.5",
-		"yiisoft/yii2-gii": "<2.0.4",
-		"yiisoft/yii2-jui": "<2.0.4",
-		"yiisoft/yii2-redis": "<2.0.8",
-		"zendframework/zend-cache": ">=2.4,<2.4.8|>=2.5,<2.5.3",
-		"zendframework/zend-captcha": ">=2,<2.4.9|>=2.5,<2.5.2",
-		"zendframework/zend-crypt": ">=2,<2.4.9|>=2.5,<2.5.2",
-		"zendframework/zend-db": ">=2,<2.0.99|>=2.1,<2.1.99|>=2.2,<2.2.10|>=2.3,<2.3.5",
-		"zendframework/zend-diactoros": ">=1,<1.8.4",
-		"zendframework/zend-feed": ">=1,<2.10.3",
-		"zendframework/zend-form": ">=2,<2.2.7|>=2.3,<2.3.1",
-		"zendframework/zend-http": ">=1,<2.8.1",
-		"zendframework/zend-json": ">=2.1,<2.1.6|>=2.2,<2.2.6",
-		"zendframework/zend-ldap": ">=2,<2.0.99|>=2.1,<2.1.99|>=2.2,<2.2.8|>=2.3,<2.3.3",
-		"zendframework/zend-mail": ">=2,<2.4.11|>=2.5,<2.7.2",
-		"zendframework/zend-navigation": ">=2,<2.2.7|>=2.3,<2.3.1",
-		"zendframework/zend-session": ">=2,<2.0.99|>=2.1,<2.1.99|>=2.2,<2.2.9|>=2.3,<2.3.4",
-		"zendframework/zend-validator": ">=2.3,<2.3.6",
-		"zendframework/zend-view": ">=2,<2.2.7|>=2.3,<2.3.1",
-		"zendframework/zend-xmlrpc": ">=2.1,<2.1.6|>=2.2,<2.2.6",
-		"zendframework/zendframework": "<2.5.1",
-		"zendframework/zendframework1": "<1.12.20",
-		"zendframework/zendopenid": ">=2,<2.0.2",
-		"zendframework/zendxml": ">=1,<1.0.1",
-		"zetacomponents/mail": "<1.8.2",
-		"zf-commons/zfc-user": "<1.2.2",
-		"zfcampus/zf-apigility-doctrine": ">=1,<1.0.3",
-		"zfr/zfr-oauth2-server-module": "<0.1.2"
-	  },
-	  "type": "metapackage",
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "Marco Pivetta",
-		  "email": "ocramius@gmail.com",
-		  "role": "maintainer"
-		}
-	  ],
-	  "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-	  "time": "2019-02-05T19:58:17+00:00"
-	},
-	{
-	  "name": "stichoza/google-translate-php",
-	  "version": "v4.0.1",
-	  "source": {
-		"type": "git",
-		"url": "https://github.com/Stichoza/google-translate-php.git",
-		"reference": "612d79e129176c67ed0c094165746c63c4cba1e3"
-	  },
-	  "dist": {
-		"type": "zip",
-		"url": "https://api.github.com/repos/Stichoza/google-translate-php/zipball/612d79e129176c67ed0c094165746c63c4cba1e3",
-		"reference": "612d79e129176c67ed0c094165746c63c4cba1e3",
-		"shasum": ""
-	  },
-	  "require": {
-		"ext-json": "*",
-		"ext-mbstring": "*",
-		"guzzlehttp/guzzle": "~6.0",
-		"php": "^7.1"
-	  },
-	  "require-dev": {
-		"phpunit/phpunit": "^7.0"
-	  },
-	  "type": "library",
-	  "autoload": {
-		"psr-4": {
-		  "Stichoza\\GoogleTranslate\\": "src/"
-		}
-	  },
-	  "notification-url": "https://packagist.org/downloads/",
-	  "license": [
-		"MIT"
-	  ],
-	  "authors": [
-		{
-		  "name": "Levan Velijanashvili",
-		  "email": "me@stichoza.com"
-		}
-	  ],
-	  "description": "Free Google Translate API PHP Package",
-	  "homepage": "http://github.com/Stichoza/google-translate-php",
-	  "keywords": [
-		"google",
-		"php",
-		"translate",
-		"translator"
-	  ],
-	  "time": "2018-12-04T00:15:54+00:00"
-	}
-  ],
-  "packages-dev": [ ],
-  "aliases": [ ],
-  "minimum-stability": "stable",
-  "stability-flags": {
-	"roave/security-advisories": 20
-  },
-  "prefer-stable": false,
-  "prefer-lowest": false,
-  "platform": {
-	"php": ">=5.5"
-  },
-  "platform-dev": [ ]
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "ce581f381016b349d9ddbe3743575f96",
+    "packages": [
+        {
+            "name": "ammarfaizi2/googletranslate",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ammarfaizi2/GoogleTranslate.git",
+                "reference": "6f819c31ceaef2dea1ebf5aa4623bb0610b94154"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ammarfaizi2/GoogleTranslate/zipball/6f819c31ceaef2dea1ebf5aa4623bb0610b94154",
+                "reference": "6f819c31ceaef2dea1ebf5aa4623bb0610b94154",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GoogleTranslate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ammar Faizi",
+                    "email": "ammarfaizi2@gmail.com"
+                }
+            ],
+            "description": "Google Translate",
+            "time": "2017-10-22T07:22:03+00:00"
+        },
+        {
+            "name": "catfan/medoo",
+            "version": "v1.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/catfan/Medoo.git",
+                "reference": "53a02b300d673f716cb06bf0e24fd774ec53939f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/catfan/Medoo/zipball/53a02b300d673f716cb06bf0e24fd774ec53939f",
+                "reference": "53a02b300d673f716cb06bf0e24fd774ec53939f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": ">=5.4"
+            },
+            "suggest": {
+                "ext-pdo_dblib": "For MSSQL or Sybase database on Linux/UNIX platform",
+                "ext-pdo_mysql": "For MySQL or MariaDB database",
+                "ext-pdo_oci": "For Oracle database",
+                "ext-pdo_oci8": "For Oracle version 8 database",
+                "ext-pdo_pqsql": "For PostgreSQL database",
+                "ext-pdo_sqlite": "For SQLite database",
+                "ext-pdo_sqlsrv": "For MSSQL database"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Medoo\\": "/src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Angel Lai",
+                    "email": "angel@catfan.me"
+                }
+            ],
+            "description": "The lightest PHP database framework to accelerate development",
+            "homepage": "https://medoo.in",
+            "keywords": [
+                "database",
+                "lightweight",
+                "mariadb",
+                "mssql",
+                "mysql",
+                "oracle",
+                "php framework",
+                "postgresql",
+                "sql",
+                "sqlite"
+            ],
+            "time": "2018-12-08T20:24:23+00:00"
+        },
+        {
+            "name": "container-interop/container-interop",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/container-interop/container-interop.git",
+                "reference": "79cbf1341c22ec75643d841642dd5d6acd83bdb8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/container-interop/container-interop/zipball/79cbf1341c22ec75643d841642dd5d6acd83bdb8",
+                "reference": "79cbf1341c22ec75643d841642dd5d6acd83bdb8",
+                "shasum": ""
+            },
+            "require": {
+                "psr/container": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Interop\\Container\\": "src/Interop/Container/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
+            "homepage": "https://github.com/container-interop/container-interop",
+            "time": "2017-02-14T19:40:03+00:00"
+        },
+        {
+            "name": "guzzlehttp/guzzle",
+            "version": "6.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/guzzle.git",
+                "reference": "407b0cb880ace85c9b63c5f9551db498cb2d50ba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/407b0cb880ace85c9b63c5f9551db498cb2d50ba",
+                "reference": "407b0cb880ace85c9b63c5f9551db498cb2d50ba",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/promises": "^1.0",
+                "guzzlehttp/psr7": "^1.4",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4 || ^7.0",
+                "psr/log": "^1.0"
+            },
+            "suggest": {
+                "psr/log": "Required for using the Log middleware"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "6.3-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions_include.php"
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Guzzle is a PHP HTTP client library",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "client",
+                "curl",
+                "framework",
+                "http",
+                "http client",
+                "rest",
+                "web service"
+            ],
+            "time": "2018-04-22T15:46:56+00:00"
+        },
+        {
+            "name": "guzzlehttp/promises",
+            "version": "v1.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/promises.git",
+                "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/a59da6cf61d80060647ff4d3eb2c03a2bc694646",
+                "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Promise\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Guzzle promises library",
+            "keywords": [
+                "promise"
+            ],
+            "time": "2016-12-20T10:07:11+00:00"
+        },
+        {
+            "name": "guzzlehttp/psr7",
+            "version": "1.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/psr7.git",
+                "reference": "9f83dded91781a01c63574e387eaa769be769115"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/9f83dded91781a01c63574e387eaa769be769115",
+                "reference": "9f83dded91781a01c63574e387eaa769be769115",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "psr/http-message": "~1.0",
+                "ralouphie/getallheaders": "^2.0.5"
+            },
+            "provide": {
+                "psr/http-message-implementation": "1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8.36 || ^5.7.27 || ^6.5.8"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Psr7\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Tobias Schultze",
+                    "homepage": "https://github.com/Tobion"
+                }
+            ],
+            "description": "PSR-7 message implementation that also provides common utility methods",
+            "keywords": [
+                "http",
+                "message",
+                "psr-7",
+                "request",
+                "response",
+                "stream",
+                "uri",
+                "url"
+            ],
+            "time": "2018-12-04T20:46:45+00:00"
+        },
+        {
+            "name": "longman/telegram-bot",
+            "version": "0.55.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-telegram-bot/core.git",
+                "reference": "2cfb8a7ea21fa244b1063ffe0f7250c4af30fcdf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-telegram-bot/core/zipball/2cfb8a7ea21fa244b1063ffe0f7250c4af30fcdf",
+                "reference": "2cfb8a7ea21fa244b1063ffe0f7250c4af30fcdf",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-pdo": "*",
+                "guzzlehttp/guzzle": "^6.3",
+                "monolog/monolog": "^1.23",
+                "php": "^5.5|^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8|^5.7|^6.5|^7.4",
+                "squizlabs/php_codesniffer": "^3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Longman\\TelegramBot\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Avtandil Kikabidze aka LONGMAN",
+                    "email": "akalongman@gmail.com",
+                    "homepage": "http://longman.me",
+                    "role": "Developer"
+                },
+                {
+                    "name": "PHP Telegram Bot Team",
+                    "homepage": "https://github.com/php-telegram-bot/core/graphs/contributors",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Telegram bot",
+            "homepage": "https://github.com/php-telegram-bot/core",
+            "keywords": [
+                "api",
+                "bot",
+                "telegram"
+            ],
+            "time": "2019-01-06T20:07:04+00:00"
+        },
+        {
+            "name": "monolog/monolog",
+            "version": "1.24.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266",
+                "reference": "bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "psr/log": "~1.0"
+            },
+            "provide": {
+                "psr/log-implementation": "1.0.0"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "^2.4.9 || ^3.0",
+                "doctrine/couchdb": "~1.0@dev",
+                "graylog2/gelf-php": "~1.0",
+                "jakub-onderka/php-parallel-lint": "0.9",
+                "php-amqplib/php-amqplib": "~2.4",
+                "php-console/php-console": "^3.1.3",
+                "phpunit/phpunit": "~4.5",
+                "phpunit/phpunit-mock-objects": "2.3.0",
+                "ruflin/elastica": ">=0.90 <3.0",
+                "sentry/sentry": "^0.13",
+                "swiftmailer/swiftmailer": "^5.3|^6.0"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+                "ext-mongo": "Allow sending log messages to a MongoDB server",
+                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
+                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
+                "php-console/php-console": "Allow sending log messages to Google Chrome",
+                "rollbar/rollbar": "Allow sending log messages to Rollbar",
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
+                "sentry/sentry": "Allow sending log messages to a Sentry server"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Monolog\\": "src/Monolog"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+            "homepage": "http://github.com/Seldaek/monolog",
+            "keywords": [
+                "log",
+                "logging",
+                "psr-3"
+            ],
+            "time": "2018-11-05T09:00:11+00:00"
+        },
+        {
+            "name": "psr/container",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
+            "keywords": [
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
+            ],
+            "time": "2017-02-14T16:28:37+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2016-08-06T14:39:51+00:00"
+        },
+        {
+            "name": "psr/log",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2018-11-20T15:27:04+00:00"
+        },
+        {
+            "name": "ralouphie/getallheaders",
+            "version": "2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ralouphie/getallheaders.git",
+                "reference": "5601c8a83fbba7ef674a7369456d12f1e0d0eafa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ralouphie/getallheaders/zipball/5601c8a83fbba7ef674a7369456d12f1e0d0eafa",
+                "reference": "5601c8a83fbba7ef674a7369456d12f1e0d0eafa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7.0",
+                "satooshi/php-coveralls": ">=1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/getallheaders.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ralph Khattar",
+                    "email": "ralph.khattar@gmail.com"
+                }
+            ],
+            "description": "A polyfill for getallheaders.",
+            "time": "2016-02-11T07:05:27+00:00"
+        },
+        {
+            "name": "roave/security-advisories",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Roave/SecurityAdvisories.git",
+                "reference": "ff41a9a96718245c7160588928e6d217cfb0393c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ff41a9a96718245c7160588928e6d217cfb0393c",
+                "reference": "ff41a9a96718245c7160588928e6d217cfb0393c",
+                "shasum": ""
+            },
+            "conflict": {
+                "3f/pygmentize": "<1.2",
+                "adodb/adodb-php": "<5.20.12",
+                "alterphp/easyadmin-extension-bundle": ">=1.2,<1.2.11|>=1.3,<1.3.1",
+                "amphp/artax": "<1.0.6|>=2,<2.0.6",
+                "amphp/http": "<1.0.1",
+                "api-platform/core": ">=2.2,<2.2.10|>=2.3,<2.3.6",
+                "asymmetricrypt/asymmetricrypt": ">=0,<9.9.99",
+                "aws/aws-sdk-php": ">=3,<3.2.1",
+                "brightlocal/phpwhois": "<=4.2.5",
+                "bugsnag/bugsnag-laravel": ">=2,<2.0.2",
+                "cakephp/cakephp": ">=1.3,<1.3.18|>=2,<2.4.99|>=2.5,<2.5.99|>=2.6,<2.6.12|>=2.7,<2.7.6|>=3,<3.0.15|>=3.1,<3.1.4|>=3.4,<3.4.14|>=3.5,<3.5.17|>=3.6,<3.6.4",
+                "cart2quote/module-quotation": ">=4.1.6,<=4.4.5|>=5,<5.4.4",
+                "cartalyst/sentry": "<=2.1.6",
+                "codeigniter/framework": "<=3.0.6",
+                "composer/composer": "<=1.0.0-alpha11",
+                "contao-components/mediaelement": ">=2.14.2,<2.21.1",
+                "contao/core": ">=2,<3.5.39",
+                "contao/core-bundle": ">=4,<4.4.37|>=4.5,<4.7.3",
+                "contao/listing-bundle": ">=4,<4.4.8",
+                "contao/newsletter-bundle": ">=4,<4.1",
+                "david-garcia/phpwhois": "<=4.3.1",
+                "doctrine/annotations": ">=1,<1.2.7",
+                "doctrine/cache": ">=1,<1.3.2|>=1.4,<1.4.2",
+                "doctrine/common": ">=2,<2.4.3|>=2.5,<2.5.1",
+                "doctrine/dbal": ">=2,<2.0.8|>=2.1,<2.1.2",
+                "doctrine/doctrine-bundle": "<1.5.2",
+                "doctrine/doctrine-module": "<=0.7.1",
+                "doctrine/mongodb-odm": ">=1,<1.0.2",
+                "doctrine/mongodb-odm-bundle": ">=2,<3.0.1",
+                "doctrine/orm": ">=2,<2.4.8|>=2.5,<2.5.1",
+                "dompdf/dompdf": ">=0.6,<0.6.2",
+                "drupal/core": ">=7,<7.65|>=8,<8.5.14|>=8.6,<8.6.13",
+                "drupal/drupal": ">=7,<7.64|>=8,<8.5.13|>=8.6,<8.6.12",
+                "erusev/parsedown": "<1.7.2",
+                "ezsystems/ezpublish-kernel": ">=5.3,<5.3.12.1|>=5.4,<5.4.13.1|>=6,<6.7.9.1|>=6.8,<6.13.5.1|>=7,<7.2.4.1|>=7.3,<7.3.2.1",
+                "ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.6|>=5.4,<5.4.12.3|>=2011,<2017.12.4.3|>=2018.6,<2018.6.1.4|>=2018.9,<2018.9.1.3",
+                "ezsystems/repository-forms": ">=2.3,<2.3.2.1",
+                "ezyang/htmlpurifier": "<4.1.1",
+                "firebase/php-jwt": "<2",
+                "fooman/tcpdf": "<6.2.22",
+                "fossar/tcpdf-parser": "<6.2.22",
+                "friendsofsymfony/rest-bundle": ">=1.2,<1.2.2",
+                "friendsofsymfony/user-bundle": ">=1.2,<1.3.5",
+                "fuel/core": "<1.8.1",
+                "gree/jose": "<=2.2",
+                "gregwar/rst": "<1.0.3",
+                "guzzlehttp/guzzle": ">=6,<6.2.1|>=4.0.0-rc2,<4.2.4|>=5,<5.3.1",
+                "illuminate/auth": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.10",
+                "illuminate/cookie": ">=4,<=4.0.11|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.42|>=5.6,<5.6.30",
+                "illuminate/database": ">=4,<4.0.99|>=4.1,<4.1.29",
+                "illuminate/encryption": ">=4,<=4.0.11|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.40|>=5.6,<5.6.15",
+                "ivankristianto/phpwhois": "<=4.3",
+                "james-heinrich/getid3": "<1.9.9",
+                "joomla/session": "<1.3.1",
+                "jsmitty12/phpwhois": "<5.1",
+                "kazist/phpwhois": "<=4.2.6",
+                "kreait/firebase-php": ">=3.2,<3.8.1",
+                "la-haute-societe/tcpdf": "<6.2.22",
+                "laravel/framework": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.42|>=5.6,<5.6.30",
+                "laravel/socialite": ">=1,<1.0.99|>=2,<2.0.10",
+                "league/commonmark": "<0.18.3",
+                "magento/magento1ce": "<1.9.4",
+                "magento/magento1ee": ">=1.9,<1.14.4",
+                "magento/product-community-edition": ">=2,<2.2.7",
+                "monolog/monolog": ">=1.8,<1.12",
+                "namshi/jose": "<2.2",
+                "onelogin/php-saml": "<2.10.4",
+                "openid/php-openid": "<2.3",
+                "oro/crm": ">=1.7,<1.7.4",
+                "oro/platform": ">=1.7,<1.7.4",
+                "padraic/humbug_get_contents": "<1.1.2",
+                "pagarme/pagarme-php": ">=0,<3",
+                "paragonie/random_compat": "<2",
+                "paypal/merchant-sdk-php": "<3.12",
+                "pear/archive_tar": "<1.4.4",
+                "phpmailer/phpmailer": ">=5,<5.2.27|>=6,<6.0.6",
+                "phpoffice/phpexcel": "<=1.8.1",
+                "phpoffice/phpspreadsheet": "<=1.5",
+                "phpunit/phpunit": ">=4.8.19,<4.8.28|>=5.0.10,<5.6.3",
+                "phpwhois/phpwhois": "<=4.2.5",
+                "phpxmlrpc/extras": "<0.6.1",
+                "propel/propel": ">=2.0.0-alpha1,<=2.0.0-alpha7",
+                "propel/propel1": ">=1,<=1.7.1",
+                "pusher/pusher-php-server": "<2.2.1",
+                "robrichards/xmlseclibs": ">=1,<3.0.2",
+                "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
+                "sensiolabs/connect": "<4.2.3",
+                "serluck/phpwhois": "<=4.2.6",
+                "shopware/shopware": "<5.3.7",
+                "silverstripe/cms": ">=3,<=3.0.11|>=3.1,<3.1.11",
+                "silverstripe/forum": "<=0.6.1|>=0.7,<=0.7.3",
+                "silverstripe/framework": ">=3,<3.6.7|>=3.7,<3.7.3|>=4,<4.0.7|>=4.1,<4.1.5|>=4.2,<4.2.4|>=4.3,<4.3.1",
+                "silverstripe/userforms": "<3",
+                "simple-updates/phpwhois": "<=1",
+                "simplesamlphp/saml2": "<1.10.6|>=2,<2.3.8|>=3,<3.1.4",
+                "simplesamlphp/simplesamlphp": "<1.16.3",
+                "simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
+                "slim/slim": "<2.6",
+                "smarty/smarty": "<3.1.33",
+                "socalnick/scn-social-auth": "<1.15.2",
+                "spoonity/tcpdf": "<6.2.22",
+                "squizlabs/php_codesniffer": ">=1,<2.8.1|>=3,<3.0.1",
+                "stormpath/sdk": ">=0,<9.9.99",
+                "swiftmailer/swiftmailer": ">=4,<5.4.5",
+                "sylius/admin-bundle": ">=1,<1.0.17|>=1.1,<1.1.9|>=1.2,<1.2.2",
+                "sylius/sylius": ">=1,<1.0.17|>=1.1,<1.1.9|>=1.2,<1.2.2",
+                "symfony/dependency-injection": ">=2,<2.0.17",
+                "symfony/form": ">=2.3,<2.3.35|>=2.4,<2.6.12|>=2.7,<2.7.50|>=2.8,<2.8.49|>=3,<3.4.20|>=4,<4.0.15|>=4.1,<4.1.9|>=4.2,<4.2.1",
+                "symfony/framework-bundle": ">=2,<2.3.18|>=2.4,<2.4.8|>=2.5,<2.5.2",
+                "symfony/http-foundation": ">=2,<2.7.49|>=2.8,<2.8.44|>=3,<3.3.18|>=3.4,<3.4.14|>=4,<4.0.14|>=4.1,<4.1.3",
+                "symfony/http-kernel": ">=2,<2.3.29|>=2.4,<2.5.12|>=2.6,<2.6.8",
+                "symfony/intl": ">=2.7,<2.7.38|>=2.8,<2.8.31|>=3,<3.2.14|>=3.3,<3.3.13",
+                "symfony/polyfill": ">=1,<1.10",
+                "symfony/polyfill-php55": ">=1,<1.10",
+                "symfony/routing": ">=2,<2.0.19",
+                "symfony/security": ">=2,<2.7.50|>=2.8,<2.8.49|>=3,<3.4.19|>=4,<4.0.15|>=4.1,<4.1.9|>=4.2,<4.2.1",
+                "symfony/security-bundle": ">=2,<2.7.48|>=2.8,<2.8.41|>=3,<3.3.17|>=3.4,<3.4.11|>=4,<4.0.11",
+                "symfony/security-core": ">=2.4,<2.6.13|>=2.7,<2.7.9|>=2.7.30,<2.7.32|>=2.8,<2.8.37|>=3,<3.3.17|>=3.4,<3.4.7|>=4,<4.0.7",
+                "symfony/security-csrf": ">=2.4,<2.7.48|>=2.8,<2.8.41|>=3,<3.3.17|>=3.4,<3.4.11|>=4,<4.0.11",
+                "symfony/security-guard": ">=2.8,<2.8.41|>=3,<3.3.17|>=3.4,<3.4.11|>=4,<4.0.11",
+                "symfony/security-http": ">=2.3,<2.3.41|>=2.4,<2.7.50|>=2.8,<2.8.49|>=3,<3.4.20|>=4,<4.0.15|>=4.1,<4.1.9|>=4.2,<4.2.1",
+                "symfony/serializer": ">=2,<2.0.11",
+                "symfony/symfony": ">=2,<2.7.50|>=2.8,<2.8.49|>=3,<3.4.20|>=4,<4.0.15|>=4.1,<4.1.9|>=4.2,<4.2.1",
+                "symfony/translation": ">=2,<2.0.17",
+                "symfony/validator": ">=2,<2.0.24|>=2.1,<2.1.12|>=2.2,<2.2.5|>=2.3,<2.3.3",
+                "symfony/web-profiler-bundle": ">=2,<2.3.19|>=2.4,<2.4.9|>=2.5,<2.5.4",
+                "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
+                "tecnickcom/tcpdf": "<6.2.22",
+                "thelia/backoffice-default-template": ">=2.1,<2.1.2",
+                "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
+                "theonedemon/phpwhois": "<=4.2.5",
+                "titon/framework": ">=0,<9.9.99",
+                "truckersmp/phpwhois": "<=4.3.1",
+                "twig/twig": "<1.38|>=2,<2.7",
+                "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.32|>=8,<8.7.23|>=9,<9.5.4",
+                "typo3/cms-core": ">=8,<8.7.23|>=9,<9.5.4",
+                "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
+                "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
+                "ua-parser/uap-php": "<3.8",
+                "wallabag/tcpdf": "<6.2.22",
+                "willdurand/js-translation-bundle": "<2.1.1",
+                "yiisoft/yii": ">=1.1.14,<1.1.15",
+                "yiisoft/yii2": "<2.0.15",
+                "yiisoft/yii2-bootstrap": "<2.0.4",
+                "yiisoft/yii2-dev": "<2.0.15",
+                "yiisoft/yii2-elasticsearch": "<2.0.5",
+                "yiisoft/yii2-gii": "<2.0.4",
+                "yiisoft/yii2-jui": "<2.0.4",
+                "yiisoft/yii2-redis": "<2.0.8",
+                "zendframework/zend-cache": ">=2.4,<2.4.8|>=2.5,<2.5.3",
+                "zendframework/zend-captcha": ">=2,<2.4.9|>=2.5,<2.5.2",
+                "zendframework/zend-crypt": ">=2,<2.4.9|>=2.5,<2.5.2",
+                "zendframework/zend-db": ">=2,<2.0.99|>=2.1,<2.1.99|>=2.2,<2.2.10|>=2.3,<2.3.5",
+                "zendframework/zend-developer-tools": ">=1.2.2,<1.2.3",
+                "zendframework/zend-diactoros": ">=1,<1.8.4",
+                "zendframework/zend-feed": ">=1,<2.10.3",
+                "zendframework/zend-form": ">=2,<2.2.7|>=2.3,<2.3.1",
+                "zendframework/zend-http": ">=1,<2.8.1",
+                "zendframework/zend-json": ">=2.1,<2.1.6|>=2.2,<2.2.6",
+                "zendframework/zend-ldap": ">=2,<2.0.99|>=2.1,<2.1.99|>=2.2,<2.2.8|>=2.3,<2.3.3",
+                "zendframework/zend-mail": ">=2,<2.4.11|>=2.5,<2.7.2",
+                "zendframework/zend-navigation": ">=2,<2.2.7|>=2.3,<2.3.1",
+                "zendframework/zend-session": ">=2,<2.0.99|>=2.1,<2.1.99|>=2.2,<2.2.9|>=2.3,<2.3.4",
+                "zendframework/zend-validator": ">=2.3,<2.3.6",
+                "zendframework/zend-view": ">=2,<2.2.7|>=2.3,<2.3.1",
+                "zendframework/zend-xmlrpc": ">=2.1,<2.1.6|>=2.2,<2.2.6",
+                "zendframework/zendframework": "<2.5.1",
+                "zendframework/zendframework1": "<1.12.20",
+                "zendframework/zendopenid": ">=2,<2.0.2",
+                "zendframework/zendxml": ">=1,<1.0.1",
+                "zetacomponents/mail": "<1.8.2",
+                "zf-commons/zfc-user": "<1.2.2",
+                "zfcampus/zf-apigility-doctrine": ">=1,<1.0.3",
+                "zfr/zfr-oauth2-server-module": "<0.1.2"
+            },
+            "type": "metapackage",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com",
+                    "role": "maintainer"
+                }
+            ],
+            "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
+            "time": "2019-04-12T16:05:24+00:00"
+        },
+        {
+            "name": "sastrawi/sastrawi",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sastrawi/sastrawi.git",
+                "reference": "09db1bda7756fae740767ed7eb8de1b01ae859d5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sastrawi/sastrawi/zipball/09db1bda7756fae740767ed7eb8de1b01ae859d5",
+                "reference": "09db1bda7756fae740767ed7eb8de1b01ae859d5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.7",
+                "squizlabs/php_codesniffer": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Sastrawi\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Librian",
+                    "email": "andylibrian@gmail.com",
+                    "homepage": "http://andylibrian.com",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "PHP library for stemming Indonesian language (Bahasa Indonesia)",
+            "homepage": "https://github.com/sastrawi/sastrawi",
+            "keywords": [
+                "bahasa",
+                "indonesia",
+                "indonesian",
+                "kata dasar",
+                "root word",
+                "stem"
+            ],
+            "time": "2017-02-21T13:43:10+00:00"
+        },
+        {
+            "name": "sastrawi/sentence-detector",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sastrawi/sentence-detector.git",
+                "reference": "a7741aea1b78afa0c77e4af1cf36c0eee05dab6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sastrawi/sentence-detector/zipball/a7741aea1b78afa0c77e4af1cf36c0eee05dab6f",
+                "reference": "a7741aea1b78afa0c77e4af1cf36c0eee05dab6f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3",
+                "sastrawi/string-span": "~1",
+                "sastrawi/trka": "~0.1"
+            },
+            "require-dev": {
+                "behat/behat": "~3",
+                "phpunit/phpunit": "~4",
+                "squizlabs/php_codesniffer": "~1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Sastrawi\\SentenceDetector": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Librian",
+                    "email": "andylibrian@gmail.com",
+                    "homepage": "http://andylibrian.pro",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "PHP library that detects sentence in Bahasa Indonesia.",
+            "homepage": "https://github.com/sastrawi/sentence-detector",
+            "keywords": [
+                "bahasa",
+                "indonesia",
+                "indonesian",
+                "natural language processing",
+                "nlp",
+                "sentence detector",
+                "sentence segmentation",
+                "text segmentation"
+            ],
+            "time": "2014-11-30T13:27:19+00:00"
+        },
+        {
+            "name": "sastrawi/string-span",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sastrawi/string-span.git",
+                "reference": "8e927ea4bf94fcc2f678f31aa3d0a62c74b07fbe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sastrawi/string-span/zipball/8e927ea4bf94fcc2f678f31aa3d0a62c74b07fbe",
+                "reference": "8e927ea4bf94fcc2f678f31aa3d0a62c74b07fbe",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4",
+                "squizlabs/php_codesniffer": "~1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Sastrawi\\String\\Span": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Librian",
+                    "email": "andylibrian@gmail.com",
+                    "homepage": "http://andylibrian.pro",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "String span utility.",
+            "homepage": "https://github.com/sastrawi/string-span",
+            "keywords": [
+                "natural language processing",
+                "nlp",
+                "string",
+                "string span"
+            ],
+            "time": "2014-12-01T14:01:51+00:00"
+        },
+        {
+            "name": "sastrawi/tokenizer",
+            "version": "v0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sastrawi/tokenizer.git",
+                "reference": "35c7c6f550e749468e0d445bf69eb019191f9415"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sastrawi/tokenizer/zipball/35c7c6f550e749468e0d445bf69eb019191f9415",
+                "reference": "35c7c6f550e749468e0d445bf69eb019191f9415",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3",
+                "sastrawi/string-span": "~1",
+                "sastrawi/trka": "0.*",
+                "symfony/console": "~2.1"
+            },
+            "require-dev": {
+                "behat/behat": "~3",
+                "phpunit/phpunit": "~4",
+                "squizlabs/php_codesniffer": "~1"
+            },
+            "suggest": {
+                "sastrawi/sastrawi": "For stemming Bahasa Indonesia",
+                "sastrawi/sentence-detector": "For splitting sentence in Bahasa Indonesia"
+            },
+            "bin": [
+                "bin/sastrawi-tokenize"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Sastrawi\\Tokenizer": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Librian",
+                    "email": "andylibrian@gmail.com",
+                    "homepage": "http://andylibrian.pro",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "PHP library that allows you to tokenize Bahasa Indonesia.",
+            "homepage": "https://github.com/sastrawi/tokenizer",
+            "keywords": [
+                "bahasa",
+                "indonesia",
+                "indonesian",
+                "natural language processing",
+                "nlp",
+                "text preprocessing",
+                "tokenization",
+                "tokenizer"
+            ],
+            "time": "2015-01-21T03:45:15+00:00"
+        },
+        {
+            "name": "sastrawi/trka",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sastrawi/trka.git",
+                "reference": "ff82616135204e2d29aca51c56def3330b994b1c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sastrawi/trka/zipball/ff82616135204e2d29aca51c56def3330b994b1c",
+                "reference": "ff82616135204e2d29aca51c56def3330b994b1c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3",
+                "sastrawi/string-span": "~1",
+                "zendframework/zend-uri": "~2",
+                "zendframework/zend-validator": "~2"
+            },
+            "require-dev": {
+                "behat/behat": "~3",
+                "phpunit/phpunit": "~4",
+                "squizlabs/php_codesniffer": "~1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Sastrawi\\Trka": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Librian",
+                    "email": "andylibrian@gmail.com",
+                    "homepage": "http://andylibrian.pro",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "PHP library that guess entity in Bahasa Indonesia.",
+            "homepage": "https://github.com/sastrawi/trka",
+            "keywords": [
+                "bahasa",
+                "indonesia",
+                "indonesian",
+                "named entity detector",
+                "natural language processing",
+                "nlp"
+            ],
+            "time": "2014-12-04T05:39:36+00:00"
+        },
+        {
+            "name": "stichoza/google-translate-php",
+            "version": "v4.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Stichoza/google-translate-php.git",
+                "reference": "612d79e129176c67ed0c094165746c63c4cba1e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Stichoza/google-translate-php/zipball/612d79e129176c67ed0c094165746c63c4cba1e3",
+                "reference": "612d79e129176c67ed0c094165746c63c4cba1e3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "~6.0",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stichoza\\GoogleTranslate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Levan Velijanashvili",
+                    "email": "me@stichoza.com"
+                }
+            ],
+            "description": "Free Google Translate API PHP Package",
+            "homepage": "http://github.com/Stichoza/google-translate-php",
+            "keywords": [
+                "google",
+                "php",
+                "translate",
+                "translator"
+            ],
+            "time": "2018-12-04T00:15:54+00:00"
+        },
+        {
+            "name": "symfony/console",
+            "version": "v2.8.50",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/console.git",
+                "reference": "cbcf4b5e233af15cd2bbd50dee1ccc9b7927dc12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/console/zipball/cbcf4b5e233af15cd2bbd50dee1ccc9b7927dc12",
+                "reference": "cbcf4b5e233af15cd2bbd50dee1ccc9b7927dc12",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9",
+                "symfony/debug": "^2.7.2|~3.0.0",
+                "symfony/polyfill-mbstring": "~1.0"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/event-dispatcher": "~2.1|~3.0.0",
+                "symfony/process": "~2.1|~3.0.0"
+            },
+            "suggest": {
+                "psr/log-implementation": "For using the console logger",
+                "symfony/event-dispatcher": "",
+                "symfony/process": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Console\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Console Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-11-20T15:55:20+00:00"
+        },
+        {
+            "name": "symfony/debug",
+            "version": "v3.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/debug.git",
+                "reference": "697c527acd9ea1b2d3efac34d9806bf255278b0a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/697c527acd9ea1b2d3efac34d9806bf255278b0a",
+                "reference": "697c527acd9ea1b2d3efac34d9806bf255278b0a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "psr/log": "~1.0"
+            },
+            "conflict": {
+                "symfony/http-kernel": ">=2.3,<2.3.24|~2.4.0|>=2.5,<2.5.9|>=2.6,<2.6.2"
+            },
+            "require-dev": {
+                "symfony/class-loader": "~2.8|~3.0",
+                "symfony/http-kernel": "~2.8|~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Debug\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Debug Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-07-30T07:22:48+00:00"
+        },
+        {
+            "name": "symfony/polyfill-mbstring",
+            "version": "v1.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-mbstring.git",
+                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fe5e94c604826c35a32fa832f35bd036b6799609",
+                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "ext-mbstring": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.11-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Mbstring\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for the Mbstring extension",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "mbstring",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2019-02-06T07:57:58+00:00"
+        },
+        {
+            "name": "tediscript/perangkum",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tediscript/perangkum.git",
+                "reference": "611b9740f19c08b31a4a501d633984fe51cd7213"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tediscript/perangkum/zipball/611b9740f19c08b31a4a501d633984fe51cd7213",
+                "reference": "611b9740f19c08b31a4a501d633984fe51cd7213",
+                "shasum": ""
+            },
+            "require": {
+                "sastrawi/sastrawi": "~1",
+                "sastrawi/sentence-detector": "~1",
+                "sastrawi/tokenizer": "0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Summarizer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tedi Fibri",
+                    "email": "tediscript@gmail.com",
+                    "homepage": "http://blog.tediscript.com",
+                    "role": "PHP Developer"
+                }
+            ],
+            "description": "PHP library to summarize Indonesian language (Bahasa Indonesia)",
+            "homepage": "https://github.com/tediscript/perangkum",
+            "keywords": [
+                "bahasa",
+                "indonesia",
+                "indonesian",
+                "perangkum",
+                "rangkum",
+                "summarize"
+            ],
+            "time": "2015-01-15T12:00:05+00:00"
+        },
+        {
+            "name": "zendframework/zend-escaper",
+            "version": "2.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-escaper.git",
+                "reference": "31d8aafae982f9568287cb4dce987e6aff8fd074"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-escaper/zipball/31d8aafae982f9568287cb4dce987e6aff8fd074",
+                "reference": "31d8aafae982f9568287cb4dce987e6aff8fd074",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
+                "zendframework/zend-coding-standard": "~1.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6.x-dev",
+                    "dev-develop": "2.7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Escaper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Securely and safely escape HTML, HTML attributes, JavaScript, CSS, and URLs",
+            "keywords": [
+                "ZendFramework",
+                "escaper",
+                "zf"
+            ],
+            "time": "2018-04-25T15:48:53+00:00"
+        },
+        {
+            "name": "zendframework/zend-stdlib",
+            "version": "3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-stdlib.git",
+                "reference": "66536006722aff9e62d1b331025089b7ec71c065"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-stdlib/zipball/66536006722aff9e62d1b331025089b7ec71c065",
+                "reference": "66536006722aff9e62d1b331025089b7ec71c065",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0"
+            },
+            "require-dev": {
+                "phpbench/phpbench": "^0.13",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
+                "zendframework/zend-coding-standard": "~1.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev",
+                    "dev-develop": "3.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Stdlib\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "SPL extensions, array utilities, error handlers, and more",
+            "keywords": [
+                "ZendFramework",
+                "stdlib",
+                "zf"
+            ],
+            "time": "2018-08-28T21:34:05+00:00"
+        },
+        {
+            "name": "zendframework/zend-uri",
+            "version": "2.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-uri.git",
+                "reference": "b2785cd38fe379a784645449db86f21b7739b1ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-uri/zipball/b2785cd38fe379a784645449db86f21b7739b1ee",
+                "reference": "b2785cd38fe379a784645449db86f21b7739b1ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0",
+                "zendframework/zend-escaper": "^2.5",
+                "zendframework/zend-validator": "^2.10"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.4",
+                "zendframework/zend-coding-standard": "~1.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7.x-dev",
+                    "dev-develop": "2.8.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Uri\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "A component that aids in manipulating and validating » Uniform Resource Identifiers (URIs)",
+            "keywords": [
+                "ZendFramework",
+                "uri",
+                "zf"
+            ],
+            "time": "2019-02-27T21:39:04+00:00"
+        },
+        {
+            "name": "zendframework/zend-validator",
+            "version": "2.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-validator.git",
+                "reference": "64c33668e5fa2d39c6289a878f927ea2b0850c30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-validator/zipball/64c33668e5fa2d39c6289a878f927ea2b0850c30",
+                "reference": "64c33668e5fa2d39c6289a878f927ea2b0850c30",
+                "shasum": ""
+            },
+            "require": {
+                "container-interop/container-interop": "^1.1",
+                "php": "^5.6 || ^7.0",
+                "zendframework/zend-stdlib": "^3.2.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.0.8 || ^5.7.15",
+                "psr/http-message": "^1.0",
+                "zendframework/zend-cache": "^2.6.1",
+                "zendframework/zend-coding-standard": "~1.0.0",
+                "zendframework/zend-config": "^2.6",
+                "zendframework/zend-db": "^2.7",
+                "zendframework/zend-filter": "^2.6",
+                "zendframework/zend-http": "^2.5.4",
+                "zendframework/zend-i18n": "^2.6",
+                "zendframework/zend-math": "^2.6",
+                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
+                "zendframework/zend-session": "^2.8",
+                "zendframework/zend-uri": "^2.5"
+            },
+            "suggest": {
+                "psr/http-message": "psr/http-message, required when validating PSR-7 UploadedFileInterface instances via the Upload and UploadFile validators",
+                "zendframework/zend-db": "Zend\\Db component, required by the (No)RecordExists validator",
+                "zendframework/zend-filter": "Zend\\Filter component, required by the Digits validator",
+                "zendframework/zend-i18n": "Zend\\I18n component to allow translation of validation error messages",
+                "zendframework/zend-i18n-resources": "Translations of validator messages",
+                "zendframework/zend-math": "Zend\\Math component, required by the Csrf validator",
+                "zendframework/zend-servicemanager": "Zend\\ServiceManager component to allow using the ValidatorPluginManager and validator chains",
+                "zendframework/zend-session": "Zend\\Session component, ^2.8; required by the Csrf validator",
+                "zendframework/zend-uri": "Zend\\Uri component, required by the Uri and Sitemap\\Loc validators"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.12.x-dev",
+                    "dev-develop": "2.13.x-dev"
+                },
+                "zf": {
+                    "component": "Zend\\Validator",
+                    "config-provider": "Zend\\Validator\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Validator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "provides a set of commonly needed validators",
+            "homepage": "https://github.com/zendframework/zend-validator",
+            "keywords": [
+                "validator",
+                "zf2"
+            ],
+            "time": "2019-01-30T14:26:10+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "roave/security-advisories": 20,
+        "sastrawi/sastrawi": 20,
+        "tediscript/perangkum": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.5"
+    },
+    "platform-dev": []
 }
