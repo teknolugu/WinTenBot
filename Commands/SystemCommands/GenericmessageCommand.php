@@ -101,7 +101,7 @@ class GenericmessageCommand extends SystemCommand
                 return $this->telegram->executeCommand('report');
                 break;
             case Words::cekKandungan($pesan, '#'):
-                return $this->telegram->executeCommand('get');
+	            return $this->telegram->executeCommand('tags');
                 break;
         }
 
