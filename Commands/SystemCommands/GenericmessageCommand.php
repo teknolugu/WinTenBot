@@ -100,23 +100,23 @@ class GenericmessageCommand extends SystemCommand
             case '@admin':
                 return $this->telegram->executeCommand('report');
                 break;
-            case Words::cekKandungan($pesan, '#'):
+	        case Words::isContain($pesan, '#'):
 	            return $this->telegram->executeCommand('tags');
                 break;
         }
 
         // Chatting
         switch (true) {
-            case Words::cekKata($kata, 'gan'):
+	        case Words::isSameWith($kata, 'gan'):
                 $chat = 'ya gan, gimana';
                 break;
-            case Words::cekKata($kata, 'mau tanya'):
+	        case Words::isSameWith($kata, 'mau tanya'):
                 $chat = 'Langsung aja tanya gan';
                 break;
-            case Words::cekKandungan($kata, thanks):
+	        case Words::isContain($kata, thanks):
                 $chat = 'Sama-sama, senang bisa membantu gan...';
                 break;
-            case Words::cekKata($kata, yuk):
+	        case Words::isSameWith($kata, yuk):
                 $chat = 'Ayuk, siapa takut 😂';
                 break;
 

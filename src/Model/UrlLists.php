@@ -9,6 +9,7 @@
 namespace src\Model;
 
 use Medoo\Medoo;
+use PDOStatement;
 use src\Utils\Words;
 
 class UrlLists
@@ -29,7 +30,7 @@ class UrlLists
 
     /**
      * @param $where
-     * @return bool|\PDOStatement
+     * @return bool|PDOStatement
      */
     public static function deleteUrl($where)
     {
@@ -72,7 +73,7 @@ class UrlLists
         $apesan = Words::multiexplode([" ", "\n"], $pesan);
         foreach ($apesan as $anu) {
             foreach ($wordlists as $kata) {
-                if (Words::cekKata($anu, $kata['url'])) {
+	            if (Words::isSameWith($anu, $kata['url'])) {
                     return true;
                 }
             }

@@ -38,7 +38,7 @@ class TagsCommand extends UserCommand
 		$chat_id = $message->getChat()->getId();
 		$rawText = $message->getText(true);
 		
-		if (Words::cekKandungan($rawText, '#')) {
+		if (Words::isContain($rawText, '#')) {
 			return $this->parseTags($rawText);
 		}
 		
@@ -90,9 +90,9 @@ class TagsCommand extends UserCommand
 		$pecah = explode(' ', $rawMessage);
 		$limit = 1;
 		foreach ($pecah as $pecahan) {
-			if (($limit <= 3) && Words::cekKandungan($pecahan, '#')) {
+			if (($limit <= 3) && Words::isContain($pecahan, '#')) {
 				$pecahan = ltrim($pecahan, '#');
-				$hashtag = Words::cekKandungan($pecahan, '#');
+				$hashtag = Words::isContain($pecahan, '#');
 				if (!$hashtag && strlen($pecahan) >= 3) {
 					$tag = Tags::getTags([
 						'id_chat' => $chatid,

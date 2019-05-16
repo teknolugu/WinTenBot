@@ -44,7 +44,7 @@ class WelcomeCommand extends UserCommand
                 $pecah = explode(' ', $message->getText(true));
                 $mHandler->sendText('Loading data..');
                 $commands = ['message', 'button'];
-                if (Words::cekKata($pecah[0], $commands)) {
+	            if (Words::isSameWith($pecah[0], $commands)) {
                     $welcome_data = trim(str_replace($pecah[0], '', $message->getText(true)));
                     $mHandler->editText('Saving settings..');
                     $text = Settings::saveNew([
