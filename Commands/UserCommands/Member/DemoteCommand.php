@@ -16,7 +16,7 @@ use src\Model\Group;
 use src\Model\Members;
 use src\Model\Translator;
 
-class PromoteCommand extends UserCommand
+class DemoteCommand extends UserCommand
 {
 	protected $name = 'promote';
 	protected $description = 'Promote chat member (bot must admin)';
@@ -49,21 +49,19 @@ class PromoteCommand extends UserCommand
 			$isAdmin = Group::isAdmin($from_id, $chat_id);
 			$isSudoer = Group::isSudoer($from_id);
 			if ($isAdmin || $isSudoer) {
-				$mHandler->sendText('Sedang mengangkat anggota..');
+				$mHandler->sendText('Sedang menurunkan anggota..');
 				$promoteRes = Members::promote($chat_id, $repFrom_id);
 			}
 		} else {
-			$mHandler->sendText('Sedang mengangkat anggota..');
-			$promoteRes = Members::promote($chat_id, $from_id);
+			$mHandler->sendText('Sedang menurunkan anggota..');
+			$promoteRes = Members::demote($chat_id, $from_id);
 			
 			$promotedName = $promoteByName;
 		}
 		
 		if ($promoteRes->isOk()) {
-			$text = "<a href='tg://user?id=" . $from_id . "'>$promotedName</a> menjadi Admin ";
-			if ($from_id != $repFrom_id) {
-				$text .= "\nDirekomendasikan oleh <a href='tg://user?id=$senderId'>" . $promoteByName . '</a>';
-			}
+			$text = "<a href='tg://user?id=" . $from_id . "'>$promotedName</a> tidak menjadi Admin " .
+				"\nDiturunkan oleh <a href='tg://user?id=$senderId'>" . $promoteByName . '</a>';
 		} else {
 			$text = '<b>🚫 Status : </b><code>' .
 				Translator::To($promoteRes->getDescription(), 'id') . '.</code>';

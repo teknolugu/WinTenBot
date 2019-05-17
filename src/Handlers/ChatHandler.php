@@ -146,9 +146,10 @@ class ChatHandler
 
         return $r;
     }
-
-    public function deleteMessage($id = null)
+	
+	public function deleteMessage($id = null, $delay = 0)
     {
+	    sleep($delay);
         return Request::deleteMessage([
             'chat_id' => $this->chat_id,
             'message_id' => $id ?? $this->message_id,
