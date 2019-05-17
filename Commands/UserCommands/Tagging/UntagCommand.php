@@ -12,11 +12,8 @@ use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use src\Handlers\ChatHandler;
-use src\Handlers\MessageHandlers;
 use src\Model\Group;
 use src\Model\Tags;
-use src\Utils\Entities;
-use src\Utils\Words;
 
 class UntagCommand extends UserCommand
 {
@@ -41,12 +38,11 @@ class UntagCommand extends UserCommand
 		
 		$isAdmin = Group::isAdmin($fromid, $chatid);
 		$isSudoer = Group::isSudoer($fromid);
-		$r = $chatHandler->sendText('Memeriksa izin..');
 		if ($isAdmin || $isSudoer) {
-			$chatHandler->editText('Mempersiapkan..');
+			$chatHandler->sendText('Mempersiapkan..');
 			if ($pecah[0] != '' && strlen($pecah[0]) >= 3) {
 				$tag = str_replace('-', '', $pecah[0]);
-				$chatHandler->editText('Deleting #' . $tag . '..');
+				$chatHandler->editText('Mmenghapus #' . $tag . '..');
 				$del = Tags::delTags([
 					'tag'     => $tag,
 					'id_chat' => $chatid,
@@ -59,9 +55,9 @@ class UntagCommand extends UserCommand
 				}
 				return $chatHandler->editText($text);
 			}
-			$text = 'ℹ  Delete tag dari Cloud Tags' .
-				"\n<b>Example:\n</b><code>/untag tag - InMessage</code>" .
-				"\nLength <code>tag</code> minimum 3 characters.";
+			$text = 'ℹ  Hapus tag dari Cloud Tags' .
+				"\n<b>Contoh: </b><code>/untag tagnya</code>" .
+				"\nPanjang <code>tag</code> minimal 3 karakter.";
 			
 			$r = $chatHandler->editText($text);
 		}

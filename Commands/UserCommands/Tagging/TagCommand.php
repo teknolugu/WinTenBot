@@ -12,11 +12,9 @@ use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use src\Handlers\ChatHandler;
-use src\Handlers\MessageHandlers;
 use src\Model\Group;
 use src\Model\Tags;
 use src\Utils\Entities;
-use src\Utils\Words;
 
 class TagCommand extends UserCommand
 {
@@ -42,9 +40,8 @@ class TagCommand extends UserCommand
 		
 		$isAdmin = Group::isAdmin($fromid, $chatid);
 		$isSudoer = Group::isSudoer($fromid);
-		$r = $chatHandler->sendText('Memeriksa izin..');
 		if ($isAdmin || $isSudoer) {
-			$chatHandler->editText('Mempersiapkan..');
+			$chatHandler->sendText('Mempersiapkan..');
 			if (strlen($pecah[0]) >= 3) {
 				$datas = [
 					'tag'     => $pecah[0],
@@ -90,7 +87,7 @@ class TagCommand extends UserCommand
 					'btn_data'  => $btn_data ?? '',
 				];
 				
-				$chatHandler->editText('Adding ' . $pecah[0] . '..');
+				$chatHandler->editText('Menambahkan ' . $pecah[0] . '..');
 				$add = Tags::saveTag($datas);
 				if ($add->rowCount() > 0) {
 					$text = 'Menambahkan tag #' . $pecah[0] . ' berhasil';
@@ -100,12 +97,11 @@ class TagCommand extends UserCommand
 				$chatHandler->editText($text);
 			} else {
 				$text = 'ℹ  Simpan tag ke Cloud Tags' .
-					"\n<b>Example:\n</b><code>/tag tag [button|link.button]</code> - InReply" .
+					"\n<b>Contoh:\n</b><code>/tag tagnya [button|link.button]</code> - Reply pesan" .
 //                    "\n<code>/tag tag content</code> - InMessage" .
-					"\nLength <code>tag</code> minimum 3 characters.\nMark [ ] is optional";
+					"\nPanjang <code>tag</code> minimal 3 karakter.\nTanda [ ] artinya tidak harus";
 			}
-
-//            $chatHandler->deleteMessage();
+			
 			$r = $chatHandler->editText($text);
 		}
 		return $r;
