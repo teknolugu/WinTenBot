@@ -18,9 +18,9 @@ use src\Model\Translator;
 
 class DemoteCommand extends UserCommand
 {
-	protected $name = 'promote';
-	protected $description = 'Promote chat member (bot must admin)';
-	protected $usage = '/promote';
+	protected $name = 'demote';
+	protected $description = 'Demote chat member (bot must admin)';
+	protected $usage = '/demote';
 	protected $version = '1.0.0';
 	
 	/**
@@ -28,6 +28,7 @@ class DemoteCommand extends UserCommand
 	 *
 	 * @return ServerResponse
 	 * @throws TelegramException
+	 * @throws \ErrorException
 	 */
 	public function execute()
 	{
