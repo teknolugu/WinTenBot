@@ -20,6 +20,7 @@ use src\Handlers\MessageHandlers;
 use src\Model\Fbans;
 use src\Model\Group;
 use src\Model\Settings;
+use src\Model\Tags;
 use src\Model\UrlLists;
 use src\Model\Wordlists;
 use src\Utils\Words;
@@ -101,7 +102,7 @@ class GenericmessageCommand extends SystemCommand
                 return $this->telegram->executeCommand('report');
                 break;
 	        case Words::isContain($pesan, '#'):
-	            return $this->telegram->executeCommand('tags');
+		        return $this->parseTags();
                 break;
         }
 
@@ -187,5 +188,94 @@ class GenericmessageCommand extends SystemCommand
             return $this->telegram->executeCommand('pinnedmessage');
         }
     }
+	
+	private function parseTags()
+	{
+		$message = $this->getMessage();
+		$chatid = $message->getChat()->getId();
+		$mssg_id = $message->getMessageId();
+		$chatHandler = new ChatHandler($message);
+		$repMssg = $message->getReplyToMessage();
+		$pecah = explode(' ', $message->getText());
+		$limit = 1;
+		foreach ($pecah as $pecahan) {
+			if (($limit <= 3) && Words::isContain($pecahan, '#')) {
+				$pecahan = ltrim($pecahan, '#');
+				$hashtag = Words::isContain($pecahan, '#');
+				if (!$hashtag && strlen($pecahan) >= 3) {
+					$tag = Tags::getTags([
+						'id_chat' => $chatid,
+						'tag'     => $pecahan,
+					]);
+					
+					if ($repMssg != null) {
+						$mssg_id = $repMssg->getMessageId();
+					}
+					
+					$id_data = $tag[0]['id_data'];
+					$tipe_data = $tag[0]['type_data'];
+					$btn_data = $tag[0]['btn_data']; // teks1|link1.com, teks2|link2.com
+					
+					$text = '#️⃣<code>#' . $tag[0]['tag'] . '</code>' .
+						"\n" . $tag[0]['content'];
+					
+					$btns = [];
+					if ($btn_data != null) {
+//							if ($pecah[1] != '-r') {
+						$abtn_data = explode(',', $btn_data); // teks1|link1.com teks2|link2.com
+						foreach ($abtn_data as $btn) {
+							$abtn = explode('|', trim($btn));
+							$btns[] = [
+								'text' => trim($abtn[0]),
+								'url'  => trim($abtn[1]),
+							];
+						}
+//
+//							} else {
+//								$text .= "\n" . $btn_data;
+//							}
+					}
+					
+					if ($tipe_data == 'text') {
+						$data['text'] = $text;
+						$r = $chatHandler->sendText($text, $mssg_id, $btns);
+					} else {
+						$data = [
+							'chat_id'                  => $chatid,
+							'parse_mode'               => 'HTML',
+							'reply_to_message_id'      => $mssg_id,
+							'disable_web_page_preview' => true,
+							$tipe_data                 => $id_data,
+							'caption'                  => $text,
+						];
+						
+						switch ($tipe_data) {
+							case 'document':
+								$r = Request::sendDocument($data);
+								break;
+							case 'video':
+								$r = Request::sendVideo($data);
+								break;
+							case 'voice':
+								$r = Request::sendVoice($data);
+								break;
+							case 'photo':
+								$r = Request::sendPhoto($data);
+								break;
+							case 'sticker':
+								$r = Request::sendSticker($data);
+								break;
+						}
+					}
+					$limit++;
+				}
+			}
+//			else{
+//				$chatHandler->sendText("Due performance reason, we limit 3 batch call tags");
+//				break;
+//			}
+		}
+		return $r;
+	}
 }
 

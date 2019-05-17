@@ -42,6 +42,10 @@ class TagsCommand extends UserCommand
 			return $this->parseTags($rawText);
 		}
 		
+		if ($rawText != '') {
+			return Request::emptyResponse();
+		}
+		
 		$mHandler->sendText('🔄 Loading Tags..');
 		$tags_data = Tags::getTags([
 			'id_chat' => $chat_id,
