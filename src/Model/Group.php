@@ -60,14 +60,14 @@ class Group
             return false;
         }
     }
-
-    public static function isMustLeft($id_chat)
+	
+	/**
+	 * @param $id_chat
+	 * @return bool
+	 */
+	public static function isMustLeft($id_chat)
     {
-        if (!in_array($id_chat, restrictArea)) {
-            return true;
-        } else {
-            return false;
-        }
+	    return (!in_array($id_chat, restrictArea) && isRestricted);
     }
 
     public static function simpanSet($datas)

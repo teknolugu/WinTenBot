@@ -84,8 +84,7 @@ class GenericmessageCommand extends SystemCommand
         }
 
         // Perika apakah Aku harus keluar grup?
-        if (isRestricted
-            && !$message->getChat()->isPrivateChat()
+	    if (!$message->getChat()->isPrivateChat()
             && Group::isMustLeft($message->getChat()->getId())) {
             $text = 'Sepertinya saya salah alamat. Saya pamit dulu..' .
                 "\nGunakan @WinTenBot";
