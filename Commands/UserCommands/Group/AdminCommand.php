@@ -36,11 +36,10 @@ class AdminCommand extends UserCommand
 		
 		if (!$message->getChat()->isPrivateChat()) {
 			$pecah = explode(' ', $message->getText(true));
-			if ($pecah[0] != '') {
+			if (Words::isContain($pecah[0], '-')) {
 				$chat_id = $pecah[0];
-				if ($pecah[0] != '-') {
-					$chat_id = '@' . str_replace('@', '', $pecah[0]);
-				}
+			} elseif ($pecah[0] != '') {
+				$chat_id = '@' . str_replace('@', '', $pecah[0]);
 			}
 			
 			$chat = [
@@ -89,6 +88,8 @@ class AdminCommand extends UserCommand
 				if ($creator != '') {
 					$text .= "👤 <b>Creator</b>\n└ " . $creator;
 				}
+				
+				$text = trim($text);
 				
 				if ($ngadmin != '') {
 					$text .= "\n\n👥️ <b>Administrators: " . count($ngadmins) . '</b>' .
