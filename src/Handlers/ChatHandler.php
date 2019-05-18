@@ -103,7 +103,7 @@ class ChatHandler
         $mssg_id = $this->responses->result->message_id;
         $this->timeProc = Time::jedaNew($this->date);
         if ($text != '') {
-            $text .= $this->timeInit . ' | ' . $this->timeProc;
+	        $text .= $this->timeInit . ' | ⌛ ' . $this->timeProc;
         }
         $data = [
             'chat_id' => $this->chat_id,
