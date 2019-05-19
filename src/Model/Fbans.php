@@ -21,10 +21,12 @@ class Fbans
 	{
 		$db = new Medoo(db_data);
         $p = $db->count( self::$table_name, ['user_id' => $datas['user_id']]);
-        if ($p > 0) {
-            $q = $db->update(self::$table_name, $datas, ['user_id' => $datas['user_id']]);
+		if ($p <= 0) {
+			$db->insert(self::$table_name, $datas);
+			$q = true;
         } else {
-            $q = $db->insert(self::$table_name, $datas);
+//            $q = $db->update(self::$table_name, $datas, ['user_id' => $datas['user_id']]);
+			$q = false;
         }
         return $q;
 	}

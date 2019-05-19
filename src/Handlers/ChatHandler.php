@@ -27,9 +27,9 @@ class ChatHandler
     protected $timeInit;
     protected $timeProc;
     protected $message_link;
-
-    protected $isPrivateChat = false;
-    protected $isPrivateGroup = false;
+	
+	public $isPrivateChat = false;
+	public $isPrivateGroup = false;
 
     /**
      * ChatHandler constructor.
@@ -137,8 +137,8 @@ class ChatHandler
             'chat_id' => $this->chat_id,
             'user_id' => $user_id,
         ];
-
-        $r = Request::kickChatMember($kick_data);
+	
+	    $r = Request::kickChatMember($kick_data);
 
         if ($unban) {
             Request::unbanChatMember($kick_data);
