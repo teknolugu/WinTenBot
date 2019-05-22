@@ -8,12 +8,12 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Exception\TelegramException;
-use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
+use Longman\TelegramBot\Entities\ServerResponse;
+use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
+use src\Utils\Time;
 
 class InfoCommand extends UserCommand
 {
@@ -44,12 +44,12 @@ class InfoCommand extends UserCommand
 		
 		$inline_keyboard = new InlineKeyboard([
 			['text' => '👥 WinTen Group', 'url' => 'https://t.me/WinTenGroup'],
-			['text' => '❤ by WinTenDev', 'url' => 'https://t.me/WinTenDev'],
+			['text' => '❤ by WinTenDev', 'url' => 'https://t.me/WinTenChannel'],
 		], [
 			['text' => '👥 Redmi 5A (Riva) ID', 'url' => 'https://t.me/Redmi5AID'],
 			['text' => '👥 Telegram Bot API', 'url' => 'https://t.me/TgBotID'],
 		], [
-			['text' => '💽 Source code', 'url' => 'https://github.com/WinTenGroup/WinTenBot'],
+			['text' => '💽 Source code', 'url' => 'https://github.com/WinTenDev/WinTenBot'],
 			['text' => '🏗 Akmal Projext', 'url' => 'https://t.me/AkmalProjext'],
 		]);
 		
