@@ -14,6 +14,9 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use src\Handlers\ChatHandler;
+use src\Model\UrlLists;
+use src\Model\Wordlists;
+use src\Utils\Words;
 
 /**
  * Edited message command
@@ -34,12 +37,38 @@ class EditedmessageCommand extends SystemCommand
 	 */
 	public function execute()
 	{
-		$edited_message = $this->getEditedMessage();
-		$chatHandler = new ChatHandler($edited_message);
-		if ($edited_message != "") {
-			$res = $chatHandler->sendText("TerEdit?");
+		$message = $this->getEditedMessage();
+		$chatHandler = new ChatHandler($message);
+		
+		$forScan = $message->getText() ?? $message->getCaption();
+		$isBad = $this->checkMessage($forScan);
+		
+		if (!$isBad) {
+			if ($message != "") {
+				$res = $chatHandler->sendText('TerEdit?');
+			}
 		}
 		
 		return $res;
+	}
+	
+	/**
+	 * @param $messageText
+	 * @return bool
+	 */
+	private function checkMessage($messageText)
+	{
+		$isBad = false;
+		$message = $this->getEditedMessage();
+		$chatHandler = new ChatHandler($message);
+		
+		$wordScan = Words::clearAlphaNum($messageText);
+		if (UrlLists::isContainBadUrl($messageText)
+			|| Wordlists::isContainBadword(strtolower($wordScan))) {
+			$chatHandler->deleteMessage();
+			$isBad = true;
+		}
+		
+		return $isBad;
 	}
 }
