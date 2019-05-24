@@ -14,6 +14,7 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use src\Handlers\ChatHandler;
+use src\Model\MalFiles;
 use src\Model\UrlLists;
 use src\Model\Wordlists;
 use src\Utils\Words;
@@ -32,7 +33,7 @@ class EditedmessageCommand extends SystemCommand
 	/**
 	 * Command execute method
 	 *
-	 * @return ServerResponse
+	 * @return bool|ServerResponse
 	 * @throws TelegramException
 	 */
 	public function execute()
@@ -40,31 +41,37 @@ class EditedmessageCommand extends SystemCommand
 		$message = $this->getEditedMessage();
 		$chatHandler = new ChatHandler($message);
 		
-		$forScan = $message->getText() ?? $message->getCaption();
-		$isBad = $this->checkMessage($forScan);
+		// Scan BadMessage
+		$isBad = $this->checkMessage();
+		if ($isBad) {
+			return $isBad;
+		}
 		
-		if (!$isBad) {
-			if ($message != "") {
-				$res = $chatHandler->sendText('TerEdit?');
-			}
+		if ($message != "") {
+			$res = $chatHandler->sendText('TerEdit?');
 		}
 		
 		return $res;
 	}
 	
 	/**
-	 * @param $messageText
 	 * @return bool
 	 */
-	private function checkMessage($messageText)
+	private function checkMessage()
 	{
 		$isBad = false;
 		$message = $this->getEditedMessage();
 		$chatHandler = new ChatHandler($message);
 		
-		$wordScan = Words::clearAlphaNum($messageText);
-		if (UrlLists::isContainBadUrl($messageText)
+		$wordScan = Words::clearAlphaNum($message->getText());
+		if (UrlLists::isContainBadUrl($message->getText())
 			|| Wordlists::isContainBadword(strtolower($wordScan))) {
+			$chatHandler->deleteMessage();
+			$isBad = true;
+		}
+		
+		if ($message->getDocument()->getFileId() != '') {
+			MalFiles::isMalFile($message->getDocument()->getFileId());
 			$chatHandler->deleteMessage();
 			$isBad = true;
 		}
