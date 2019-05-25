@@ -288,7 +288,7 @@ class GenericmessageCommand extends SystemCommand
 			$isBad = true;
 		}
 		
-		if ($message->getDocument()->getFileId() != '') {
+		if ($message->getDocument() != '') {
 			MalFiles::isMalFile($message->getDocument()->getFileId());
 			$chatHandler->deleteMessage();
 			$isBad = true;
