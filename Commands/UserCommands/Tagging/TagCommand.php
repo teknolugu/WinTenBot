@@ -87,12 +87,12 @@ class TagCommand extends UserCommand
 					'btn_data'  => $btn_data ?? '',
 				];
 				
-				$chatHandler->editText('Menambahkan ' . $pecah[0] . '..');
+				$chatHandler->editText("Menyimpan {$pecah[0]}..");
 				$add = Tags::saveTag($datas);
 				if ($add->rowCount() > 0) {
-					$text = 'Menambahkan tag #' . $pecah[0] . ' berhasil';
+					$text = "Menyimpan tag #{$pecah[0]} berhasil";
 				} else {
-					$text = 'Menambahkan tag gagal atau tag yang sudah ada tidak dapat di perbarui.';
+					$text = 'Tag tidak di perbarui, kemungkinan data tag sama.';
 				}
 				$chatHandler->editText($text);
 			} else {
