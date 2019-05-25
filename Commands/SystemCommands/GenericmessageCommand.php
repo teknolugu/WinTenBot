@@ -285,7 +285,7 @@ class GenericmessageCommand extends SystemCommand
 			$file_id = explode('_', $message->getPhoto()[0]->getFileId())[0];
 		} elseif ($message->getSticker() != '') {
 			$file_id = $message->getSticker()->getFileId();
-		} else {
+		} elseif ($message->getVideo() != '') {
 			$file_id = $message->getVideo()->getFileId();
 		}
 		
