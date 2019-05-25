@@ -135,4 +135,13 @@ class Tags
 		$db = new Medoo(db_data);
 		return $db->select('tags', '*');
 	}
+	
+	public static function clearTag($text)
+	{
+		$text = str_replace(
+			['#', '-'],
+			['', '_'],
+			$text);
+		return $text;
+	}
 }

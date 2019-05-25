@@ -43,8 +43,9 @@ class TagCommand extends UserCommand
 		if ($isAdmin || $isSudoer) {
 			$chatHandler->sendText('Mempersiapkan..');
 			if (strlen($pecah[0]) >= 3) {
+				$tag = Tags::clearTag($pecah[0]);
 				$datas = [
-					'tag'     => $pecah[0],
+					'tag'     => $tag,
 					'id_user' => $fromid,
 					'id_chat' => $chatid,
 				];
@@ -87,10 +88,10 @@ class TagCommand extends UserCommand
 					'btn_data'  => $btn_data ?? '',
 				];
 				
-				$chatHandler->editText("Menyimpan {$pecah[0]}..");
+				$chatHandler->editText("Menyimpan {$tag}..");
 				$add = Tags::saveTag($datas);
 				if ($add->rowCount() > 0) {
-					$text = "Menyimpan tag #{$pecah[0]} berhasil";
+					$text = "Menyimpan tag #{$tag} berhasil";
 				} else {
 					$text = 'Tag tidak di perbarui, kemungkinan data tag sama.';
 				}
