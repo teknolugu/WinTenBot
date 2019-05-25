@@ -13,7 +13,7 @@ use src\Handlers\ChatHandler;
 use src\Model\Group;
 use src\Model\MalFiles;
 
-class FileCommand extends UserCommand
+class MalfileCommand extends UserCommand
 {
 	protected $name = 'file';
 	protected $description = 'Add files to blacklist or whitelist';
