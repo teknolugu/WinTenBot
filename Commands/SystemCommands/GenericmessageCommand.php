@@ -61,30 +61,21 @@ class GenericmessageCommand extends SystemCommand
 		$pesanCmd = explode(' ', strtolower($pesan))[0];
 		
 		// Scan BadMessage
-		$isBad = $this->checkMessage();
+		$isBad = $this->checkBadMessage();
 		if ($isBad) {
 			return $isBad;
 		}
 		
-		if (Fbans::isBan($from_id)) {
-			$text = "$from_id telah terdeteksi di " . federation_name;
-			$kickRes = $chatHandler->kickMember($from_id, true);
-			if ($kickRes->isOk()) {
-				$text .= " dan berhasil di tendang";
-			} else {
-				$text .= " dan gagal di tendang, karena <b>" . $kickRes->getDescription() . "</b>. " .
-					"Pastikan saya Admin dengan level standard";
-			}
-			return $chatHandler->sendText($text, '-1');
+		// Check if member is banned
+		$isBanned = $this->checkFedBan();
+		if ($isBanned) {
+			return $isBanned;
 		}
 		
-		// Perika apakah Aku harus keluar grup?
-		if (!$message->getChat()->isPrivateChat()
-			&& Group::isMustLeft($message->getChat()->getId())) {
-			$text = 'Sepertinya saya salah alamat. Saya pamit dulu..' .
-				"\nGunakan @WinTenBot";
-			$mHandler->sendText($text);
-			return Request::leaveChat(['chat_id' => $chat_id]);
+		// Check if this grup is restricted
+		$isRestricted = $this->checkRestriction();
+		if ($isRestricted) {
+			return $isRestricted;
 		}
 		
 		// Command Aliases
@@ -123,7 +114,7 @@ class GenericmessageCommand extends SystemCommand
 			$group_data = Settings::getNew(['chat_id' => $chat_id]);
 			if ($group_data[0]['enable_warn_username'] == 1) {
 				$limit = $group_data[0]['warning_username_limit'];
-				$chat = "Hey, Segera pasang username ya, jangan lupa.";
+				$chat = 'Hey, Segera pasang username ya, jangan lupa.';
 //                    "\nPeringatan %2/$limit tersisa";
 				$btn_markup[] = ['text' => 'Pasang Username', 'url' => urlStart . 'username'];
 				$mHandler->deleteMessage($group_data[0]['last_warning_username_message_id']);
@@ -141,7 +132,7 @@ class GenericmessageCommand extends SystemCommand
 		$mHandler->sendText($chat, null, $btn_markup);
 		
 		if ($repMsg !== null) {
-			if ($message->getChat()->getType() != "private") {
+			if ($message->getChat()->getType() != 'private') {
 				$mssgLink = 'https://t.me/' . $chat_username . '/' . $message->getMessageId();
 				$chat = "<a href='tg://user?id=" . $from_id . "'>" . $from_first_name . '</a>' .
 					" mereply <a href='" . $mssgLink . "'>pesan kamu" . '</a>' .
@@ -164,11 +155,11 @@ class GenericmessageCommand extends SystemCommand
 				return Request::sendMessage($data);
 			} else {
 				$chat_id = $repMsg->getCaptionEntities()[3]->getUrl();
-				$chat_id = str_replace("tg://user?id=", "", $chat_id);
+				$chat_id = str_replace('tg://user?id=', '', $chat_id);
 				
 				$data = [
 					'chat_id'                  => $chat_id,
-					'text'                     => "lorem",
+					'text'                     => 'lorem',
 					'parse_mode'               => 'HTML',
 					'disable_web_page_preview' => true,
 				];
@@ -275,13 +266,13 @@ class GenericmessageCommand extends SystemCommand
 	/**
 	 * @return bool
 	 */
-	private function checkMessage()
+	private function checkBadMessage()
 	{
 		$isBad = false;
 		$message = $this->getMessage();
 		$chatHandler = new ChatHandler($message);
-		
 		$wordScan = Words::clearAlphaNum($message->getText());
+		
 		if (UrlLists::isContainBadUrl($message->getText())
 			|| Wordlists::isContainBadword(strtolower($wordScan))) {
 			$chatHandler->deleteMessage();
@@ -295,6 +286,47 @@ class GenericmessageCommand extends SystemCommand
 		}
 		
 		return $isBad;
+	}
+	
+	/**
+	 * @return bool
+	 * @throws TelegramException
+	 */
+	private function checkFedBan()
+	{
+		$isBanned = false;
+		$message = $this->getMessage();
+		$chatHandler = new ChatHandler($message);
+		$from_id = $message->getFrom()->getId();
+		
+		if (Fbans::isBan($from_id)) {
+			$text = "$from_id telah terdeteksi di " . federation_name_short;
+			$kickRes = $chatHandler->kickMember($from_id, true);
+			if ($kickRes->isOk()) {
+				$text .= ' dan berhasil di tendang';
+			} else {
+				$text .= ' dan gagal di tendang, karena <b>' . $kickRes->getDescription() . '</b>. ' .
+					'Pastikan saya Admin dengan level standard';
+			}
+			$chatHandler->sendText($text, '-1');
+			$isBanned = true;
+		}
+		return $isBanned;
+	}
+	
+	private function checkRestriction()
+	{
+		$isRestricted = false;
+		$message = $this->getMessage();
+		$chatHandler = new ChatHandler($message);
+		
+		if (!$chatHandler->isPrivateChat && Group::isMustLeft($message->getChat()->getId())) {
+			$text = 'Sepertinya saya salah alamat. Saya pamit dulu..' . "\nGunakan @WinTenBot";
+			$chatHandler->sendText($text);
+			$chatHandler->leaveChat();
+			$isRestricted = true;
+		}
+		return $isRestricted;
 	}
 }
 
