@@ -33,15 +33,25 @@ class MalfileCommand extends UserCommand
 			$chatHandler->deleteMessage();
 			$r = $chatHandler->sendText('🔄 Mempersiapkan..', '-1');
 			if ($replyMssg != '') {
-				$file_id = $replyMssg->getDocument()->getFileId();
+				if ($replyMssg->getDocument() != '') {
+					$file_id = $replyMssg->getDocument()->getFileId();
+				} elseif ($replyMssg->getPhoto() != '') {
+					$file_id = explode('_', $replyMssg->getPhoto()[0]->getFileId())[0];
+				} elseif ($replyMssg->getSticker() != '') {
+					$file_id = $replyMssg->getSticker()->getFileId();
+				} else {
+					$file_id = $replyMssg->getVideo()->getFileId();
+				}
+				
 				$datas = [
 					'file_id'      => $file_id,
+					'type_data'    => $replyMssg->getType(),
 					'blocked_by'   => $from_id,
 					'blocked_from' => $chat_id,
 				];
 			}
 			
-			if (count($datas) == 3) {
+			if (count($datas) == 4) {
 				$r = $chatHandler->editText('🔄 Menyimpan..' . json_encode($datas));
 				$blok = MalFiles::addFile($datas);
 				if ($blok) {

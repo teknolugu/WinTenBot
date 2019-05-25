@@ -280,10 +280,18 @@ class GenericmessageCommand extends SystemCommand
 		}
 		
 		if ($message->getDocument() != '') {
-			if (MalFiles::isMalFile($message->getDocument()->getFileId())) {
-				$chatHandler->deleteMessage();
-				$isBad = true;
-			}
+			$file_id = $message->getDocument()->getFileId();
+		} elseif ($message->getPhoto() != '') {
+			$file_id = explode('_', $message->getPhoto()[0]->getFileId())[0];
+		} elseif ($message->getSticker() != '') {
+			$file_id = $message->getSticker()->getFileId();
+		} else {
+			$file_id = $message->getVideo()->getFileId();
+		}
+		
+		if (MalFiles::isMalFile($file_id)) {
+			$chatHandler->deleteMessage();
+			$isBad = true;
 		}
 		
 		return $isBad;
