@@ -46,10 +46,10 @@ class EditedmessageCommand extends SystemCommand
 		if ($isBad) {
 			return $isBad;
 		}
-		
-		if ($message != "") {
-			$res = $chatHandler->sendText('TerEdit?');
-		}
+
+//		if ($message != "") {
+//			$res = $chatHandler->sendText('TerEdit?');
+//		}
 		
 		return $res;
 	}
