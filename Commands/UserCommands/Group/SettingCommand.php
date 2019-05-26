@@ -40,7 +40,7 @@ class SettingCommand extends UserCommand
 
         $isAdmin = Group::isAdmin($from_id, $chat_id);
         $isSudoer = Group::isSudoer($from_id);
-        if ($isAdmin || $isSudoer && !$message->getChat()->isPrivateChat()) {
+	    if ($isAdmin || ($isSudoer && !$message->getChat()->isPrivateChat())) {
             if ($pecah[0] != '') {
 //                $text = Settings::inlineSetting([
 //                    'chat_id' => $chat_id,
@@ -62,35 +62,35 @@ class SettingCommand extends UserCommand
                     $text = 'Parameter invalid';
                 }
                 return $mHandler->sendText($text);
-            } else {
-                $mHandler->deleteMessage();
-                $mHandler->sendText('🔄 Loading settings..','-1');
-                $btns = Settings::getForTombol(['chat_id' => $chat_id]);
-                $btn_markup = [];
-                $btns = array_map(null, ...$btns);
-                foreach ($btns as $key => $val) {
-                    $p = explode('_', $key);
-                    $cek = Converters::intToEmoji($val);
-                    $callback = ltrim($key, $p[0]);
-                    $btn_text = str_replace('_', ' ', ltrim($callback, '_'));
-                    $btn_markup[] = [
-                        'text' => $cek . ' ' . ucfirst($btn_text),
-                        'callback_data' => 'setting' . $callback
-                    ];
-                }
-
-                $text = "⚙ Group settings for <b>" . $message->getChat()->getTitle() . '</b>' .
-                    "\n<i>Click for enable/disable</i>";
-                $group_data = Settings::getNew(['chat_id' => $chat_id]);
-                $r = $mHandler->editText($text, null, $btn_markup);
-                $mHandler->deleteMessage($group_data[0]['last_setting_message_id']);
-                Settings::saveNew([
-                    'last_setting_message_id' => $r->result->message_id,
-                    'chat_id' => $chat_id,
-                ], [
-                    'chat_id' => $chat_id,
-                ]);
             }
+		
+		    $mHandler->sendText('🔄 Loading settings..', '-1');
+		    $mHandler->deleteMessage();
+		    $btns = Settings::getForTombol($chat_id);
+		    $btn_markup = [];
+		    $btns = array_map(null, ...$btns);
+		    foreach ($btns as $key => $val) {
+			    $p = explode('_', $key);
+			    $cek = Converters::intToEmoji($val);
+			    $callback = ltrim($key, $p[0]);
+			    $btn_text = str_replace('_', ' ', ltrim($callback, '_'));
+			    $btn_markup[] = [
+				    'text'          => $cek . ' ' . ucfirst($btn_text),
+				    'callback_data' => 'setting' . $callback,
+			    ];
+		    }
+		
+		    $text = "⚙ Group settings for <b>" . $message->getChat()->getTitle() . '</b>' .
+			    "\n<i>Click for enable/disable</i>";
+		    $group_data = Settings::getNew(['chat_id' => $chat_id]);
+		    $r = $mHandler->editText($text, null, $btn_markup);
+		    $mHandler->deleteMessage($group_data[0]['last_setting_message_id']);
+		    Settings::saveNew([
+			    'last_setting_message_id' => $r->result->message_id,
+			    'chat_id'                 => $chat_id,
+		    ], [
+			    'chat_id' => $chat_id,
+		    ]);
         }
 
         return $r;
