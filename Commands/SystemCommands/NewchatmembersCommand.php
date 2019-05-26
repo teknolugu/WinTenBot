@@ -243,6 +243,8 @@ class NewchatmembersCommand extends SystemCommand
             $mHandler->deleteMessage($last_welcome_message_id);
         }
 
+        $mHandler->deleteMessage(); // delete event new_chat_member
+
         $r = $mHandler->sendText($text, '-1', $btn_markup);
 
         Settings::saveNew([
