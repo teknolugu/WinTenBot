@@ -45,6 +45,7 @@ class LeftchatmemberCommand extends SystemCommand
 //	    $time = Time::jeda($time);
 
 //        if (isset($leftMem)) {
+		$mHandler->deleteMessage(); // delete event left_chat_member
 		if ($message->getFrom()->getId() != $leftMem->getId()) {
 			$text = "<b>Dikeluarkan : </b> {$leftMemFname} oleh " . $message->getFrom()->getFirstName();
 //            $data = [
@@ -55,8 +56,8 @@ class LeftchatmemberCommand extends SystemCommand
 		} else {
 			$text = "$leftMemFname Keluar dengan sendirinya";
 		}
-		$text .= "\n\nasdasd";
-		$mHandler->sendText($text);
+		// $text .= "\n\nasdasd";
+		$mHandler->sendText($text, '-1');
 //            return Request::sendMessage($data);
 //        }
 	}
