@@ -41,17 +41,17 @@ class PinnedmessageCommand extends SystemCommand
 		$senderId = $pinnedMsg->getFrom()->getId();
 		$senderFullname =trim($pinnedMsg->getFrom()->getFirstName(). ' ' . $pinnedMsg->getFrom()->getLastName());
 		$linkPin = "https://t.me/$chat_uname/".$pinnedMsg->getMessageId();
-		$text = '📌 <b>Pesan di sematkan baru..!!</b>' .
+		$text = '📌 <b>Pesan disematkan baru!</b>' .
 			"\n<b>Pin oleh : </b><a href='tg://user?id=$pinById'>$pinByFullname</a>".
 			"\n<b>Pengirim : </b><a href='tg://user?id=$senderId'>$senderFullname</a>";
 		
-		Request::deleteMessage([
-			'chat_id'    => $chat_id,
-			'message_id' => $message->getMessageId()
-		]);
+		// Request::deleteMessage([
+		// 	'chat_id'    => $chat_id,
+		// 	'message_id' => $message->getMessageId()
+		// ]);
 		
 		$keyboard = new InlineKeyboard([
-			['text' => '📌 Ke Pinned', 'url' => $linkPin]
+			['text' => '🔍 Baca Pesan Tersemat', 'url' => $linkPin]
 		]);
 		
 		$time2 = Time::jedaNew($time);
