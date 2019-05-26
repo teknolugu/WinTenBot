@@ -78,6 +78,11 @@ class GenericmessageCommand extends SystemCommand
 			return $isRestricted;
 		}
 		
+		$isNoUsername = $this->checkUsername();
+		if ($isNoUsername) {
+			return $isNoUsername;
+		}
+		
 		// Command Aliases
 		switch ($pesanCmd) {
 			case 'ping':
@@ -108,25 +113,6 @@ class GenericmessageCommand extends SystemCommand
 			
 			default:
 				break;
-		}
-		
-		if ($from_username == '') {
-			$group_data = Settings::getNew(['chat_id' => $chat_id]);
-			if ($group_data[0]['enable_warn_username'] == 1) {
-				$limit = $group_data[0]['warning_username_limit'];
-				$chat = 'Hey, Segera pasang username ya, jangan lupa.';
-//                    "\nPeringatan %2/$limit tersisa";
-				$btn_markup[] = ['text' => 'Pasang Username', 'url' => urlStart . 'username'];
-				$mHandler->deleteMessage($group_data[0]['last_warning_username_message_id']);
-				$r = $mHandler->sendText($chat, null, $btn_markup);
-				Settings::saveNew([
-					'last_warning_username_message_id' => $r->result->message_id,
-					'chat_id'                          => $chat_id,
-				], [
-					'chat_id' => $chat_id,
-				]);
-				return $r;
-			}
 		}
 		
 		$mHandler->sendText($chat, null, $btn_markup);
@@ -336,6 +322,42 @@ class GenericmessageCommand extends SystemCommand
 			$isRestricted = true;
 		}
 		return $isRestricted;
+	}
+	
+	private function checkUsername()
+	{
+		$isNoUsername = false;
+		$message = $this->getMessage();
+		$chatHandler = new ChatHandler($message);
+		$from_username = $message->getFrom()->getUsername();
+		$from_id = $message->getFrom()->getId();
+		$chat_id = $message->getChat()->getId();
+		
+		if ($from_username == '') {
+			$group_data = Settings::getNew(['chat_id' => $chat_id]);
+			if ($group_data[0]['enable_warn_username'] == 1) {
+				$limit = $group_data[0]['warning_username_limit'];
+				$chat = 'Hey, Kamu di Mute sebentar 5 menit, Segera <b>Pasang username</b> ya.' .
+					"\nJika sudah pasang Username, klik tombol <b>Sudah pasang</b> agar segera di UnMute.";
+				$btn_markup = [
+					['text' => 'Pasang Username', 'url' => urlStart . 'username'],
+					['text' => 'Sudah pasang', 'callback_data' => 'check_' . $from_id],
+				];
+				$chatHandler->restrictMember($from_id, '0:0:5');
+				$chatHandler->deleteMessage($group_data[0]['last_warning_username_message_id']);
+				$r = $chatHandler->sendText($chat, null, $btn_markup);
+				
+				Settings::saveNew([
+					'last_warning_username_message_id' => $chatHandler->getSendedMessageId(),
+					'chat_id'                          => $chat_id,
+				], [
+					'chat_id' => $chat_id,
+				]);
+				return $r;
+			}
+			$isNoUsername = true;
+		}
+		return $isNoUsername;
 	}
 }
 
