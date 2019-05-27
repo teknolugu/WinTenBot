@@ -8,6 +8,7 @@
 
 namespace src\Model;
 
+use ErrorException;
 use Exception;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
@@ -39,5 +40,18 @@ class Translator
 			'to'   => $to,
 			'text' => $translated,
 		];
+	}
+	
+	/**
+	 * @param $text
+	 * @param $langId
+	 * @return string|null
+	 * @throws ErrorException
+	 */
+	public static function To($text, $langId)
+	{
+//		$res = self::Exe($text, '', $langId);
+		$tr = new GoogleTranslate();
+		return $tr->setSource(null)->setTarget($langId)->translate($text);
 	}
 }

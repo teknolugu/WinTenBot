@@ -14,6 +14,10 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use src\Handlers\ChatHandler;
+use src\Model\MalFiles;
+use src\Model\UrlLists;
+use src\Model\Wordlists;
+use src\Utils\Words;
 
 /**
  * Edited message command
@@ -29,17 +33,58 @@ class EditedmessageCommand extends SystemCommand
 	/**
 	 * Command execute method
 	 *
-	 * @return ServerResponse
+	 * @return bool|ServerResponse
 	 * @throws TelegramException
 	 */
 	public function execute()
 	{
-		$edited_message = $this->getEditedMessage();
-		$chatHandler = new ChatHandler($edited_message);
-		if ($edited_message != "") {
-			$res = $chatHandler->sendText("TerEdit?");
+		$message = $this->getEditedMessage();
+		$chatHandler = new ChatHandler($message);
+		
+		// Scan BadMessage
+		$isBad = $this->checkMessage();
+		if ($isBad) {
+			return $isBad;
+		}
+
+//		if ($message != "") {
+//			$res = $chatHandler->sendText('TerEdit?');
+//		}
+
+//		return $res;
+	}
+	
+	/**
+	 * @return bool
+	 */
+	private function checkMessage()
+	{
+		$isBad = false;
+		$message = $this->getEditedMessage();
+		$chatHandler = new ChatHandler($message);
+		
+		$wordScan = Words::clearAlphaNum($message->getText());
+		if (UrlLists::isContainBadUrl($message->getText())
+			|| Wordlists::isContainBadword(strtolower($wordScan))) {
+			$chatHandler->deleteMessage();
+			$isBad = true;
 		}
 		
-		return $res;
+		if ($message->getDocument() != '') {
+			$file_id = $message->getDocument()->getFileId();
+		} elseif ($message->getPhoto() != '') {
+			$file_id = explode('_', $message->getPhoto()[0]->getFileId())[0];
+		} elseif ($message->getSticker() != '') {
+			$file_id = $message->getSticker()->getFileId();
+		} elseif ($message->getVideo() != '') {
+			$file_id = $message->getVideo()->getFileId();
+		}
+		
+		if (MalFiles::isMalFile($file_id)) {
+			$chatHandler->deleteMessage();
+			$isBad = true;
+		}
+		
+		return $isBad;
 	}
 }

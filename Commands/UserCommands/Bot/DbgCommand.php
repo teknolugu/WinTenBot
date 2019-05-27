@@ -31,6 +31,7 @@ class DbgCommand extends UserCommand
 		$message = $this->getMessage();
 		$mHandler = new MessageHandlers($message);
 		$repMssg = $message->getReplyToMessage();
+		$pecah = explode(' ', $message->getText(true));
 		
 		$mHandler->sendText('Loading JSON data..');
 		if ($repMssg != null) {
@@ -39,10 +40,14 @@ class DbgCommand extends UserCommand
 			$dbg = $message->getRawData();
 		}
 		
-		$text = "<b>Debug messages</b>\n" .
-			'<code>' .
-			json_encode($dbg, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) .
-			'</code>';
+		if ($pecah[0] == '-r') {
+			$json = json_encode($dbg, JSON_PRETTY_PRINT);
+		} else {
+			$json = json_encode($dbg, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+//			$json = json_encode($dbg, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+		}
+		
+		$text = "<b>Debug messages</b>\n" . '<code>' . $json . '</code>';
 		
 		return $mHandler->editText($text);
 	}

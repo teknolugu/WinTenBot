@@ -9,6 +9,7 @@
 namespace src\Model;
 
 use Medoo\Medoo;
+use PDOStatement;
 
 class Tags
 {
@@ -88,14 +89,18 @@ class Tags
 	
 	/**
 	 * @param array $datas
-	 * @param array $where
-	 * @return bool|\PDOStatement
+	 * @return bool|PDOStatement
 	 */
-	public static function saveNew(array $datas, array $where)
+	public static function saveTag(array $datas)
 	{
 		$db = new Medoo(db_data);
 		$table = 'tags';
-		$p = $db->count($table, ['tag' => $datas['tag']]);
+		$where = [
+			'tag'     => $datas['tag'],
+			'id_chat' => $datas['id_chat'],
+		];
+		
+		$p = $db->count($table, $where);
 		if ($p > 0) {
 			$q = $db->update($table, $datas, $where);
 		} else {
@@ -129,5 +134,14 @@ class Tags
 	{
 		$db = new Medoo(db_data);
 		return $db->select('tags', '*');
+	}
+	
+	public static function clearTag($text)
+	{
+		$text = str_replace(
+			['#', '-'],
+			['', '_'],
+			$text);
+		return $text;
 	}
 }

@@ -44,13 +44,12 @@ class NewchatmembersCommand extends SystemCommand
         $welcome_data = Settings::getNew(['chat_id' => $chat_id]);
 
         // Perika apakah Aku harus keluar grup?
-        if (isRestricted) {
-            if ($message->getChat()->isPrivateChat()
-                && Group::isMustLeft($message->getChat()->getId())) {
-                $mHandler->sendText('Sepertinya saya salah alamat. Saya pamit dulu..' . "\nGunakan @WinTenBot");
-                return Request::leaveChat(['chat_id' => $chat_id]);
-            }
-        }
+	    if (!$message->getChat()->isPrivateChat()
+		    && Group::isMustLeft($message->getChat()->getId())) {
+		    $mHandler->sendText('Sepertinya saya salah alamat. Saya pamit dulu..' .
+			    "\nGunakan @WinTenBot", '-1');
+		    return Request::leaveChat(['chat_id' => $chat_id]);
+	    }
 
         $enable_restriction = $welcome_data[0]['enable_restriction'];
         if ($enable_restriction == '1') {

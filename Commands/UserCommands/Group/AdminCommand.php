@@ -8,12 +8,12 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Utils\Words;
-use src\Utils\Time;
-use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
+use src\Handlers\ChatHandler;
+use src\Utils\Words;
 
 class AdminCommand extends UserCommand
 {
@@ -30,33 +30,26 @@ class AdminCommand extends UserCommand
 	 */
 	public function execute()
 	{
-		$text = '';
 		$message = $this->getMessage();
 		$chat_id = $message->getChat()->getId();
-		$mssg_id = $message->getMessageId();
+		$chatHandler = new ChatHandler($message);
 		
-		if(!$message->getChat()->isPrivateChat()) {
-			$time = $message->getDate();
-			$time1 = Time::jedaNew($time);
+		if (!$message->getChat()->isPrivateChat()) {
 			$pecah = explode(' ', $message->getText(true));
-			if ($pecah[0] != '') {
-				$param = $pecah[0];
-				if ($pecah[0][0] != '-') {
-					$param = '@' . $pecah[0];
-				}
-				
-				$chat = [
-					'chat_id' => $param,
-				];
-			} else {
-				$chat = [
-					'chat_id' => $chat_id,
-				];
+			if (Words::isContain($pecah[0], '-')) {
+				$chat_id = $pecah[0];
+			} elseif ($pecah[0] != '') {
+				$chat_id = '@' . str_replace('@', '', $pecah[0]);
 			}
 			
+			$chat = [
+				'chat_id' => $chat_id,
+			];
+			
+			$chatHandler->sendText("🔄 Loading $chat_id..");
 			$respon = Request::getChatAdministrators($chat);
 			
-			$respon = json_decode($respon, true);
+			$respon = \GuzzleHttp\json_decode($respon, true);
 			$result = $respon['result'];
 			$ngadmins = [];
 			if (count($result) > 0) {
@@ -72,45 +65,43 @@ class AdminCommand extends UserCommand
 					} else {
 						$admins = "<a href='tg://user?id=" . $admin['user']['id'] . "'>" . $fullname . '</a>';
 						if ($admin['user']['is_bot']) {
-							$admins .= " 🤖";
+							$admins .= ' 🤖';
 						}
 						$ngadmins[] = $admins;
 					}
-					sort($ngadmins);
 				}
-			}
-			
-			$ngadmin = '';
-			$noAdm = 1;
-			$lastAdm = end($ngadmins);
-			foreach ($ngadmins as $adminl) {
-				if ($adminl != $lastAdm) {
-					$ngadmin .= '├ ' . $noAdm . ' . ' . $adminl . "\n";
-				} else {
-					$ngadmin .= '└ ' . $noAdm . ' . ' . $adminl . "\n";
+				sort($ngadmins);
+				$ngadmin = '';
+				$noAdm = 1;
+				$lastAdm = end($ngadmins);
+				foreach ($ngadmins as $adminl) {
+					if ($adminl != $lastAdm) {
+						$ngadmin .= '├ ' . $noAdm . ' . ' . $adminl . "\n";
+					} else {
+						$ngadmin .= '└ ' . $noAdm . ' . ' . $adminl;
+					}
+					$noAdm++;
 				}
-				$noAdm++;
+				
+				$text = "🧩 <b>ID/Username:</b> $chat_id\n\n";
+				
+				if ($creator != '') {
+					$text .= "👤 <b>Creator</b>\n└ " . $creator;
+				}
+				
+				$text = trim($text);
+				
+				if ($ngadmin != '') {
+					$text .= "\n\n👥️ <b>Administrators: " . count($ngadmins) . '</b>' .
+						"\n" . $ngadmin;
+				}
+			} else {
+				$text = "🤔 Tidak ada hasil, mungkin parameter salah.\nKalau chat_id depanya harus ada tanda -";
 			}
-			
-			if ($creator != '') {
-				$text .= "👤 <b>Creator</b>\n└ " . $creator;
-			}
-			
-			if ($ngadmin != '') {
-				$text .= "\n\n👥️ <b>Administrators: " . count($ngadmins) . "</b>" .
-					"\n" . $ngadmin;
-			}
-			$time2 = Time::jedaNew($time);
-			$time = "\n\n ⏱ " . $time1 . " | ⏳ " . $time2;
+		} else {
+			return $chatHandler->sendText('Perintah /admin hanya di jalankan di grup.');
 		}
 		
-		$data = [
-			'chat_id'             => $chat_id,
-			'text'                => $text . $time,
-			'reply_to_message_id' => $mssg_id,
-			'parse_mode'          => 'HTML'
-		];
-		
-		return Request::sendMessage($data);
+		return $chatHandler->editText($text);
 	}
 }

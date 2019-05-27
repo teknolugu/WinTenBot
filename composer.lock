@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ce581f381016b349d9ddbe3743575f96",
+  "content-hash": "9bd3b06d8cb3114db04c4656c7d517e4",
     "packages": [
         {
             "name": "ammarfaizi2/googletranslate",
@@ -133,6 +133,51 @@
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
+		  "name": "cosenary/simple-php-cache",
+		  "version": "dev-master",
+		  "source": {
+			"type": "git",
+			"url": "https://github.com/cosenary/Simple-PHP-Cache.git",
+			"reference": "39607c9307b32248bae2fd6a945183c7249156da"
+		  },
+		  "dist": {
+			"type": "zip",
+			"url": "https://api.github.com/repos/cosenary/Simple-PHP-Cache/zipball/39607c9307b32248bae2fd6a945183c7249156da",
+			"reference": "39607c9307b32248bae2fd6a945183c7249156da",
+			"shasum": ""
+		  },
+		  "require": {
+			"ext-curl": "*",
+			"php": ">=5.2.0"
+		  },
+		  "type": "library",
+		  "autoload": {
+			"classmap": [
+			  "."
+			]
+		  },
+		  "notification-url": "https://packagist.org/downloads/",
+		  "license": [
+			"BSD"
+		  ],
+		  "authors": [
+			{
+			  "name": "Christian Metz",
+			  "email": "christian-metz1@gmx.net",
+			  "homepage": "http://metzweb.net"
+			}
+		  ],
+		  "description": "A light, simple but powerful PHP5 Cache Class which uses the filesystem for caching.",
+		  "homepage": "https://github.com/cosenary/Simple-PHP-Cache",
+		  "keywords": [
+			"Simple",
+			"cache",
+			"filesystem",
+			"json"
+		  ],
+		  "time": "2015-01-03T18:28:23+00:00"
+		},
+	  {
             "name": "guzzlehttp/guzzle",
             "version": "6.3.3",
             "source": {
@@ -1636,7 +1681,8 @@
     "stability-flags": {
         "roave/security-advisories": 20,
         "sastrawi/sastrawi": 20,
-        "tediscript/perangkum": 20
+	  "tediscript/perangkum": 20,
+	  "cosenary/simple-php-cache": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

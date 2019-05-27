@@ -15,11 +15,11 @@ use src\Model\Group;
 use src\Model\Translator;
 use src\Utils\Converters;
 
-class KickCommand extends UserCommand
+class BanCommand extends UserCommand
 {
-	protected $name = 'kick';
-	protected $description = 'Reply to kick member';
-	protected $usage = '<kick>';
+	protected $name = 'ban';
+	protected $description = 'Reply to ban member';
+	protected $usage = '<ban>';
 	protected $version = '1.0.0';
 	
 	/**
@@ -31,7 +31,7 @@ class KickCommand extends UserCommand
 	public function execute()
 	{
 		$message = $this->getMessage();
-		$cHandler = new ChatHandler($message);
+		$chatHandler = new ChatHandler($message);
 //		$mHandler = new MessageHandlers($message);
 		$chat_id = $message->getChat()->getId();
 		$from_id = $message->getFrom()->getId();
@@ -47,8 +47,8 @@ class KickCommand extends UserCommand
 //		$isSudoer = Group::isSudoer($from_id);
 		
 		if ($isAdmin || $from_id == $id_target) {
-			$cHandler->sendText('Kicking ' . $id_target);
-			$kick = $cHandler->kickMember($id_target, true);
+			$chatHandler->sendText('Sedang mengeBan ' . $id_target);
+			$kick = $chatHandler->kickMember($id_target);
 			$text = '<b>Status: </b> ' . Converters::intToString($kick->getOk());
 			
 			if ($kick->isOk()) {
@@ -61,6 +61,6 @@ class KickCommand extends UserCommand
 			$text = '🚫 <i>Kamu tidak memiliki akses /kick</i>';
 		}
 		
-		$cHandler->editText($text);
+		$chatHandler->editText($text);
 	}
 }

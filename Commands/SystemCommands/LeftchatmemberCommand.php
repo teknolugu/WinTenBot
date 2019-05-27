@@ -8,11 +8,10 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\MessageHandlers;
-use src\Utils\Time;
-use Longman\TelegramBot\Commands\SystemCommand;
+use src\Handlers\ChatHandler;
 
 class LeftchatmemberCommand extends SystemCommand
 {
@@ -36,30 +35,25 @@ class LeftchatmemberCommand extends SystemCommand
 	public function execute()
 	{
 		$message = $this->getMessage();
-		$mHandler = new MessageHandlers($message);
-		$chat_id = $message->getChat()->getId();
+		$mHandler = new ChatHandler($message);
+		$from_id = $message->getFrom()->getId();
 		$leftMem = $message->getLeftChatMember();
+		$left_id = $leftMem->getId();
 		
-		$leftMemFname = $leftMem->getFirstName();
-//        $time = $message->getDate();
-//	    $time = Time::jeda($time);
-
-//        if (isset($leftMem)) {
+		$fullName = trim($message->getFrom()->getFirstName() . ' ' . $message->getFrom()->getLastName());
+		$leftFullname = trim($leftMem->getFirstName() . ' ' . $leftMem->getLastName());
+		
+		$fullNameLink = "<a href='tg://user?id=" . $from_id . "'>" . $fullName . '</a>';
+		$leftfullNameLink = "<a href='tg://user?id=" . $left_id . "'>" . $leftFullname . '</a>';
+		
 		$mHandler->deleteMessage(); // delete event left_chat_member
 		if ($message->getFrom()->getId() != $leftMem->getId()) {
-			$text = "<b>Dikeluarkan : </b> {$leftMemFname} oleh " . $message->getFrom()->getFirstName();
-//            $data = [
-//                'chat_id' => $chat_id,
-//                'text' => $text . $time,
-//                'parse_mode' => 'HTML'
-//            ];
+			$text = "{$fullNameLink} mengeluarkan {$leftfullNameLink}.";
 		} else {
-			$text = "$leftMemFname Keluar dengan sendirinya";
+			$text = "$leftfullNameLink Keluar dari grup.";
 		}
-		// $text .= "\n\nasdasd";
-		$mHandler->sendText($text, '-1');
-//            return Request::sendMessage($data);
-//        }
+		
+		$mHandler->sendText($text);
 	}
 	
 }
