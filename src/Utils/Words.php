@@ -221,4 +221,6 @@ class Words
 		$sentences = $summarizer->summarize($text);
 		return $sentences;
 	}
+
+//	public static function
 }
