@@ -17,8 +17,10 @@ use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 use src\Handlers\ChatHandler;
 use src\Handlers\MessageHandlers;
+use src\Model\Cas;
 use src\Model\Fbans;
 use src\Model\Group;
+use src\Model\Logs;
 use src\Model\MalFiles;
 use src\Model\Settings;
 use src\Model\Tags;
@@ -257,9 +259,10 @@ class GenericmessageCommand extends SystemCommand
 		$isBad = false;
 		$message = $this->getMessage();
 		$chatHandler = new ChatHandler($message);
-		$wordScan = Words::clearAlphaNum($message->getText());
+		$textMessage = $message->getCaption() ?? $message->getText();
+		$wordScan = Words::clearAlphaNum($textMessage);
 		
-		if (UrlLists::isContainBadUrl($message->getText())
+		if (UrlLists::isContainBadUrl($textMessage)
 			|| Wordlists::isContainBadword(strtolower($wordScan))) {
 			$chatHandler->deleteMessage();
 			$isBad = true;
@@ -286,12 +289,14 @@ class GenericmessageCommand extends SystemCommand
 	/**
 	 * @return bool
 	 * @throws TelegramException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
 	 */
 	private function checkFedBan()
 	{
 		$isBanned = false;
 		$message = $this->getMessage();
 		$chatHandler = new ChatHandler($message);
+		$chat_id = $message->getChat()->getId();
 		$from_id = $message->getFrom()->getId();
 		
 		if (Fbans::isBan($from_id)) {
@@ -303,20 +308,36 @@ class GenericmessageCommand extends SystemCommand
 				$text .= ' dan gagal di tendang, karena <b>' . $kickRes->getDescription() . '</b>. ' .
 					'Pastikan saya Admin dengan level standard';
 			}
+			$btn_markup = [
+				['text' => 'Keluar grup', 'callback_data' => 'group_leave_' . $chat_id],
+			];
+			$chatHandler->logToChannel($text, $btn_markup);
 			$chatHandler->sendText($text, '-1');
 			$isBanned = true;
+		}
+		
+		if (Cas::checkCas($from_id)) {
+			$text = 'CAS (Combot Anti-Spam)';
+			$chatHandler->logToChannel($text);
+			$chatHandler->kickMember($from_id, true);
 		}
 		return $isBanned;
 	}
 	
+	/**
+	 * @return bool
+	 * @throws TelegramException
+	 */
 	private function checkRestriction()
 	{
 		$isRestricted = false;
 		$message = $this->getMessage();
+		$chat_id = $message->getChat()->getId();
 		$chatHandler = new ChatHandler($message);
 		
 		if (!$chatHandler->isPrivateChat && Group::isMustLeft($message->getChat()->getId())) {
 			$text = 'Sepertinya saya salah alamat. Saya pamit dulu..' . "\nGunakan @WinTenBot";
+			$chatHandler->logToChannel($text);
 			$chatHandler->sendText($text);
 			$chatHandler->leaveChat();
 			$isRestricted = true;

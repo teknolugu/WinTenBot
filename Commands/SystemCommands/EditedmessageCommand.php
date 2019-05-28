@@ -62,9 +62,10 @@ class EditedmessageCommand extends SystemCommand
 		$isBad = false;
 		$message = $this->getEditedMessage();
 		$chatHandler = new ChatHandler($message);
+		$textMessage = $message->getCaption() ?? $message->getText();
+		$wordScan = Words::clearAlphaNum($textMessage);
 		
-		$wordScan = Words::clearAlphaNum($message->getText());
-		if (UrlLists::isContainBadUrl($message->getText())
+		if (UrlLists::isContainBadUrl($textMessage)
 			|| Wordlists::isContainBadword(strtolower($wordScan))) {
 			$chatHandler->deleteMessage();
 			$isBad = true;
