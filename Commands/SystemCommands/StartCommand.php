@@ -14,9 +14,9 @@ use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
+use src\Handlers\ChatHandler;
 use src\Model\Bot;
 use src\Model\Settings;
-use src\Utils\Time;
 
 class StartCommand extends SystemCommand
 {
@@ -33,17 +33,20 @@ class StartCommand extends SystemCommand
 	public function execute()
 	{
 		$message = $this->getMessage();
+		$chatHandler = new ChatHandler($message);
 		
 		$chat_id = $message->getChat()->getId();
 		$mssg_id = $message->getMessageId();
 		
-		$time = $message->getDate();
-		$time1 = Time::jedaNew($time);
-		
-		$text = '🤖 <b>WinTen Bot</b> is a debugging bot, group management and other useful equipment.' .
-			"\nOfficial Telegram Bot based on <b>WinTen API</b> with Anti-Spam Security!" .
-			"\nFeedback and Request via @WinTenGroup or @TgBotID.\nFor help type /help. " .
-			"\n\nℹ /info for more information.\nMade with ❤ by @WinTenDev";
+		$text = '🤖 <b>WinTen Bot</b> by ' . federation_name_short . '.' .
+			"\nAdalah bot debugging, manajemen grup yang di lengkapi dengan alat keamanan. " .
+			'Agar fungsi saya bekerja dengan fitur penuh, jadikan saya admin dengan level standard. ' .
+			
+			"\n\nSaran dan fitur bisa di ajukan di @WinTenGroup atau @TgBotID." .
+			"\nUntuk bantuan ketikkan /help. " .
+			
+			"\n\nℹ /info untuk informasi selengkapnya." .
+			"\nMade with ❤ by WinTenDev";
 		
 		$pecah = explode('_', $message->getText(true));
 		switch ($pecah[0]) {
@@ -52,7 +55,7 @@ class StartCommand extends SystemCommand
 				$caption = '<b>Ikuti video tutorial berikut.</b>' .
 					"\nBuka aplikasi Telegram lalu navigasi ke Settings > Username, lalu isi Username-nya.";
 				$veriv_username = [
-					['text' => "I have set Username?", 'callback_data' => 'check_username']
+					['text' => 'I have set Username?', 'callback_data' => 'check_username'],
 				];
 				return Request::sendDocument([
 					'chat_id'                  => $chat_id,
@@ -63,7 +66,7 @@ class StartCommand extends SystemCommand
 					'disable_web_page_preview' => true,
 					'reply_markup'             => new InlineKeyboard([
 						'inline_keyboard' => array_chunk($veriv_username, 2),
-					])
+					]),
 				]);
 				break;
 			case 'rules':
@@ -82,6 +85,13 @@ class StartCommand extends SystemCommand
 				$text = bot_name . ' adalah Open Source';
 				break;
 			
+			case 'help':
+				$tekt = '<b>' . bot_name . '</b> <code>' . versi . '</code>' .
+					"\nby " . federation_name . "\n\n" .
+					Bot::loadInbotDocs('home');
+				return $chatHandler->sendPrivateText($tekt, '-1', BTN_HELP_HOME);
+				break;
+			
 			case '1':
 				$text = 'Selamat datang di @' . bot_username;
 				break;
@@ -91,16 +101,6 @@ class StartCommand extends SystemCommand
 			$text = str_replace('WinTen Bot', bot_name, $text);
 		}
 		
-		$time2 = Time::jedaNew($time);
-		$time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
-		
-		$data = [
-			'chat_id'             => $chat_id,
-			'text'                => $text . $time,
-			'reply_to_message_id' => $mssg_id,
-			'parse_mode'          => 'HTML',
-		];
-		
-		return Request::sendMessage($data);
+		return $chatHandler->sendText($text);
 	}
 }
