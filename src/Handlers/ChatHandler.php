@@ -13,11 +13,13 @@ use Longman\TelegramBot\Entities\Message;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
+use src\Model\Logs;
 use src\Utils\Time;
 
 class ChatHandler
 {
 	protected $chat_id;
+	protected $chatTitle;
 	protected $from_id;
 	protected $date;
 	protected $is_reply = false;
@@ -42,6 +44,7 @@ class ChatHandler
 	{
 		$this->date = $param->getDate();
 		$this->chat_id = $param->getChat()->getId();
+		$this->chatTitle = $param->getChat()->getTitle();
 		$this->from_id = $param->getFrom()->getId();
 		$this->timeInit = "\n\n⏱ " . Time::jedaNew($this->date);
 		$this->message_id = $param->getMessageId();
@@ -273,9 +276,26 @@ class ChatHandler
 		]);
 	}
 	
-	final public function leaveChat()
+	final public function leaveChat($chatId = null)
 	{
-		return Request::leaveChat(['chat_id' => $this->chat_id]);
+		return Request::leaveChat([
+			'chat_id' => $chatId ?? $this->chat_id,
+		]);
+	}
+	
+	/**
+	 * @param      $text
+	 * @param null $keyboard
+	 * @return ServerResponse
+	 * @throws TelegramException
+	 */
+	final public function logToChannel($text, $keyboard = null)
+	{
+		$log = "<b>Chat ID: </b>{$this->chat_id}" .
+			"\n<b>Chat Title: </b>{$this->chatTitle}" .
+			"\n<b>From ID:</b> {$this->from_id}" .
+			"\n$text";
+		return Logs::toChannel($log, $keyboard);
 	}
 	
 	final public function getSendedMessageId()
