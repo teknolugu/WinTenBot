@@ -16,16 +16,17 @@ class Cas
 	public static function checkCas($user_id)
 	{
 		$isBanned = false;
-		$baseUrl = 'https://combot.org/api/cas/check';
-		$client = new Client(['base_uri' => $baseUrl]);
-		$response = $client->request('GET', '/tags', [
-			'query' => [
-				'id_chat' => $user_id,
-			],
-		]);
+		$url = "https://combot.org/api/cas/check?user_id=$user_id";
+//		$baseUrl = 'https://combot.org/api';
+//		$client = new Client(['base_uri' => $baseUrl]);
+//		$response = $client->request('GET', '/cas/check', [
+//			'query' => [
+//				'user_id' => $user_id,
+//			],
+//		]);
 		
-		$json = \GuzzleHttp\json_decode($response->getBody(), true);
-		if ($json['ok'] == 'true') {
+		$json = \GuzzleHttp\json_decode($url, true);
+		if ($json['ok'] == 1) {
 			$isBanned = true;
 		}
 		return $isBanned;

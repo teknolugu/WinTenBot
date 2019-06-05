@@ -10,6 +10,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use GuzzleHttp\Exception\GuzzleException;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
@@ -42,6 +43,7 @@ class GenericmessageCommand extends SystemCommand
 	 *
 	 * @return bool|ServerResponse
 	 * @throws TelegramException
+	 * @throws GuzzleException
 	 */
 	public function execute()
 	{
@@ -268,6 +270,7 @@ class GenericmessageCommand extends SystemCommand
 			$isBad = true;
 		}
 		
+		$file_id = '';
 		if ($message->getDocument() != '') {
 			$file_id = $message->getDocument()->getFileId();
 		} elseif ($message->getPhoto() != '') {
@@ -289,7 +292,7 @@ class GenericmessageCommand extends SystemCommand
 	/**
 	 * @return bool
 	 * @throws TelegramException
-	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @throws GuzzleException
 	 */
 	private function checkFedBan()
 	{
@@ -315,12 +318,12 @@ class GenericmessageCommand extends SystemCommand
 			$chatHandler->sendText($text, '-1');
 			$isBanned = true;
 		}
-		
-		if (Cas::checkCas($from_id)) {
-			$text = 'CAS (Combot Anti-Spam)';
-			$chatHandler->logToChannel($text);
-			$chatHandler->kickMember($from_id, true);
-		}
+
+//		if (Cas::checkCas($from_id)) {
+//			$text = 'CAS (Combot Anti-Spam)';
+//			$chatHandler->logToChannel($text);
+//			$chatHandler->kickMember($from_id, true);
+//		}
 		return $isBanned;
 	}
 	
