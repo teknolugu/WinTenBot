@@ -40,13 +40,17 @@ class Caches
 	/**
 	 * Read cache
 	 *
-	 * @param [type] $key
+	 * @param $path
+	 * @param $key
 	 * @return mixed
 	 */
 	public function readCache($path, $key)
 	{
+		$json = [];
 		$fileName = botData . $path . '/' . $key . '.json';
-		$json = file_get_contents($fileName);
+		if (file_exists($fileName)) {
+			$json = file_get_contents($fileName);
+		}
 		return \GuzzleHttp\json_decode($json, true);
 	}
 	
