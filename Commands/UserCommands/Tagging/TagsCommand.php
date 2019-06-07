@@ -37,17 +37,19 @@ class TagsCommand extends UserCommand
 
 //		$chatHandler->sendText('🔄 Loading Tags..','-1');
 		$chatHandler->deleteMessage();
-		
-		$tags_data = Caches::read($chat_id, 'tags');
+
+//		$tags_data = Caches::read($chat_id, 'tags');
+		$tags_data = Tags::readCache($chat_id);
 		
 		$hit = count($tags_data);
+		$no = 1;
 		if ($hit > 0) {
-			$text = "#️⃣  <b>$hit Tags</b>\n\n";
+			$text = "#️⃣  <b>{$hit} Cloud tags</b>\n\n";
 			foreach ($tags_data as $data) {
-				$arr[] = '<code>#' . $data['tag'] . '</code>';
+				$arr[] = "<code>#{$data['tag']}</code>\n";
 			}
 			sort($arr);
-			$tag = implode(' ', $arr);
+			$tag = implode('', $arr);
 			$text .= $tag;
 		} else {
 			$text = 'Tidak ada Tags di hatiqu';
@@ -55,22 +57,24 @@ class TagsCommand extends UserCommand
 		
 		$r = $chatHandler->sendText($text, '-1');
 		
-		$setting_data = Caches::read($chat_id, 'group_setting');
+		$setting_data = Settings::readCache($chat_id);
 		$chatHandler->deleteMessage($setting_data['last_tags_message_id']);
 		
-		$tags_data = Tags::getTags(['id_chat' => $chat_id]);
-		Caches::write($chat_id, 'tags', $tags_data);
-
-//		$welcome_data = Settings::getNew(['chat_id' => $chat_id]);
+		// Write Tags to Cache
+		$tags_data = Tags::getTags($chat_id);
+		Tags::writeCache($chat_id, $tags_data);
 		
+		// Save last_tags_message_id
 		$last_tags_mssg_id = [
 			'last_tags_message_id' => $chatHandler->getSendedMessageId(),
 			'chat_id'              => $chat_id,
 		];
 		
-		Caches::write($chat_id, 'group_setting', $last_tags_mssg_id);
-		
 		Settings::saveNew($last_tags_mssg_id, ['chat_id' => $chat_id]);
+		
+		// Write Settings to Cache
+		$setting_data = Settings::getNew(['chat_id' => $chat_id]);
+		Settings::writeCache($chat_id, $setting_data);
 		
 		return $r;
 	}
