@@ -13,7 +13,6 @@ use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 use src\Handlers\ChatHandler;
-use src\Handlers\MessageHandlers;
 use src\Model\Fbans;
 use src\Model\Group;
 use src\Model\Members;
@@ -38,7 +37,6 @@ class NewchatmembersCommand extends SystemCommand
         $chat_title = $message->getChat()->getTitle();
         $chat_username = $message->getChat()->getUsername();
 //		$pinned_msg = $message->getPinnedMessage()->getMessageId();
-        $mHandler = new MessageHandlers($message);
 	    $chatHandler = new ChatHandler($message);
         $isKicked = false;
         $welcome_data = Settings::getNew(['chat_id' => $chat_id]);
@@ -46,14 +44,14 @@ class NewchatmembersCommand extends SystemCommand
         // Perika apakah Aku harus keluar grup?
 	    if (!$message->getChat()->isPrivateChat()
 		    && Group::isMustLeft($message->getChat()->getId())) {
-		    $mHandler->sendText('Sepertinya saya salah alamat. Saya pamit dulu..' .
+		    $chatHandler->sendText('Sepertinya saya salah alamat. Saya pamit dulu..' .
 			    "\nGunakan @WinTenBot", '-1');
 		    return Request::leaveChat(['chat_id' => $chat_id]);
 	    }
 
         $enable_restriction = $welcome_data[0]['enable_restriction'];
         if ($enable_restriction == '1') {
-            $mHandler->sendText('⚠ Saya benar-benar tidak untuk Grup ini!');
+	        $chatHandler->sendText('⚠ Saya benar-benar tidak untuk Grup ini!');
             return Request::leaveChat(['chat_id' => $chat_id]);
         }
 
@@ -64,7 +62,7 @@ class NewchatmembersCommand extends SystemCommand
                 "Untuk melihat daftar perintah bisa ketikkan /help" .
                 "\n\nJika kamu ingin baca dokumentasi dapat di baca di web di bawah ini";
             $btn_markup[] = ['text' => '📃 Dokumentasi', 'url' => 'https://dev.winten.tk/'];
-            $send = $mHandler->sendText($text, '-1', $btn_markup);
+	        $send = $chatHandler->sendText($text, '-1', $btn_markup);
             if (count($message->getNewChatMembers()) == 1) return $send;
         }
 
@@ -239,18 +237,19 @@ class NewchatmembersCommand extends SystemCommand
             $text .= "\n\nUntuk alasan keamanan, Silakan klik tombol <b>Verifikasi</b> di bawah ini agar tidak di Mute!";
             $btn_markup[] = ['text' => '✅ Verifikasi saya!', 'callback_data' => 'verify_' . $member_id];
         } else {
-            $mHandler->deleteMessage($last_welcome_message_id);
+	        $chatHandler->deleteMessage($last_welcome_message_id);
         }
-
-        $mHandler->deleteMessage(); // delete event new_chat_member
-
-        $r = $mHandler->sendText($text, '-1', $btn_markup);
+	
+	    $chatHandler->deleteMessage(); // delete event new_chat_member
+	
+	    $r = $chatHandler->sendText($text, '-1', $btn_markup);
 
         Settings::saveNew([
-            'last_welcome_message_id' => $r->result->message_id,
-            'chat_title' => $chat_title,
-            'chat_id' => $chat_id,
-            'members_count' => $member_count
+	        'last_welcome_message_id' => $chatHandler->getSendedMessageId(),
+	        'chat_title'              => $chat_title,
+	        'chat_id'                 => $chat_id,
+	        'members_count'           => $member_count,
+	        'is_admin'                => $chatHandler->isAdmin(559707023),
         ], [
             'chat_id' => $chat_id,
         ]);

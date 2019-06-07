@@ -111,13 +111,14 @@ class Tags
 	}
 	
 	/**
-	 * @param $where
+	 * @param $chat_id
 	 * @return array|bool
 	 */
-	public static function getTags($where)
+	public static function getTags($chat_id)
 	{
 		$db = new Medoo(db_data);
-		return $db->select('tags', '*', $where);
+		//		self::writeCache($chat_id, $datas);
+		return $db->select('tags', '*', ['id_chat' => $chat_id, 'ORDER' => 'tag']);
 	}
 	
 	public static function delTags($where)
@@ -143,5 +144,17 @@ class Tags
 			['', '_'],
 			$text);
 		return $text;
+	}
+	
+	public static function writeCache($chat_id, $datas)
+	{
+		$cache = new Caches();
+		$cache->writeCache("cache-json/{$chat_id}", 'tags', $datas);
+	}
+	
+	public static function readCache($chat_id)
+	{
+		$cache = new Caches();
+		return $cache->readCache("cache-json/{$chat_id}", 'tags');
 	}
 }

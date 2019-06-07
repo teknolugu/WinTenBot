@@ -152,6 +152,18 @@ class Settings
 		return $q;
 	}
 	
+	public static function writeCache($chat_id, $datas)
+	{
+		$cache = new Caches();
+		$cache->writeCache("cache-json/{$chat_id}", 'settings', $datas);
+	}
+	
+	public static function readCache($chat_id)
+	{
+		$cache = new Caches();
+		return $cache->readCache("cache-json/{$chat_id}", 'settings');
+	}
+	
 	/**
 	 * @param $data
 	 * @return \Psr\Http\Message\StreamInterface

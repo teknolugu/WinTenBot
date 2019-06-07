@@ -313,12 +313,12 @@ class ChatHandler
 		return $message_link;
 	}
 	
-	final public function isAdmin()
+	final public function isAdmin($user_id = null)
 	{
 		$isAdmin = false;
 		$res = Request::getChatMember([
 			'chat_id' => $this->chat_id,
-			'user_id' => $this->from_id,
+			'user_id' => $user_id ?? $this->from_id,
 		]);
 		
 		if ($res->isOk()) {
