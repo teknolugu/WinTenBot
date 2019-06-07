@@ -121,6 +121,13 @@ class Tags
 		return $db->select('tags', '*', ['id_chat' => $chat_id, 'ORDER' => 'tag']);
 	}
 	
+	public static function getTag($where)
+	{
+		$db = new Medoo(db_data);
+		//		self::writeCache($chat_id, $datas);
+		return $db->select('tags', '*', $where);
+	}
+	
 	public static function delTags($where)
 	{
 		$db = new Medoo(db_data);

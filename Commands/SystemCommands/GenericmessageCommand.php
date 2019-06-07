@@ -171,14 +171,14 @@ class GenericmessageCommand extends SystemCommand
 		$mssg_id = $message->getMessageId();
 		$chatHandler = new ChatHandler($message);
 		$repMssg = $message->getReplyToMessage();
-		$pecah = explode(' ', $message->getText());
+		$pecah = Words::multiexplode([' ', "\n"], $message->getText());
 		$limit = 1;
 		foreach ($pecah as $pecahan) {
 			if (($limit <= 3) && Words::isContain($pecahan, '#')) {
 				$pecahan = ltrim($pecahan, '#');
 				$hashtag = Words::isContain($pecahan, '#');
 				if (!$hashtag && strlen($pecahan) >= 3) {
-					$tag = Tags::getTags([
+					$tag = Tags::getTag([
 						'id_chat' => $chatid,
 						'tag'     => $pecahan,
 					]);
