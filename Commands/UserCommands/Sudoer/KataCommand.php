@@ -9,9 +9,10 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
-use src\Handlers\MessageHandlers;
+use src\Handlers\ChatHandler;
 use src\Model\Group;
 use src\Model\Wordlists;
+use src\Utils\Words;
 
 class KataCommand extends UserCommand
 {
@@ -23,47 +24,47 @@ class KataCommand extends UserCommand
     public function execute()
     {
         $message = $this->getMessage();
-        $mHandler = new MessageHandlers($message);
+	    $chatHandler = new ChatHandler($message);
         $chat_id = $message->getChat()->getId();
         $mssg_id = $message->getMessageId();
         $from_id = $message->getFrom()->getId();
 
         $pecah = explode(' ', $message->getText());
         if (Group::isSudoer($from_id)) {
-//            $mHandler->deleteMessage();
-            $mHandler->sendText("🔄 Executing..", '-1');
+//            $chatHandler->deleteMessage();
+	        $chatHandler->sendText('🔄 Executing..', '-1');
             $validExec = ['blok', 'biar'];
             if (in_array($pecah[1], $validExec)) {
                 $katas = [
-                    'word' => strtolower($pecah[2]),
-                    'class' => strtolower($pecah[1]),
-                    'id_telegram' => $message->getFrom()->getId(),
-                    'id_grup' => $chat_id
+	                'word'        => Words::clearAlphaNum(strtolower($pecah[2])),
+	                'class'       => strtolower($pecah[1]),
+	                'id_telegram' => $message->getFrom()->getId(),
+	                'id_grup'     => $chat_id
                 ];
                 $blok = Wordlists::addWords($katas);
                 if ($blok->rowCount() > 0) {
-                    $mHandler->editText("✍ Writing to cache..");
+	                $chatHandler->editText('✍ Writing to cache..');
                     $wordlists = Wordlists::getAll();
                     $json = json_encode($wordlists);
                     file_put_contents(botData . 'wordlists.json', $json);
-                    $text = "✅ Kata berhasil di tambahkan";
+	                $text = '✅ Kata berhasil di tambahkan';
                 } else {
-                    $text = "⚠ Kata sudah ada dan tidak dapat di perbarui";
+	                $text = '⚠ Kata sudah ada dan tidak dapat di perbarui';
                 }
             } else if ($pecah[1] == 'del') {
                 $del = Wordlists::delTags(['word' => $pecah[2]]);
                 if ($del->rowCount() > 0) {
-                    $text = "✅ Kata berhasil di hapus";
+	                $text = '✅ Kata berhasil di hapus';
                 } else {
-                    $text = "⚠ Kata tidak dapat di hapus atau tidak ada";
+	                $text = '⚠ Kata tidak dapat di hapus atau tidak ada';
                 }
             } else if ($pecah[1] == 'all') {
-                $mHandler->editText("👓 Loading data..");
+	            $chatHandler->editText('👓 Loading data..');
                 $wordlists = Wordlists::getAll();
                 $json = json_encode($wordlists);
-                $mHandler->editText("✍ Writing to cache..");
+	            $chatHandler->editText('✍ Writing to cache..');
                 file_put_contents(botData . 'wordlists.json', $json);
-                $list = "";
+	            $list = '';
                 ksort($wordlists);
                 $countWordlist = count($wordlists);
                 foreach ($wordlists as $word) {
@@ -77,9 +78,9 @@ class KataCommand extends UserCommand
                     "\n<code>/kata [command] katamu</code>" .
                     "\n<b>Command : </b><code>blok, biar, del</code>";
             }
-            $mHandler->editText($text);
+	        $chatHandler->editText($text);
         } else {
-            $mHandler->sendText("⚠ <b>You isn't sudoer and can't use this feature.</b>");
+	        $chatHandler->sendText("⚠ <b>You isn't sudoer and can't use this feature.</b>");
         }
     }
 }
