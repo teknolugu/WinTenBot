@@ -43,8 +43,7 @@ class MalFiles
 	public static function isMalFile($file_id)
 	{
 		$result = false;
-		$cache = new Caches();
-		$datas = $cache->readCache('cache-json', 'anti-malfiles');
+		$datas = self::readCache();
 		foreach ($datas as $e) {
 			if ($file_id == $e['file_id']) {
 				$result = true;
@@ -61,6 +60,12 @@ class MalFiles
 		$datas = self::getAll();
 		$cache = new Caches();
 		return $cache->writeCache('cache-json', 'anti-malfiles', $datas);
+	}
+	
+	public static function readCache()
+	{
+		$cache = new Caches();
+		return $cache->readCache('cache-json', 'anti-malfiles');
 	}
 	
 	/**
