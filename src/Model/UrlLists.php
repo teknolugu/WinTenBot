@@ -70,6 +70,15 @@ class UrlLists
 		$cache = new Caches();
 		return $cache->writeCache('cache-json', 'url-list', $datas);
 	}
+	
+	/**
+	 * @return mixed
+	 */
+	public static function readCache()
+	{
+		$cache = new Caches();
+		return $cache->readCache('cache-json', 'url-list');
+	}
 
     /**
      * @param $pesan
@@ -78,9 +87,10 @@ class UrlLists
     public static function isContainBadUrl($pesan)
     {
 //        $wordlists = self::getAll();
-        $wordlists = self::loadFromFile();
+//        $wordlists = self::loadFromFile();
+	    $wordlists = self::readCache();
 //        $apesan = explode(' ', $pesan);
-        $apesan = Words::multiexplode([" ", "\n"], $pesan);
+	    $apesan = Words::multiexplode([' ', "\n"], $pesan);
         foreach ($apesan as $anu) {
             foreach ($wordlists as $kata) {
 	            if (Words::isSameWith($anu, $kata['url'])) {

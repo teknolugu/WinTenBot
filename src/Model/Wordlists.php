@@ -71,6 +71,15 @@ class Wordlists
 		return $cache->writeCache('cache-json', 'wordlist', $datas);
 	}
 	
+	/**
+	 * @return mixed
+	 */
+	public static function readCache()
+	{
+		$cache = new Caches();
+		return $cache->readCache('cache-json', 'wordlist');
+	}
+	
     /**
      * @param $pesan
      * @return bool
@@ -78,9 +87,10 @@ class Wordlists
     public static function isContainBadword($pesan)
     {
 //        $wordlists = self::getAll();
-        $wordlists = self::loadFromFile();
+//        $wordlists = self::loadFromFile();
+	    $wordlists = self::readCache();
 //        $apesan = explode(' ', $pesan);
-        $apesan = Words::multiexplode([" ", "\n"], $pesan);
+	    $apesan = Words::multiexplode([' ', "\n"], $pesan);
         foreach ($apesan as $anu) {
             foreach ($wordlists as $kata) {
 	            if (Words::isSameWith($anu, $kata['word'])) {
