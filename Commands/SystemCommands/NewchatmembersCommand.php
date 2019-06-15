@@ -39,7 +39,8 @@ class NewchatmembersCommand extends SystemCommand
 //		$pinned_msg = $message->getPinnedMessage()->getMessageId();
 		$chatHandler = new ChatHandler($message);
 		$isKicked = false;
-		$welcome_data = Settings::getNew(['chat_id' => $chat_id]);
+		$isEnableCache = true;
+		$welcome_data = $isEnableCache ? Settings::readCache($chat_id) : Settings::getNew(['chat_id' => $chat_id]);
 		
 		// Perika apakah Aku harus keluar grup?
 		if (!$message->getChat()->isPrivateChat()
@@ -253,6 +254,11 @@ class NewchatmembersCommand extends SystemCommand
 		], [
 			'chat_id' => $chat_id,
 		]);
+		
+		if ($isEnableCache) {
+			$setting_data = Settings::getNew(['chat_id' => $chat_id]);
+			Settings::writeCache($chat_id, $setting_data);
+		}
 		
 		return $r;
 	}
