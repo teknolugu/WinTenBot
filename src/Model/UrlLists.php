@@ -60,6 +60,16 @@ class UrlLists
         $wordArray = \GuzzleHttp\json_decode(file_get_contents($filePath), true);
         return $wordArray;
     }
+	
+	/**
+	 * @return bool|int
+	 */
+	public static function writeCache()
+	{
+		$datas = self::getAll();
+		$cache = new Caches();
+		return $cache->writeCache('cache-json', 'url-list', $datas);
+	}
 
     /**
      * @param $pesan

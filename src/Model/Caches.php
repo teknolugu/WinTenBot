@@ -24,9 +24,10 @@ class Caches
 	/**
 	 * Write cache
 	 *
-	 * @param [type] $key
-	 * @param [type] $data
-	 * @return void
+	 * @param $path
+	 * @param $key
+	 * @param $data
+	 * @return bool|int
 	 */
 	public function writeCache($path, $key, $data)
 	{
@@ -34,7 +35,7 @@ class Caches
 		$this->createDir($path);
 		$json = \GuzzleHttp\json_encode($data, 128);
 		$fileName = $path . '/' . $key . '.json';
-		file_put_contents($fileName, $json);
+		return file_put_contents($fileName, $json);
 	}
 	
 	/**

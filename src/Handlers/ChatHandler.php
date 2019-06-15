@@ -13,6 +13,7 @@ use Longman\TelegramBot\Entities\Message;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
+use src\Model\Group;
 use src\Model\Logs;
 use src\Utils\Time;
 
@@ -298,6 +299,22 @@ class ChatHandler
 		return Logs::toChannel($log, $keyboard);
 	}
 	
+	/**
+	 * @return int
+	 */
+	final public function getFromId()
+	{
+		return $this->from_id;
+	}
+	
+	/**
+	 * @return int
+	 */
+	final public function getChatId()
+	{
+		return $this->chat_id;
+	}
+	
 	final public function getSendedMessageId()
 	{
 		return $this->responses->result->message_id;
@@ -329,5 +346,11 @@ class ChatHandler
 			}
 		}
 		return $isAdmin;
+	}
+	
+	final public function isSudoer($from_id = null)
+	{
+		$user_id = $from_id ?? $this->from_id;
+		return Group::isSudoer($user_id);
 	}
 }

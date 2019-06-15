@@ -58,10 +58,17 @@ class Fbans
         $db = new Medoo(db_data);
         return $db->delete(self::$table_name, $where);
     }
-
+	
+	/**
+	 * @return bool|int
+	 */
 	public static function writeCacheFbans(){
-        $fbansAll = \GuzzleHttp\json_encode(Fbans::getAll());
-        file_put_contents(botData . 'cache-json/fbans-all.json', $fbansAll);
+		$datas = self::getAll();
+		$cache = new Caches();
+		return $cache->writeCache('cache-json', 'fbans-all', $datas);
+
+//        $fbansAll = \GuzzleHttp\json_encode(Fbans::getAll());
+//        file_put_contents(botData . 'cache-json/fbans-all.json', $fbansAll);
     }
 
     /*
@@ -101,8 +108,12 @@ class Fbans
     }
 
     public static function writeCacheAdminFbans(){
-        $fbansAll = \GuzzleHttp\json_encode(Fbans::getAdminFbansAll());
-        file_put_contents(botData . 'cache-json/fbans-admin-all.json', $fbansAll);
+	    $datas = self::getAdminFbansAll();
+	    $cache = new Caches();
+	    return $cache->writeCache('cache-json', 'fbans-admin-all', $datas);
+
+//        $fbansAll = \GuzzleHttp\json_encode(Fbans::getAdminFbansAll());
+//        file_put_contents(botData . 'cache-json/fbans-admin-all.json', $fbansAll);
     }
 
     /**

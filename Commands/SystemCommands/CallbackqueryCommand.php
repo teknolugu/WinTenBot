@@ -17,9 +17,13 @@ use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 use src\Handlers\ChatHandler;
 use src\Model\Bot;
+use src\Model\Fbans;
 use src\Model\Group;
+use src\Model\MalFiles;
 use src\Model\Members;
 use src\Model\Settings;
+use src\Model\UrlLists;
+use src\Model\Wordlists;
 use src\Utils\Converters;
 
 /**
@@ -292,6 +296,86 @@ class CallbackqueryCommand extends SystemCommand
 				}
 				
 				return $chatHandler->editText($text);
+				
+				break;
+			
+			case 'filtering-message':
+				if ($chatHandler->isSudoer($callback_from_id)) {
+					$text = federation_name_short . " Filtering Message\n";
+					switch ($bacot[1]) {
+						case'file':
+							$lists = MalFiles::getAll();
+							$list = '';
+							ksort($lists);
+							$countList = count($lists);
+							if ($countList > 0) {
+								foreach ($lists as $lis) {
+									$list .= '<code>' . $lis['file_id'] . "</code>\n";
+								}
+							} else {
+								$list = 'No <b>Files</b> blocked globally';
+							}
+							
+							$text .= "📜 <b>Url-Lists</b>: <code>$countList</code>\n" .
+								"===============================\n" .
+								trim($list);
+							break;
+						
+						case 'kata':
+							$wordlists = Wordlists::getAll();
+							$list = '';
+							ksort($wordlists);
+							$countWordlist = count($wordlists);
+							foreach ($wordlists as $word) {
+								$list .= $word['word'] . ' -> ' . $word['class'] . "\n";
+							}
+							$text .= "📜 <b>Wordlist</b>: <code>$countWordlist</code>\n" .
+								"===============================\n" .
+								trim($list);
+							break;
+						
+						case 'url':
+							$lists = UrlLists::getAll();
+							$list = '';
+							ksort($lists);
+							$countList = count($lists);
+							if ($countList > 0) {
+								foreach ($lists as $lis) {
+									$list .= $lis['url'] . ' -> ' . $lis['class'] . "\n";
+								}
+							} else {
+								$list = 'No <b>Url</b> blocked globally';
+							}
+							$text = "📜 <b>Url-Lists</b>: <code>$countList</code>\n" .
+								"===============================\n" .
+								trim($list);
+							break;
+						
+						case 'fedban':
+							$lists = '';
+							$fbans = Fbans::getAdminFbansAll();
+							$countAdmin = count($fbans);
+							if ($countAdmin > 0) {
+								foreach ($fbans as $fban) {
+									$lists .= Converters::intToEmoji(!$fban['is_banned']) . ' ' .
+										$fban['user_id'] . ' from ' .
+										$fban['promoted_from'] . "\n";
+								}
+							} else {
+								$lists = 'No Admin FBans';
+							}
+							
+							$text = '<b>Admin Fbans Lists</b>: ' . $countAdmin .
+								"\n-------------------------------------------------\n" . trim($lists);
+							break;
+					}
+					
+					$chatHandler->editMessageCallback($text . $bacot[1],
+						null,
+						BUTTON_FILTERING_MESSAGE);
+				} else {
+					$chatHandler->answerCallbackQuery('wik wik');
+				}
 				
 				break;
 		}

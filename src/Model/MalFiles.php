@@ -54,13 +54,13 @@ class MalFiles
 	}
 	
 	/**
-	 *
+	 * @return bool|int
 	 */
 	public static function writeCache()
 	{
 		$datas = self::getAll();
 		$cache = new Caches();
-		$cache->writeCache('cache-json', 'anti-malfiles', $datas);
+		return $cache->writeCache('cache-json', 'anti-malfiles', $datas);
 	}
 	
 	/**

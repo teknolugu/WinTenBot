@@ -60,7 +60,17 @@ class Wordlists
         $wordArray = \GuzzleHttp\json_decode(file_get_contents($filePath), true);
         return $wordArray;
     }
-
+	
+	/**
+	 * @return bool|int
+	 */
+	public static function writeCache()
+	{
+		$datas = self::getAll();
+		$cache = new Caches();
+		return $cache->writeCache('cache-json', 'wordlist', $datas);
+	}
+	
     /**
      * @param $pesan
      * @return bool
