@@ -6,7 +6,7 @@
   "require": {
 	"roave/security-advisories": "dev-master",
     "php": ">=5.5",
-	"longman/telegram-bot": "^0.55",
+	"longman/telegram-bot": "*",
 	"ammarfaizi2/googletranslate": "^0.0.1",
 	"stichoza/google-translate-php": "^4.0.1",
 	"catfan/medoo": "^1.6.1",
