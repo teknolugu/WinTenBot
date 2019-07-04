@@ -1,5 +1,6 @@
 <?php
-include_once 'config.php';
+include_once './Resources/Config/bot.php';
+include_once './Resources/Config/config.php';
 
 define('API_URL', 'https://api.telegram.org/bot' . bot_token . '/');
 

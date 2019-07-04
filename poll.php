@@ -8,21 +8,34 @@
 
 // Load composer
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/Resources/kosakata.php';
+require_once __DIR__ . '/Resources/Config/config.php';
+require_once __DIR__ . '/Resources/Words/kosakata.php';
 
-// Load all in /app dir
-foreach (glob('app/*.php') as $files) {
-    include_once $files;
+// Load all in /Resources dir
+foreach (glob('Resources/*/*.php') as $files) {
+	include_once $files;
 }
 
 // load all under folder src
 foreach (glob('src/*/*.php') as $files) {
-    include_once $files;
+	include_once $files;
 }
 
 $commands_paths = [
-    __DIR__ . '/Commands/',
+	__DIR__ . '/Commands/SystemCommands',
+	__DIR__ . '/Commands/UserCommands/Additional',
+	__DIR__ . '/Commands/UserCommands/Bot',
+	__DIR__ . '/Commands/UserCommands/CekResi',
+	__DIR__ . '/Commands/UserCommands/Chat',
+	__DIR__ . '/Commands/UserCommands/FedBan',
+	__DIR__ . '/Commands/UserCommands/GitTools',
+	__DIR__ . '/Commands/UserCommands/Group',
+	__DIR__ . '/Commands/UserCommands/Labs',
+	__DIR__ . '/Commands/UserCommands/Member',
+	__DIR__ . '/Commands/UserCommands/Security',
+	__DIR__ . '/Commands/UserCommands/Sudoer',
+	__DIR__ . '/Commands/UserCommands/Tagging',
+	__DIR__ . '/Commands/UserCommands/Texting',
 ];
 
 try {

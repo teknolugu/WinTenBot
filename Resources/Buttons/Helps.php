@@ -87,3 +87,13 @@ define('BTN_HELP_ADDITIONAL', [
 	['text' => 'Web Screenshot', 'callback_data' => 'help_additional/web/screenshot'],
 	['text' => 'Beranda', 'callback_data' => 'help_home'],
 ]);
+
+define('BTN_HELP_WELCOME', [
+	['text' => 'Teks', 'callback_data' => 'help_welcome/text'],
+	['text' => 'Tombol', 'callback_data' => 'help_welcome/button'],
+	['text' => 'Media', 'callback_data' => 'help_welcome/media'],
+	['text' => 'Dokumen', 'callback_data' => 'help_welcome/file'],
+	['text' => 'Welcome', 'callback_data' => 'help_group/welcome'],
+	['text' => 'Kembali', 'callback_data' => 'help_group'],
+	['text' => 'Beranda', 'callback_data' => 'help_home'],
+]);

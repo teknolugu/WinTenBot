@@ -4,8 +4,8 @@ composer.phar
 /vendor/
 
 ## Custom File adn Folder
-Data/config/bot.php
-Data/config/config.php
+Resources/Config/bot.php
+Resources/Config/config.php
 hook.php
 poll.php
 
