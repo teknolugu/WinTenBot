@@ -20,7 +20,7 @@ use src\Utils\Time;
 class ChatHandler
 {
 	protected $chat_id;
-	protected $chatTitle;
+	public $chatTitle;
 	protected $from_id;
 	protected $date;
 	protected $is_reply = false;
@@ -268,6 +268,21 @@ class ChatHandler
 		return Request::restrictChatMember($data);
 	}
 	
+	final public function unrestrictMember($user_id)
+	{
+		$unmute = [
+			'chat_id'                   => $this->chat_id,
+			'user_id'                   => $user_id,
+			'until_date'                => strtotime(date('Y-m-d H:i:s')),
+			'can_send_messages'         => true,
+			'can_send_media_messages'   => true,
+			'can_send_other_messages'   => true,
+			'can_add_web_page_previews' => true,
+		];
+		
+		return Request::restrictChatMember($unmute);
+	}
+	
 	final public function deleteMessage($id = null, $delay = 0)
 	{
 		sleep($delay);
@@ -315,6 +330,11 @@ class ChatHandler
 		return $this->chat_id;
 	}
 	
+	final public function getChatTitle()
+	{
+		return $this->chatTitle;
+	}
+	
 	final public function getSendedMessageId()
 	{
 		return $this->responses->result->message_id;
@@ -330,6 +350,10 @@ class ChatHandler
 		return $message_link;
 	}
 	
+	/**
+	 * @param null $user_id
+	 * @return bool
+	 */
 	final public function isAdmin($user_id = null)
 	{
 		$isAdmin = false;
