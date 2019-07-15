@@ -15,7 +15,7 @@ define('descBeta',"\n<b>I'm still beta, maybe contains bug and unstable. not rec
 define('botData','./Data/');
 
 // WinTen API
-define('winten_api', "https://api.winten.tk/");
+define('winten_api', "https://api.winten.space/");
 define('winten_key', "YOUR API TOKEN HERE");
 
 // API key Thumbnail.ws
