@@ -49,12 +49,17 @@ class MuteCommand extends UserCommand
 //		$isSudoer = Group::isSudoer($from_id);
 		
 		if ($isAdmin || $from_id == $id_target) {
-			$chatHandler->sendText('Sedang menge-Mute ' . $id_target);
+			$chatHandler->sendText('Sedang menge-Mute ' . $id_target, '-1');
+			$chatHandler->deleteMessage();
+			
 			$kick = $chatHandler->restrictMember($id_target, 365);
 			$text = '<b>Status: </b> ' . Converters::intToString($kick->getOk());
 			
 			if ($kick->isOk()) {
 				$text .= "\n<b>Message: </b> Mute <code>$id_target</code> berhasil..";
+				$keyboard = [
+					['text' => '❤ Unmute Member', 'callback_data' => 'action_unmute-member_' . $id_target . '_' . $chat_id],
+				];
 			} else {
 				$text .= "\n<b>Message: </b> " . $kick->getErrorCode() . ': ' .
 					Translator::To($kick->getDescription(), 'id');
@@ -63,6 +68,6 @@ class MuteCommand extends UserCommand
 			$text = '🚫 <i>Kamu tidak memiliki akses /kick</i>';
 		}
 		
-		return $chatHandler->editText($text);
+		return $chatHandler->editText($text, '-1', $keyboard);
 	}
 }

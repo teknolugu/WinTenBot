@@ -25,6 +25,7 @@ use src\Model\Settings;
 use src\Model\UrlLists;
 use src\Model\Wordlists;
 use src\Utils\Converters;
+use src\Utils\Folder;
 
 /**
  * Callback query command
@@ -108,6 +109,9 @@ class CallbackqueryCommand extends SystemCommand
 				
 				//SWITCH LEVEL 2
 				switch ($splitHelp[0]) {
+					case 'home':
+						$btn_markup = BTN_HELP_HOME;
+						break;
 					case 'core':
 						$btn_markup = BTN_HELP_CORE;
 						break;
@@ -132,9 +136,12 @@ class CallbackqueryCommand extends SystemCommand
 					case 'texting':
 						$btn_markup = BTN_HELP_TEXTING;
 						break;
-					default:
-						$btn_markup = BTN_HELP_HOME;
+					case 'welcome':
+						$btn_markup = BTN_HELP_WELCOME;
 						break;
+//					default:
+//						$btn_markup = BTN_HELP_HOME;
+//						break;
 				}
 				
 				switch ($splitHelp[1]) {
@@ -143,6 +150,9 @@ class CallbackqueryCommand extends SystemCommand
 						break;
 					case 'info':
 						$btn_markup = BTN_HELP_INFO;
+						break;
+					case 'welcome':
+						$btn_markup = BTN_HELP_WELCOME;
 						break;
 				}
 				
@@ -278,6 +288,11 @@ class CallbackqueryCommand extends SystemCommand
 							'user_id' => $bacot[2],
 						]);
 						break;
+					case 'unmute-member':
+						$r = $chatHandler->unrestrictMember($bacot[2]);
+						$chatHandler->editMessageCallback("Anggota berhasil di unmute");
+						return $chatHandler->deleteMessage($chatHandler->callBackMessageId, 3);
+						break;
 				}
 				
 				$aksi = str_replace('-', ' ', ucwords($bacot[1]));
@@ -378,7 +393,53 @@ class CallbackqueryCommand extends SystemCommand
 				}
 				
 				break;
+			
+			case 'cache':
+				$canReset = false;
+				if ($chatHandler->isAdmin($callback_from_id)
+					|| $chatHandler->isSudoer($callback_from_id)
+					|| $chatHandler->isPrivateChat) {
+					$canReset = true;
+				}
+				
+				if ($canReset) {
+					$base_dir = botData . 'cache-json/' . $chatHandler->getChatId();
+					switch ($bacot[1]) {
+						case'tags':
+							$dir = $base_dir . '/tags.json';
+							break;
+						case 'setting':
+							$dir = $base_dir . '/setting.json';
+							break;
+						default:
+							$dir = $base_dir;
+							break;
+					}
+					
+					if (is_dir($dir)) {
+						$delete = Folder::deleteDir($dir);
+					} else {
+						$delete = Folder::deleteFile($dir);
+					}
+					
+					if ($delete) {
+						$text = "Cache {$bacot[1]} berhasil di hapus.";
+					} else {
+						$text = "Cache {$bacot[1]} sudah di hapus.";
+					}
+				} else {
+					$text = "Kamu bukan Admin di Grup ini.";
+				}
+				$res = $chatHandler->answerCallbackQuery($text);
+				break;
 		}
+		
+		if (isBeta) {
+			$text = $callback_data;
+		} else {
+			$text = "Sesuatu telah terjadi.";
+		}
+		$res = $chatHandler->answerCallbackQuery($text);
 
 //		$data = [
 //			'callback_query_id' => $callback_query_id,
@@ -387,6 +448,7 @@ class CallbackqueryCommand extends SystemCommand
 //			'cache_time'        => 5,
 //		];
 //		return Request::answerCallbackQuery($data);
+		return $res;
 	}
 	
 	/**

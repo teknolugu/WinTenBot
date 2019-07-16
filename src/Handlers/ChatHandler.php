@@ -166,7 +166,6 @@ class ChatHandler
 	 * @param int  $messageId
 	 * @param null $keyboard
 	 * @return ServerResponse
-	 * @throws TelegramException
 	 */
 	final public function editMessageCallback($text, $messageId = -1, $keyboard = null)
 	{
@@ -255,17 +254,7 @@ class ChatHandler
 			'can_add_web_page_previews' => false,
 		];
 		
-		$unmute = [
-			'chat_id'                   => $this->chat_id,
-			'user_id'                   => $user_id,
-			'until_date'                => strtotime(date('Y-m-d H:i:s')),
-			'can_send_messages'         => true,
-			'can_send_media_messages'   => true,
-			'can_send_other_messages'   => true,
-			'can_add_web_page_previews' => true,
-		];
-		$data = $time == -1 ? $unmute : $mute;
-		return Request::restrictChatMember($data);
+		return Request::restrictChatMember($mute);
 	}
 	
 	final public function unrestrictMember($user_id)
