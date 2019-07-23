@@ -52,12 +52,26 @@ class Fbans
 		$db = new Medoo(db_data);
 		return $db->select(self::$table_name, '*');
 	}
-
-    public static function deleteFban($where)
+	
+	/**
+	 * @param $where
+	 * @return bool|\PDOStatement
+	 */
+	public static function deleteFban($where)
     {
         $db = new Medoo(db_data);
         return $db->delete(self::$table_name, $where);
     }
+	
+	/**
+	 * @param $where
+	 * @return array|bool
+	 */
+	public static function findId($where)
+	{
+		$db = new Medoo(db_data);
+		return $db->select(self::$table_name, $where);
+	}
 	
 	/**
 	 * @return bool|int
@@ -70,6 +84,15 @@ class Fbans
 //        $fbansAll = \GuzzleHttp\json_encode(Fbans::getAll());
 //        file_put_contents(botData . 'cache-json/fbans-all.json', $fbansAll);
     }
+	
+	/**
+	 * @return mixed
+	 */
+	public static function readCache()
+	{
+		$cache = new Caches();
+		return $cache->readCache('cache-json', 'fbans-all');
+	}
 
     /*
      *Admin FBans
@@ -138,9 +161,10 @@ class Fbans
      */
     public static function isBan($user_id){
         $result = false;
-        $json = file_get_contents(botData.'cache-json/fbans-all.json');
+//        $json = file_get_contents(botData.'cache-json/fbans-all.json');
 //        $allFbans = self::getAll();
-        $allFbans = \GuzzleHttp\json_decode($json, true);
+//        $allFbans = \GuzzleHttp\json_decode($json, true);
+	    $allFbans = self::readCache();
         foreach ($allFbans as $e) {
             if($user_id == $e['user_id']){
                 $result = true;

@@ -44,7 +44,7 @@ class UnfbanCommand extends UserCommand
 			} elseif ($data[0] != '') {
 				$user_id = $data[0];
 			} else {
-				$text = "ℹ $federation_name" .
+				$text = "🧩 $federation_name" .
 					"\n<code>/unfban</code> (InReply)" .
 					"\n<code>/unfban user_id</code> (InMessage)" .
 					"\n\n<b>Warning: </b> Fake reports might make you unable to become an FBan Admin forever!";
@@ -53,12 +53,21 @@ class UnfbanCommand extends UserCommand
 			
 			$banned_by = $message->getFrom()->getId();
 			
-			$fbans_data = [
-				'user_id'   => $user_id,
-				'banned_by' => $banned_by,
-			];
+			if ($chatHandler->isSudoer()) {
+				$fbans_data = [
+					'user_id' => $user_id,
+				];
+			} else {
+				$fbans_data = [
+					'user_id'   => $user_id,
+					'banned_by' => $banned_by,
+				];
+			}
+
+//			$findedId = Fbans::findId(['user_id' => $user_id]);
 			
-			$text = $federation_name . "\n\n";
+			$text = '🧩 ' . federation_name . "\n\n";
+//			if (count($findedId) > 0) {
 			$chatHandler->editText($text . '🗑 Menghapus dari daftar');
 			$fban = Fbans::deleteFban($fbans_data);
 			if ($fban->rowCount() > 0) {
@@ -66,9 +75,12 @@ class UnfbanCommand extends UserCommand
 				Fbans::writeCacheFbans();
 				$text .= '✅ <b>Pengguna</b> berhasil di hapus.';
 			} else {
-				$text .= 'ℹ  Hapus pengguna gagal .' .
-					"\nKamu tidak bisa meng-unfban akun yang di ban oleh orang lain.";
+				$text .= 'ℹ  Hapus pengguna gagal silakan hubungi ke @TgBotId.';
 			}
+//			} else {
+//				$text .= "Tidak ada pengguna yang di temukan" . count($findedId);
+//			}
+			
 			$r = $chatHandler->editText($text);
 		} else {
 			$r = $chatHandler->editText("⚠ Kamu belum terdaftar ke $federation_name");
