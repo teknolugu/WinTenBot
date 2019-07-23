@@ -13,6 +13,7 @@ use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use src\Handlers\ChatHandler;
 use src\Model\Fbans;
+use src\Model\Logs;
 
 class UnfbanCommand extends UserCommand
 {
@@ -69,6 +70,7 @@ class UnfbanCommand extends UserCommand
 			$text = '🧩 ' . federation_name . "\n\n";
 //			if (count($findedId) > 0) {
 			$chatHandler->editText($text . '🗑 Menghapus dari daftar');
+			$chatHandler->deleteMessage();
 			$fban = Fbans::deleteFban($fbans_data);
 			if ($fban->rowCount() > 0) {
 				$chatHandler->editText('✍ Menulis ke Cache..');
@@ -82,6 +84,9 @@ class UnfbanCommand extends UserCommand
 //			}
 			
 			$r = $chatHandler->editText($text);
+			$logText = $text . "\n" . \GuzzleHttp\json_encode($fbans_data, 128);
+			Logs::toChannel($logText);
+			$chatHandler->deleteMessage($chatHandler->getSendedMessageId(), 3);
 		} else {
 			$r = $chatHandler->editText("⚠ Kamu belum terdaftar ke $federation_name");
 		}
