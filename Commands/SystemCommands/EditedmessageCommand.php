@@ -57,10 +57,10 @@ class EditedmessageCommand extends SystemCommand
 				return $this->parseTags();
 				break;
 		}
-		
-		if ($message != "") {
-			$res = $chatHandler->sendText('TerEdit?');
-		}
+
+//		if ($message != "") {
+//			$res = $chatHandler->sendText('TerEdit?');
+//		}
 
 //		return $res;
 	}
