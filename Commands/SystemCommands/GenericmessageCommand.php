@@ -95,9 +95,6 @@ class GenericmessageCommand extends SystemCommand
 			case '@admin':
 				return $this->telegram->executeCommand('report');
 				break;
-			case Words::isContain($pesan, '#'):
-				return $this->parseTags();
-				break;
 		}
 		
 		// Chatting
@@ -114,6 +111,9 @@ class GenericmessageCommand extends SystemCommand
 			case Words::isSameWith($kata, yuk):
 				$chat = 'Ayuk, siapa takut 😂';
 				break;
+			case Words::isContain($pesan, '#'):
+				return $this->parseTags();
+				break;
 			
 			default:
 				break;
@@ -127,7 +127,8 @@ class GenericmessageCommand extends SystemCommand
 				$chat = "<a href='tg://user?id=" . $from_id . "'>" . $from_first_name . '</a>' .
 					" mereply <a href='" . $mssgLink . "'>pesan kamu" . '</a>' .
 					' di grup <b>' . $chat_title . '</b>'
-					. "\n" . $message->getText();
+					. "\n" . $message->getText() .
+					"\n\nReply pesan ini untuk membalas atau klik tombol <b>Balas</b>";
 				$data = [
 					'chat_id'                  => $repMsg->getFrom()->getId(),
 					'text'                     => $chat,
@@ -144,12 +145,30 @@ class GenericmessageCommand extends SystemCommand
 				
 				return Request::sendMessage($data);
 			} else {
-				$chat_id = $repMsg->getCaptionEntities()[3]->getUrl();
-				$chat_id = str_replace('tg://user?id=', '', $chat_id);
+				$entities = \GuzzleHttp\json_encode($repMsg->getEntities()[1], 128);
+				$text = "Wrok " . $entities;
+//				$chatHandler->sendText($text);
+
+//				$chat_id = $repMsg->getCaptionEntities()[3]->getUrl();
+				$toFName = $repMsg->getEntities()[0]->getUser()->getFirstName();
+				$chatUsername = '@' . explode('/', $repMsg->getEntities()[1]->getUrl())[3];
+				$messageId = explode('/', $repMsg->getEntities()[1]->getUrl())[4];
+				$text .= "\nUsername $chatUsername $messageId";
+//				$chatHandler->editText($text);
+				
+				$getChat = Request::getChat(['chat_id' => $chatUsername]);
+//				$chat_id = str_replace('tg://user?id=', '', $chat_id);
+				
+				if ($getChat->isOk()) {
+					$chatId = $getChat->getResult()->id;
+				}
+				
+				$text = "$from_first_name membalas sebuah pesan\n" . $message->getText();
 				
 				$data = [
-					'chat_id'                  => $chat_id,
-					'text'                     => 'lorem',
+					'chat_id'                  => $chatId,
+					'text'                     => $text,
+					'reply_to_message_id'      => $messageId,
 					'parse_mode'               => 'HTML',
 					'disable_web_page_preview' => true,
 				];
@@ -302,7 +321,7 @@ class GenericmessageCommand extends SystemCommand
 		$chat_id = $message->getChat()->getId();
 		$from_id = $message->getFrom()->getId();
 		
-		if (Fbans::isBan($from_id)) {
+		if (Fbans::isBan($from_id) && !$chatHandler->isPrivateChat) {
 			$text = "$from_id telah terdeteksi di " . federation_name_short;
 			$kickRes = $chatHandler->kickMember($from_id, true);
 			if ($kickRes->isOk()) {
