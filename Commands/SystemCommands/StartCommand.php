@@ -38,15 +38,12 @@ class StartCommand extends SystemCommand
 		$chat_id = $message->getChat()->getId();
 		$mssg_id = $message->getMessageId();
 		
-		$text = '🤖 <b>WinTen Bot</b> by ' . federation_name_short . '.' .
+		$text = "🤖 <b>WinTen Bot</b> <code>" . versi . "</code> \nby " . federation_name . '.' .
 			"\nAdalah bot debugging, manajemen grup yang di lengkapi dengan alat keamanan. " .
 			'Agar fungsi saya bekerja dengan fitur penuh, jadikan saya admin dengan level standard. ' .
 			
-			"\n\nSaran dan fitur bisa di ajukan di @WinTenGroup atau @TgBotID." .
-			"\nUntuk bantuan ketikkan /help. " .
-			
-			"\n\nℹ /info untuk informasi selengkapnya." .
-			"\nMade with ❤ by WinTenDev";
+			"\n\nSaran dan fitur bisa di ajukan di @WinTenGroup atau @TgBotID.";
+//			"\nMade with ❤ by " . federation_name_short;
 		
 		$pecah = explode('_', $message->getText(true));
 		switch ($pecah[0]) {
@@ -74,11 +71,11 @@ class StartCommand extends SystemCommand
 				$text = $settings_data[0]['rules_text'] != ''
 					? $settings_data[0]['rules_text']
 					: 'ℹ <b>Rules</b> belum di tetapkan oleh Admin grup.';
-				
+				return $chatHandler->sendText($text);
 				break;
 			case 'eula':
 				$text = Bot::getTermsUse('eula');
-				
+				return $chatHandler->sendText($text);
 				break;
 			
 			case 'opensource':
@@ -101,6 +98,10 @@ class StartCommand extends SystemCommand
 			$text = str_replace('WinTen Bot', bot_name, $text);
 		}
 		
-		return $chatHandler->sendText($text);
+		$btn_start = [
+			['text' => 'Bantuan', 'url' => urlStart . 'help'],
+		];
+		
+		return $chatHandler->sendText($text, null, $btn_start);
 	}
 }
