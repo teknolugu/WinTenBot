@@ -119,7 +119,7 @@ class GenericmessageCommand extends SystemCommand
 				break;
 		}
 		
-		$mHandler->sendText($chat, null, $btn_markup);
+		$mHandler->sendText($chat, null);
 		
 		if ($repMsg !== null) {
 			if ($message->getChat()->getType() != 'private') {
