@@ -34,12 +34,12 @@ class GitintegrationCommand extends UserCommand
 		$chat_id = $message->getChat()->getId();
 		$chatHandler = new ChatHandler($message);
 		
-		$url = "https://integrate.azhe.space/$chat_id.php";
-		$text = "Sambungkan bot ke repository Anda. " .
+		$url = "https://integrate.winten.space/$chat_id.php";
+		$text = "🔌 Sambungkan bot ke repository Anda. " .
 			"\nSilakan pasang url di bawah ini di pengaturan Webhook\Integrasi.\n" . $url;
 		
 		$text .= "\n\nPenyedia yang di dukung: GitLab, GitHub." .
-			"\nUntuk konfigurasi GitHub, Content type di set ke <code>application/jeson</code>";
+			"\nUntuk konfigurasi GitHub, <b>Content type</b> di set ke <code>application/jeson</code>";
 		
 		return $chatHandler->sendText($text);
 	}
