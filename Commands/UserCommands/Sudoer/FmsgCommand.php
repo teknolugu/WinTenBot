@@ -49,34 +49,35 @@ class FmsgCommand extends UserCommand
 			$this->chatHandler->deleteMessage();
 			$pecah = explode(' ', $tmessage->getText(true));
 			if ($pecah[0] == 'all') {
-				$text = '✍ Menulis Url Lists ke Cache..';
-				$this->chatHandler->editText($text);
-				$writeUrl = UrlLists::writeCache();
-				
-				$text .= "\n✍ Menulis Word Lists ke Cache..";
-				$this->chatHandler->editText($text);
-				$writeWord = Wordlists::writeCache();
-				
-				$text .= "\n✍ Menulis Malfile Lists ke Cache..";
-				$this->chatHandler->editText($text);
-				$writeFile = MalFiles::writeCache();
-				
-				$text .= "\n✍ Menulis Fban Lists ke Cache..";
-				$this->chatHandler->editText($text);
-				$writeFban = Fbans::writeCacheFbans();
-				
-				$text .= "\n✍ Menulis Admin Fban Lists ke Cache..";
-				$this->chatHandler->editText($text);
-				Fbans::writeCacheAdminFbans();
-				
-				$this->chatHandler->editText('✅ Done!' .
-					"\n<b>Write Url: </b> $writeUrl B - " . Format::formatSize($writeUrl) .
-					"\n<b>Write Word: </b> $writeWord B - " . Format::formatSize($writeWord) .
-					"\n<b>Write File: </b> $writeFile B - " . Format::formatSize($writeFile) .
-					"\n<b>Write Fban: </b> $writeFban B - " . Format::formatSize($writeFban)
-				);
-				
-				$this->chatHandler->deleteMessage($this->chatHandler->getSendedMessageId(), 2);
+				$this->executeWriteCacheAll();
+//				$text = '✍ Menulis Url Lists ke Cache..';
+//				$this->chatHandler->editText($text);
+//				$writeUrl = UrlLists::writeCache();
+//
+//				$text .= "\n✍ Menulis Word Lists ke Cache..";
+//				$this->chatHandler->editText($text);
+//				$writeWord = Wordlists::writeCache();
+//
+//				$text .= "\n✍ Menulis Malfile Lists ke Cache..";
+//				$this->chatHandler->editText($text);
+//				$writeFile = MalFiles::writeCache();
+//
+//				$text .= "\n✍ Menulis Fban Lists ke Cache..";
+//				$this->chatHandler->editText($text);
+//				$writeFban = Fbans::writeCacheFbans();
+//
+//				$text .= "\n✍ Menulis Admin Fban Lists ke Cache..";
+//				$this->chatHandler->editText($text);
+//				Fbans::writeCacheAdminFbans();
+//
+//				$this->chatHandler->editText('✅ Done!' .
+//					"\n<b>Write Url: </b> $writeUrl B - " . Format::formatSize($writeUrl) .
+//					"\n<b>Write Word: </b> $writeWord B - " . Format::formatSize($writeWord) .
+//					"\n<b>Write File: </b> $writeFile B - " . Format::formatSize($writeFile) .
+//					"\n<b>Write Fban: </b> $writeFban B - " . Format::formatSize($writeFban)
+//				);
+//
+//				$this->chatHandler->deleteMessage($this->chatHandler->getSendedMessageId(), 2);
 //				if($write){
 //				}else{
 //					$this->chatHandler->editText("✅ Failed! $write");
@@ -139,6 +140,41 @@ class FmsgCommand extends UserCommand
 		}
 		
 		return $r;
+	}
+	
+	/**
+	 *
+	 */
+	private function executeWriteCacheAll()
+	{
+		$text = '✍ Menulis Url Lists ke Cache..';
+		$this->chatHandler->editText($text);
+		$writeUrl = UrlLists::writeCache();
+		
+		$text .= "\n✍ Menulis Word Lists ke Cache..";
+		$this->chatHandler->editText($text);
+		$writeWord = Wordlists::writeCache();
+		
+		$text .= "\n✍ Menulis Malfile Lists ke Cache..";
+		$this->chatHandler->editText($text);
+		$writeFile = MalFiles::writeCache();
+		
+		$text .= "\n✍ Menulis Fban Lists ke Cache..";
+		$this->chatHandler->editText($text);
+		$writeFban = Fbans::writeCacheFbans();
+		
+		$text .= "\n✍ Menulis Admin Fban Lists ke Cache..";
+		$this->chatHandler->editText($text);
+		Fbans::writeCacheAdminFbans();
+		
+		$this->chatHandler->editText('✅ Done!' .
+			"\n<b>Write Url: </b> $writeUrl B - " . Format::formatSize($writeUrl) .
+			"\n<b>Write Word: </b> $writeWord B - " . Format::formatSize($writeWord) .
+			"\n<b>Write File: </b> $writeFile B - " . Format::formatSize($writeFile) .
+			"\n<b>Write Fban: </b> $writeFban B - " . Format::formatSize($writeFban)
+		);
+		
+		$this->chatHandler->deleteMessage($this->chatHandler->getSendedMessageId(), 2);
 	}
 	
 	/**
