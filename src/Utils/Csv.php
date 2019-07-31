@@ -53,7 +53,7 @@ class Csv
 		return $json;
 	}
 	
-	public static function ConvertJson($fileName)
+	public static function ConvertJson($fileName, $header = [])
 	{
 		if (($handle = fopen($fileName, "r")) !== false) {
 			$csvs = [];
@@ -62,8 +62,12 @@ class Csv
 			}
 			$datas = [];
 			$column_names = [];
-			foreach ($csvs[0] as $single_csv) {
-				$column_names[] = $single_csv;
+			if (count($header) > 0) {
+				$column_names = $header;
+			} else {
+				foreach ($csvs[0] as $single_csv) {
+					$column_names[] = $single_csv;
+				}
 			}
 			
 			foreach ($csvs as $key => $csv) {
