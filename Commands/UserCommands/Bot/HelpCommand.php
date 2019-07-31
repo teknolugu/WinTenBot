@@ -45,16 +45,20 @@ class HelpCommand extends UserCommand
 	{
 		$message = $this->getMessage();
 		$chatHandler = new ChatHandler($message);
+		$bot_username = $GLOBALS['bot_username'];
+		$urlBoot = "https://t.me/$bot_username?start=";
 		
 		if (!$chatHandler->isPrivateChat) {
 			$text = 'ℹ Untuk mendapatkan bantuan, klik tombol dibawah ini';
 			return $chatHandler->sendText($text, '', [
-				['text' => 'Dapatkan bantuan..', 'url' => urlStart . 'help'],
+				['text' => 'Dapatkan bantuan..', 'url' => $urlBoot . 'help'],
 			]);
 		} else {
-			$tekt = '<b>' . bot_name . '</b> <code>' . versi . '</code>' .
-				"\nBot debugging dan manajemen grup dengan alat keamanan. \n\nby " . federation_name . "\n\n" .
-				'Berikut adalah daftar perintah';
+			$tekt = '<b>' . bot_name . '</b> <code>' . versi . "</code>" .
+				"\nby " . federation_name .
+				"\n\nAdalah bot debugging, manajemen grup yang di lengkapi dengan alat keamanan. " .
+				"Agar fungsi saya bekerja dengan fitur penuh, jadikan saya admin dengan level standard. "  .
+				'Berikut adalah panduan singkat penggunaan bot';
 			return $chatHandler->sendPrivateText($tekt, '-1', BTN_HELP_HOME);
 		}
 		
