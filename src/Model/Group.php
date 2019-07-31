@@ -67,7 +67,8 @@ class Group
 	 */
 	public static function isMustLeft($id_chat)
     {
-	    return (!in_array($id_chat, restrictArea) && isRestricted);
+    	$isRestricted = $GLOBALS['is_restricted'];
+	    return (!in_array($id_chat, restrictArea) && $isRestricted);
     }
 
     public static function simpanSet($datas)
