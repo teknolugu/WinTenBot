@@ -6,8 +6,10 @@ composer.phar
 ## Custom File adn Folder
 Resources/Config/bot.php
 Resources/Config/config.php
+Resources/Config/bots.php
 hook.php
 poll.php
+multi-hook.php
 
 # Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
@@ -71,3 +73,4 @@ fabric.properties
 .idea/*
 
 \.idea/
+
