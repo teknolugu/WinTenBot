@@ -57,7 +57,8 @@ class NewchatmembersCommand extends SystemCommand
 		}
 		
 		if ($message->botAddedInChat()) {
-			$text = "🙋‍ Hai, perkenalkan saya <b>" . bot_name . '</b>!' .
+			$bot_name = $GLOBALS['bot_name'];
+			$text = "🙋‍ Hai, perkenalkan saya <b>" . $bot_name . '</b>!' .
 				"\nSaya adalah bot untuk debugging dan manajemen grup yang di lengkapi alat keamanan!" .
 				"\nAgar saya bekerja dengan fitur penuh, jadikan saya admin dengan level standard. " .
 				"Untuk melihat daftar perintah bisa ketikkan /help" .
