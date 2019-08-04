@@ -79,7 +79,7 @@ class NewchatmembersCommand extends SystemCommand
 			$member_count = json_decode(Request::getChatMembersCount(['chat_id' => $chat_id]), true)['result'];
 			$human_verification = $welcome_data[0]['enable_human_verification'];
 			$unified_welcome = $welcome_data[0]['enable_unified_welcome'];
-			$raw_welcome_message = $welcome_data[0]['splitted_welcome_message'];
+			$raw_welcome_message = $welcome_data[0]['welcome_message'];
 			$raw_welcome_button = $welcome_data[0]['welcome_button'];
 			$last_welcome_message_id = $welcome_data[0]['last_welcome_message_id'];
 			
