@@ -163,6 +163,10 @@ class GenericmessageCommand extends SystemCommand
 					$chatId = $getChat->getResult()->id;
 				}
 				
+				if ($message->getText() == null) {
+					return $chatHandler->sendText("Saat ini hanya dapat meneruskan balasan pesan teks");
+				}
+				
 				$text = "$from_first_name membalas sebuah pesan\n" . $message->getText();
 				
 				$data = [
