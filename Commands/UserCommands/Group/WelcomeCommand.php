@@ -11,7 +11,7 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\MessageHandlers;
+use src\Handlers\ChatHandler;
 use src\Model\Group;
 use src\Model\Settings;
 use src\Utils\Words;
@@ -22,6 +22,8 @@ class WelcomeCommand extends UserCommand
     protected $description = 'Set welcome message, buttons, others';
     protected $usage = '/welcome';
     protected $version = '1.0.0';
+	
+	protected $chatHandler;
 
     /**
      * Execute command
@@ -32,7 +34,9 @@ class WelcomeCommand extends UserCommand
     public function execute()
     {
         $message = $this->getMessage();
-        $mHandler = new MessageHandlers($message);
+//        $mHandler = new ChatHandler($message);
+	    $this->chatHandler = new ChatHandler($message);
+        
         $chat_id = $message->getChat()->getId();
 //		$mssg_id = $message->getMessageId();
         $from_id = $message->getFrom()->getId();
@@ -42,18 +46,19 @@ class WelcomeCommand extends UserCommand
         if ($isAdmin || $isSudoer) {
             if (!$message->getChat()->isPrivateChat()) {
                 $pecah = explode(' ', $message->getText(true));
-                $mHandler->sendText('Loading data..');
+	            $this->chatHandler->sendText('Loading data..');
                 $commands = ['message', 'button'];
 	            if (Words::isSameWith($pecah[0], $commands)) {
                     $welcome_data = trim(str_replace($pecah[0], '', $message->getText(true)));
-                    $mHandler->editText('Saving settings..');
+		            $this->chatHandler->editText('Saving settings..');
                     $text = Settings::saveNew([
                         'welcome_' . $pecah[0] => $welcome_data,
                         'chat_id' => $chat_id,
                     ], [
                         'chat_id' => $chat_id
                     ]);
-                    $r = $mHandler->editText('✅ Welcome ' . $pecah[0] . ' saved (y)');
+		            $this->updateCache();
+		            $r = $this->chatHandler->editText('✅ Welcome ' . $pecah[0] . ' saved (y)');
                 } elseif ($pecah[0] == '') {
                     $datas = Settings::getNew(['chat_id' => $chat_id]);
                     if ($datas[0]['welcome_message'] != '') {
@@ -76,23 +81,34 @@ class WelcomeCommand extends UserCommand
                             $text .= "\n\n<b>Button markup</b>\n" . $btn_data;
                         }
                     }
-
-                    $r = $mHandler->editText($text, null, $btn_markup);
+		            $this->updateCache();
+		
+		            $r = $this->chatHandler->editText($text, null, $btn_markup);
                 } else {
                     $btn_markup = [
                         ['text' => 'Contoh Message', 'callback_data' => 'inbot-example_welcome-message-example'],
                         ['text' => 'Contoh Button', 'callback_data' => 'inbot-example_welcome-button-example'],
                     ];
-                    $r = $mHandler->editText('ℹ Parameter tidak valid.' .
+		            $r = $this->chatHandler->editText('ℹ Parameter tidak valid.' .
                         "\nContoh:\n/welcome message pesan" .
                         "\n/welcome button text_tombol|link.com", '-1', $btn_markup);
                 }
             } else {
-                $r = $mHandler->sendText('Perintah /welcome hanya di dalam grup');
+	            $r = $this->chatHandler->sendText('Perintah /welcome hanya di dalam grup');
             }
         }
 
 //		$r = $mHandler->editText($text, null, $btn_markup);
         return $r;
     }
+	
+	/**
+	 *
+	 */
+	private function updateCache()
+	{
+		$this->chatHandler->editText("✍ Writing to cache..");
+		$setting_data = Settings::getNew(['chat_id' => $this->chatHandler->getChatId()]);
+		Settings::writeCache($this->chatHandler->getChatId(), $setting_data);
+	}
 }
