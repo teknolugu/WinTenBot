@@ -49,7 +49,12 @@ class WelcomeCommand extends UserCommand
 	            $this->chatHandler->sendText('Loading data..');
                 $commands = ['message', 'button'];
 	            if (Words::isSameWith($pecah[0], $commands)) {
-                    $welcome_data = trim(str_replace($pecah[0], '', $message->getText(true)));
+		            if ($pecah[1] == "reset") {
+			            $welcome_data = "";
+		            } else {
+			            $welcome_data = trim(str_replace($pecah[0], '', $message->getText(true)));
+		            }
+	            	
 		            $this->chatHandler->editText('Saving settings..');
                     $text = Settings::saveNew([
                         'welcome_' . $pecah[0] => $welcome_data,
