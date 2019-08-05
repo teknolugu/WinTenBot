@@ -5,12 +5,12 @@
   "type": "project",
   "require": {
 	"roave/security-advisories": "dev-master",
-    "php": ">=5.5",
-	"longman/telegram-bot": "*",
+	"php": ">=7",
+	"longman/telegram-bot": "^0.59",
 	"ammarfaizi2/googletranslate": "^0.0.1",
-	"stichoza/google-translate-php": "^4.0.1",
-	"catfan/medoo": "^1.6.1",
-    "sastrawi/sastrawi": "1.1.x-dev",
+	"stichoza/google-translate-php": "^4.0.2",
+	"catfan/medoo": "^1.7.2",
+	"sastrawi/sastrawi": "^1.2",
 	"tediscript/perangkum": "dev-master",
 	"cosenary/simple-php-cache": "dev-master"
   }
