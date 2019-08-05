@@ -14,7 +14,7 @@ class Buttons
 	 * @param string $btn_data
 	 * @return array
 	 */
-	public static function Generate($btn_data)
+	public static function Generate(string $btn_data): array
 	{
 		$btn_markup = [];
 		$btn_datas = explode(',', $btn_data);
@@ -25,10 +25,15 @@ class Buttons
 		
 		return $btn_markup;
 	}
-
-	public static function loadFromJson($slug){
-	    $path = botData . 'button-json/' .$slug .'.json';
-	    $json = file_get_contents($path);
-	    return \GuzzleHttp\json_decode($json);
-    }
+	
+	/**
+	 * @param $slug
+	 * @return mixed
+	 */
+	public static function loadFromJson($slug): array
+	{
+		$path = botData . 'button-json/' . $slug . '.json';
+		$json = file_get_contents($path);
+		return \GuzzleHttp\json_decode($json);
+	}
 }

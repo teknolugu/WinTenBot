@@ -19,7 +19,8 @@ use src\Utils\Time;
 
 class ChatHandler
 {
-	protected $chat_id;
+	public $message;
+	protected $chatId;
 	public $chatTitle;
 	protected $from_id;
 	protected $date;
@@ -30,6 +31,9 @@ class ChatHandler
 	protected $timeInit;
 	protected $timeProc;
 	protected $message_link;
+	
+	public $messageTextWithCmd;
+	public $messageText;
 	
 	public $isPrivateChat = false;
 	public $isPrivateGroup = false;
@@ -43,13 +47,17 @@ class ChatHandler
 	 */
 	public function __construct(Message $param)
 	{
+		$this->message = $param;
 		$this->date = $param->getDate();
-		$this->chat_id = $param->getChat()->getId();
+		$this->chatId = $param->getChat()->getId();
 		$this->chatTitle = $param->getChat()->getTitle();
 		$this->from_id = $param->getFrom()->getId();
 		$this->timeInit = "\n\n⏱ " . Time::jedaNew($this->date);
 		$this->message_id = $param->getMessageId();
 		$this->message_link = str_replace('-100', '', $this->message_id);
+		
+		$this->messageText = $param->getText(true);
+		$this->messageTextWithCmd = $param->getText();
 		
 		if ($param->getReplyToMessage() != '') {
 			$this->reply_to_message_id = $param->getReplyToMessage()->getMessageId();
@@ -68,14 +76,14 @@ class ChatHandler
 	 * @return ServerResponse
 	 * @throws TelegramException
 	 */
-	final public function sendText($text, $messageId = null, $keyboard = null)
+	final public function sendText($text, $messageId = null, $keyboard = null): ServerResponse
 	{
 		$this->timeProc = Time::jedaNew($this->date);
 		if ($text != '') {
 			$text .= $this->timeInit . ' | ⌛ ' . $this->timeProc;
 		}
 		$data = [
-			'chat_id'                  => $this->chat_id,
+			'chat_id'                  => $this->chatId,
 			'text'                     => $text,
 			'parse_mode'               => 'HTML',
 			'disable_web_page_preview' => true,
@@ -97,7 +105,62 @@ class ChatHandler
 		return $this->responses;
 	}
 	
-	final public function sendPrivateText($text, $messageId = null, $keyboard = null)
+	/**
+	 * @param string $mediaId
+	 * @param string $mediaType
+	 * @param string $caption
+	 * @param int    $messageId
+	 * @param array  $keyboard
+	 * @return ServerResponse
+	 */
+	final public function sendMedia(string $mediaId,
+	                                string $mediaType,
+	                                string $caption = null,
+	                                int $messageId = -1,
+	                                array $keyboard = null): ServerResponse
+	{
+		$this->timeProc = Time::jedaNew($this->date);
+		
+		if ($caption != '') {
+			$caption .= $this->timeInit . ' | ⌛ ' . $this->timeProc;
+		}
+		$data = [
+			'chat_id'                  => $this->chatId,
+			'caption'                  => $caption,
+			$mediaType                 => $mediaId,
+			'parse_mode'               => 'HTML',
+			'disable_web_page_preview' => true,
+		];
+		if ($messageId != '') {
+			$data['reply_to_message_id'] = $messageId;
+		} else {
+			$data['reply_to_message_id'] = $this->message_id;
+		}
+		
+		if ($keyboard !== null) {
+			$data['reply_markup'] = new InlineKeyboard([
+				'inline_keyboard' => array_chunk($keyboard, 2),
+			]);
+		}
+		
+		$res = null;
+		switch ($mediaType) {
+			case 'document':
+				$res = Request::sendDocument($data);
+				break;
+		}
+		
+		return $res;
+	}
+	
+	/**
+	 * @param      $text
+	 * @param null $messageId
+	 * @param null $keyboard
+	 * @return ServerResponse
+	 * @throws TelegramException
+	 */
+	final public function sendPrivateText($text, $messageId = null, $keyboard = null): ServerResponse
 	{
 		$this->timeProc = Time::jedaNew($this->date);
 		if ($text != '') {
@@ -131,9 +194,8 @@ class ChatHandler
 	 * @param int  $messageId
 	 * @param null $keyboard
 	 * @return ServerResponse
-	 * @throws TelegramException
 	 */
-	final public function editText($text, $messageId = -1, $keyboard = null)
+	final public function editText($text, $messageId = -1, $keyboard = null): ServerResponse
 	{
 		$mssg_id = $this->responses->result->message_id;
 		$this->timeProc = Time::jedaNew($this->date);
@@ -141,7 +203,7 @@ class ChatHandler
 			$text .= $this->timeInit . ' | ⌛ ' . $this->timeProc;
 		}
 		$data = [
-			'chat_id'                  => $this->chat_id,
+			'chat_id'                  => $this->chatId,
 			'text'                     => $text,
 			'message_id'               => $mssg_id,
 			'parse_mode'               => 'HTML',
@@ -162,19 +224,56 @@ class ChatHandler
 	}
 	
 	/**
+	 * @param      $media_id
+	 * @param null $caption
+	 * @param int  $messageId
+	 * @param      $keyboard
+	 * @return ServerResponse
+	 */
+	final public function editMedia($media_id, $caption = null, $messageId = -1, $keyboard): ServerResponse
+	{
+		$mssg_id = $this->getSendedMessageId();
+		
+		$this->timeProc = Time::jedaNew($this->date);
+		
+		if ($caption != '') {
+			$caption .= $this->timeInit . ' | ⌛ ' . $this->timeProc;
+		}
+		$data = [
+			'chat_id'                  => $this->chatId,
+			'text'                     => $caption,
+			'message_id'               => $mssg_id,
+			'parse_mode'               => 'HTML',
+			'disable_web_page_preview' => true,
+		];
+		if ($messageId != '') {
+			$data['reply_to_message_id'] = $messageId;
+		} else {
+			$data['reply_to_message_id'] = $this->message_id;
+		}
+		
+		if ($keyboard !== null) {
+			$data['reply_markup'] = new InlineKeyboard([
+				'inline_keyboard' => array_chunk($keyboard, 2),
+			]);
+		}
+		return Request::editMessageMedia($data);
+	}
+	
+	/**
 	 * @param      $text
 	 * @param int  $messageId
 	 * @param null $keyboard
 	 * @return ServerResponse
 	 */
-	final public function editMessageCallback($text, $messageId = -1, $keyboard = null)
+	final public function editMessageCallback($text, $messageId = -1, $keyboard = null): ServerResponse
 	{
 		$this->timeProc = Time::jedaNew($this->date);
 //	    if ($text != '') {
 //		    $text .= $this->timeInit . ' | ⌛ ' . $this->timeProc;
 //	    }
 		$data = [
-			'chat_id'                  => $this->chat_id,
+			'chat_id'                  => $this->chatId,
 			'text'                     => trim($text),
 			'message_id'               => $this->callBackMessageId,
 			'parse_mode'               => 'HTML',
@@ -198,7 +297,7 @@ class ChatHandler
 	 * @param $text
 	 * @return ServerResponse
 	 */
-	final public function answerCallbackQuery($text)
+	final public function answerCallbackQuery($text): ServerResponse
 	{
 		$data = [
 			'callback_query_id' => $this->callBackQueryId,
@@ -214,10 +313,10 @@ class ChatHandler
 	 * @param bool $unban
 	 * @return ServerResponse
 	 */
-	final public function kickMember($user_id, $unban = false)
+	final public function kickMember($user_id, $unban = false): ServerResponse
 	{
 		$kick_data = [
-			'chat_id' => $this->chat_id,
+			'chat_id' => $this->chatId,
 			'user_id' => $user_id,
 		];
 		
@@ -235,7 +334,7 @@ class ChatHandler
 	 * @param string $time
 	 * @return ServerResponse
 	 */
-	final public function restrictMember($user_id, $time = '-1')
+	final public function restrictMember($user_id, $time = '-1'): ServerResponse
 	{
 		if ($time != '-1') {
 			$waktu = explode(':', $time);
@@ -245,7 +344,7 @@ class ChatHandler
 		}
 		
 		$mute = [
-			'chat_id'                   => $this->chat_id,
+			'chat_id'                   => $this->chatId,
 			'user_id'                   => $user_id,
 			'until_date'                => $until,
 			'can_send_messages'         => false,
@@ -257,10 +356,14 @@ class ChatHandler
 		return Request::restrictChatMember($mute);
 	}
 	
-	final public function unrestrictMember($user_id)
+	/**
+	 * @param $user_id
+	 * @return ServerResponse
+	 */
+	final public function unrestrictMember($user_id): ServerResponse
 	{
 		$unmute = [
-			'chat_id'                   => $this->chat_id,
+			'chat_id'                   => $this->chatId,
 			'user_id'                   => $user_id,
 			'until_date'                => strtotime(date('Y-m-d H:i:s')),
 			'can_send_messages'         => true,
@@ -272,19 +375,28 @@ class ChatHandler
 		return Request::restrictChatMember($unmute);
 	}
 	
-	final public function deleteMessage($id = null, $delay = 0)
+	/**
+	 * @param null $id
+	 * @param int  $delay
+	 * @return ServerResponse
+	 */
+	final public function deleteMessage($id = null, $delay = 0): ServerResponse
 	{
 		sleep($delay);
 		return Request::deleteMessage([
-			'chat_id'    => $this->chat_id,
+			'chat_id'    => $this->chatId,
 			'message_id' => $id ?? $this->message_id,
 		]);
 	}
 	
-	final public function leaveChat($chatId = null)
+	/**
+	 * @param null $chatId
+	 * @return ServerResponse
+	 */
+	final public function leaveChat($chatId = null): ServerResponse
 	{
 		return Request::leaveChat([
-			'chat_id' => $chatId ?? $this->chat_id,
+			'chat_id' => $chatId ?? $this->chatId,
 		]);
 	}
 	
@@ -294,9 +406,9 @@ class ChatHandler
 	 * @return ServerResponse
 	 * @throws TelegramException
 	 */
-	final public function logToChannel($text, $keyboard = null)
+	final public function logToChannel($text, $keyboard = null): ServerResponse
 	{
-		$log = "<b>Chat ID: </b>{$this->chat_id}" .
+		$log = "<b>Chat ID: </b>{$this->chatId}" .
 			"\n<b>Chat Title: </b>{$this->chatTitle}" .
 			"\n<b>From ID:</b> {$this->from_id}" .
 			"\n$text";
@@ -306,7 +418,7 @@ class ChatHandler
 	/**
 	 * @return int
 	 */
-	final public function getFromId()
+	final public function getFromId(): int
 	{
 		return $this->from_id;
 	}
@@ -314,27 +426,36 @@ class ChatHandler
 	/**
 	 * @return int
 	 */
-	final public function getChatId()
+	final public function getChatId(): int
 	{
-		return $this->chat_id;
+		return $this->chatId;
 	}
 	
-	final public function getChatTitle()
+	/**
+	 * @return string
+	 */
+	final public function getChatTitle(): string
 	{
 		return $this->chatTitle;
 	}
 	
-	final public function getSendedMessageId()
+	/**
+	 * @return mixed
+	 */
+	final public function getSendedMessageId(): int
 	{
 		return $this->responses->result->message_id;
 	}
 	
-	final public function getMessageLink()
+	/**
+	 * @return string
+	 */
+	final public function getMessageLink(): string
 	{
 		if ($this->isPrivateGroup) {
 			$message_link = 'https://t.me/c/' . $this->message_link . '/' . $this->message_id;
 		} else {
-			$message_link = 'https://t.me/' . $this->chat_id . '/' . $this->message_id;
+			$message_link = 'https://t.me/' . $this->chatId . '/' . $this->message_id;
 		}
 		return $message_link;
 	}
@@ -343,11 +464,11 @@ class ChatHandler
 	 * @param null $user_id
 	 * @return bool
 	 */
-	final public function isAdmin($user_id = null)
+	final public function isAdmin($user_id = null): bool
 	{
 		$isAdmin = false;
 		$res = Request::getChatMember([
-			'chat_id' => $this->chat_id,
+			'chat_id' => $this->chatId,
 			'user_id' => $user_id ?? $this->from_id,
 		]);
 		
@@ -361,7 +482,11 @@ class ChatHandler
 		return $isAdmin;
 	}
 	
-	final public function isSudoer($from_id = null)
+	/**
+	 * @param null $from_id
+	 * @return bool
+	 */
+	final public function isSudoer($from_id = null): bool
 	{
 		$user_id = $from_id ?? $this->from_id;
 		return Group::isSudoer($user_id);
