@@ -382,7 +382,7 @@ class GenericmessageCommand extends SystemCommand
 		
 		if ($from_username == '') {
 			$group_data = Settings::getNew(['chat_id' => $chat_id]);
-			if ($group_data[0]['enable_warn_username'] == 1) {
+			if ($group_data[0]['enable_warn_username'] == 1 && !in_array($from_id, WARN_USERNAME_WHITELISTS)) {
 				$limit = $group_data[0]['warning_username_limit'];
 				$chat = 'Hey, Kamu di Mute sebentar 5 menit, Segera <b>Pasang username</b> ya.' .
 					"\nJika sudah pasang Username, klik tombol <b>Sudah pasang</b> agar segera di UnMute.";
