@@ -39,6 +39,8 @@ class StartCommand extends SystemCommand
 		$mssg_id = $message->getMessageId();
 		
 		$urlBoot = Bot::getUrlStart();
+		$bot_name = Bot::getBotName();
+		$bot_username = Bot::getBotUsername();
 		
 		
 		$text = "🤖 <b>WinTen Bot</b> <code>" . versi . "</code> \nby " . federation_name . '.' .
@@ -82,23 +84,23 @@ class StartCommand extends SystemCommand
 				break;
 			
 			case 'opensource':
-				$text = bot_name . ' adalah Open Source';
+				$text = $bot_name . ' adalah Open Source';
 				break;
 			
 			case 'help':
-				$tekt = '<b>' . bot_name . '</b> <code>' . versi . '</code>' .
+				$tekt = '<b>' . $bot_name . '</b> <code>' . versi . '</code>' .
 					"\nby " . federation_name . "\n\n" .
 					Bot::loadInbotDocs('home');
 				return $chatHandler->sendPrivateText($tekt, '-1', BTN_HELP_HOME);
 				break;
 			
 			case '1':
-				$text = 'Selamat datang di @' . bot_username;
+				$text = 'Selamat datang di @' . $bot_username;
 				break;
 		}
 		
 		if (isBeta) {
-			$text = str_replace('WinTen Bot', bot_name, $text);
+			$text = str_replace('WinTen Bot', $bot_name, $text);
 		}
 		
 		$btn_start = [

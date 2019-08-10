@@ -46,7 +46,8 @@ class HelpCommand extends UserCommand
 	{
 		$message = $this->getMessage();
 		$chatHandler = new ChatHandler($message);
-//		$bot_username = $GLOBALS['bot_username'];
+		
+		$bot_name = $GLOBALS['bot_name'];
 		$urlBoot = Bot::getUrlStart();
 		
 		if (!$chatHandler->isPrivateChat) {
@@ -55,7 +56,7 @@ class HelpCommand extends UserCommand
 				['text' => 'Dapatkan bantuan..', 'url' => $urlBoot . 'help'],
 			]);
 		} else {
-			$tekt = '<b>' . bot_name . '</b> <code>' . versi . "</code>" .
+			$tekt = '<b>' . $bot_name . '</b> <code>' . versi . "</code>" .
 				"\nby " . federation_name .
 				"\n\nAdalah bot debugging, manajemen grup yang di lengkapi dengan alat keamanan. " .
 				"Agar fungsi saya bekerja dengan fitur penuh, jadikan saya admin dengan level standard. "  .

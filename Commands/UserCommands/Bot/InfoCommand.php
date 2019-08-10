@@ -9,11 +9,10 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use Longman\TelegramBot\Request;
-use src\Utils\Time;
+use src\Handlers\ChatHandler;
+use src\Model\Bot;
 
 class InfoCommand extends UserCommand
 {
@@ -31,38 +30,29 @@ class InfoCommand extends UserCommand
 	public function execute()
 	{
 		$message = $this->getMessage();
-		$chat_id = $message->getChat()->getId();
-		
-		$time = $message->getDate();
-		$time1 = Time::jedaNew($time);
+		$chatHandler = new ChatHandler($message);
 		
 		$text = '🤖 <b>WinTen Beta Bot</b> <code>' . versi . "</code>\n" . descBot;
+		$bot_name = Bot::getBotName();
 		
 		if (isBeta) {
 			$text .= descBeta;
 		}
 		
-		$inline_keyboard = new InlineKeyboard([
+		$text .= "\n\nFor more fast and keep fast Bot and still continue improvement and reability, please <b>Donate</b> below for buy VPS and give me coffe.";
+		
+		$text = str_replace("WinTen Beta Bot", $bot_name, $text);
+		
+		$keyboard = [
 			['text' => '👥 WinTen Group', 'url' => 'https://t.me/WinTenGroup'],
-			['text' => '❤ by WinTenDev', 'url' => 'https://t.me/WinTenChannel'],
-		], [
+			['text' => '❤ by WinTenDev', 'url' => 'https://t.me/WinTenDev'],
 			['text' => '👥 Redmi 5A (Riva) ID', 'url' => 'https://t.me/Redmi5AID'],
 			['text' => '👥 Telegram Bot API', 'url' => 'https://t.me/TgBotID'],
-		], [
 			['text' => '💽 Source code', 'url' => 'https://github.com/WinTenDev/WinTenBot'],
 			['text' => '🏗 Akmal Projext', 'url' => 'https://t.me/AkmalProjext'],
-		]);
-		
-		$time2 = Time::jedaNew($time);
-		$time = "\n\n ⏱ " . $time1 . ' | ⏳ ' . $time2;
-		
-		$data = [
-			'chat_id'      => $chat_id,
-			'text'         => $text . $time,
-			'reply_markup' => $inline_keyboard,
-			'parse_mode'   => 'HTML'
+			['text' => '💰 Donate', 'url' => 'http://paypal.me/Azhe403'],
 		];
 		
-		return Request::sendMessage($data);
+		return $chatHandler->sendText($text, '-1', $keyboard);
 	}
 }

@@ -39,8 +39,10 @@ class Bot
 	{
 		$path = botData . 'inbot-docs/' . $slug . '.html';
 		$docs = trim(file_get_contents($path));
+		
+		$bot_username = $GLOBALS['bot_username'];
 		if (isBeta) {
-			str_replace('WinTenBot', bot_username, $docs);
+			str_replace('WinTenBot', $bot_username, $docs);
 		}
 		return $docs;
 	}
@@ -52,6 +54,19 @@ class Bot
 	{
 		$bot_username = $GLOBALS['bot_username'];
 		return "https://t.me/$bot_username?start=";
+	}
+	
+	/**
+	 * @return string
+	 */
+	public static function getBotName(): string
+	{
+		return $GLOBALS['bot_name'];
+	}
+	
+	public static function getBotUsername(): string
+	{
+		return $GLOBALS['bot_username'];
 	}
 	
 }
