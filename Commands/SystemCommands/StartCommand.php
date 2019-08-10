@@ -38,6 +38,9 @@ class StartCommand extends SystemCommand
 		$chat_id = $message->getChat()->getId();
 		$mssg_id = $message->getMessageId();
 		
+		$urlBoot = Bot::getUrlStart();
+		
+		
 		$text = "🤖 <b>WinTen Bot</b> <code>" . versi . "</code> \nby " . federation_name . '.' .
 			"\nAdalah bot debugging, manajemen grup yang di lengkapi dengan alat keamanan. " .
 			'Agar fungsi saya bekerja dengan fitur penuh, jadikan saya admin dengan level standard. ' .
@@ -99,7 +102,7 @@ class StartCommand extends SystemCommand
 		}
 		
 		$btn_start = [
-			['text' => 'Bantuan', 'url' => urlStart . 'help'],
+			['text' => 'Bantuan', 'url' => $urlBoot . 'help'],
 		];
 		
 		return $chatHandler->sendText($text, null, $btn_start);

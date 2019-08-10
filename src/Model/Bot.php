@@ -45,4 +45,13 @@ class Bot
 		return $docs;
 	}
 	
+	/**
+	 * @return string
+	 */
+	public static function getUrlStart(): string
+	{
+		$bot_username = $GLOBALS['bot_username'];
+		return "https://t.me/$bot_username?start=";
+	}
+	
 }
