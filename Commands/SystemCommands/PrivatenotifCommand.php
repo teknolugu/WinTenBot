@@ -10,7 +10,7 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Utils\Time;
+use WinTenDev\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;

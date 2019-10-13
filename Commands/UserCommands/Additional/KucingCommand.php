@@ -13,7 +13,7 @@ use Longman\TelegramBot\Entities\InputMedia\InputMediaPhoto;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
-use src\Utils\Time;
+use WinTenDev\Utils\Time;
 
 class KucingCommand extends UserCommand
 {

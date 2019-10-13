@@ -11,11 +11,10 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Exception;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Model\Bot;
-use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
+use WinTenDev\Utils\Time;
 
 class TermsCommand extends UserCommand
 {

@@ -12,8 +12,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\MessageHandlers;
-use src\Model\Pemilu;
+use WinTenDev\Handlers\ChatHandler;
 
 class RibutCommand extends UserCommand
 {
@@ -34,7 +33,7 @@ class RibutCommand extends UserCommand
 	public function execute()
 	{
 		$message = $this->getMessage();
-		$mHandler = new MessageHandlers($message);
+		$mHandler = new ChatHandler($message);
 
 //		$pecah = explode(' ', $message->getText(true));
 //		$repMssg = $message->getReplyToMessage();

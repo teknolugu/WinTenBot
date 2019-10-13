@@ -14,18 +14,21 @@ use GuzzleHttp\Exception\GuzzleException;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
+use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
-use src\Handlers\ChatHandler;
-use src\Handlers\MessageHandlers;
-use src\Model\Fbans;
-use src\Model\Group;
-use src\Model\MalFiles;
-use src\Model\Settings;
-use src\Model\Tags;
-use src\Model\UrlLists;
-use src\Model\Wordlists;
-use src\Utils\Words;
+use Longman\TelegramBot\Telegram;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Bot;
+use WinTenDev\Model\Fbans;
+use WinTenDev\Model\Group;
+use WinTenDev\Model\MalFiles;
+use WinTenDev\Model\Settings;
+use WinTenDev\Model\Tags;
+use WinTenDev\Model\UrlLists;
+use WinTenDev\Model\Wordlists;
+use WinTenDev\Utils\Words;
+use WinTenDev\Validators\MessageValidator;
 
 /**
  * Generic message command
@@ -35,6 +38,13 @@ class GenericmessageCommand extends SystemCommand
 	protected $name = 'genericmessage';
 	protected $description = 'Handle generic message';
 	protected $version = '1.0.0';
+	protected $chatHandler;
+
+//	public function __construct(Telegram $telegram, Update $update = null)
+//	{
+//		parent::__construct($telegram, $update);
+//		$this->chatHandler = new ChatHandler($this->getMessage());
+//	}
 	
 	/**
 	 * Execute command
@@ -47,7 +57,6 @@ class GenericmessageCommand extends SystemCommand
 	{
 		$pesan = $this->getMessage()->getText();
 		$message = $this->getMessage();
-		$mHandler = new MessageHandlers($message);
 		$chatHandler = new ChatHandler($message);
 		$from_id = $message->getFrom()->getId();
 		$from_first_name = $message->getFrom()->getFirstName();
@@ -61,6 +70,12 @@ class GenericmessageCommand extends SystemCommand
 		
 		$kata = strtolower($pesan);
 		$pesanCmd = explode(' ', strtolower($pesan))[0];
+		
+		$msgValidator = new MessageValidator($message);
+		
+		if ($message->getNewChatMembers()) {
+			return $this->telegram->executeCommand('newchatmembers');
+		}
 		
 		// Scan BadMessage
 		$isBad = $this->checkBadMessage();
@@ -84,6 +99,12 @@ class GenericmessageCommand extends SystemCommand
 		if ($isNoUsername) {
 			return $isNoUsername;
 		}
+
+//		$isForwarded = $this->checkForwardedMessage();
+		$msgValidator->checkForwardedMessage();
+//		if ($isForwarded) {
+//			return $isForwarded;
+//		}
 		
 		// Command Aliases
 		switch ($pesanCmd) {
@@ -117,7 +138,9 @@ class GenericmessageCommand extends SystemCommand
 				break;
 		}
 		
-		$mHandler->sendText($chat, null);
+		if (isset($chat)) {
+			$chatHandler->sendText($chat, '-1');
+		}
 		
 		if ($repMsg !== null) {
 			if ($message->getChat()->getType() != 'private') {
@@ -178,100 +201,11 @@ class GenericmessageCommand extends SystemCommand
 				return Request::sendMessage($data);
 			}
 		}
-		
-		$pinned_message = $message->getPinnedMessage()->getMessageId();
-		if (isset($pinned_message)) {
-			return $this->telegram->executeCommand('pinnedmessage');
-		}
-	}
-	
-	private function parseTags()
-	{
-		$message = $this->getMessage();
-		$chatid = $message->getChat()->getId();
-		$mssg_id = $message->getMessageId();
-		$chatHandler = new ChatHandler($message);
-		$repMssg = $message->getReplyToMessage();
-		$pecah = Words::multiexplode([' ', "\n"], $message->getText());
-		$limit = 1;
-		foreach ($pecah as $pecahan) {
-			if (($limit <= 3) && Words::isContain($pecahan, '#')) {
-				$pecahan = ltrim($pecahan, '#');
-				$hashtag = Words::isContain($pecahan, '#');
-				if (!$hashtag && strlen($pecahan) >= 3) {
-					$tag = Tags::getTag([
-						'id_chat' => $chatid,
-						'tag'     => $pecahan,
-					]);
-					
-					if ($repMssg != null) {
-						$mssg_id = $repMssg->getMessageId();
-					}
-					
-					$id_data = $tag[0]['id_data'];
-					$tipe_data = $tag[0]['type_data'];
-					$btn_data = $tag[0]['btn_data']; // teks1|link1.com, teks2|link2.com
-					
-					$text = '#️⃣<code>#' . $tag[0]['tag'] . '</code>' .
-						"\n" . $tag[0]['content'];
-					
-					$btns = [];
-					if ($btn_data != null) {
-//							if ($pecah[1] != '-r') {
-						$abtn_data = explode(',', $btn_data); // teks1|link1.com teks2|link2.com
-						foreach ($abtn_data as $btn) {
-							$abtn = explode('|', trim($btn));
-							$btns[] = [
-								'text' => trim($abtn[0]),
-								'url'  => trim($abtn[1]),
-							];
-						}
-//
-//							} else {
-//								$text .= "\n" . $btn_data;
-//							}
-					}
-					
-					if ($tipe_data == 'text') {
-						$data['text'] = $text;
-						$r = $chatHandler->sendText($text, $mssg_id, $btns);
-					} else {
-						$data = [
-							'chat_id'                  => $chatid,
-							'parse_mode'               => 'HTML',
-							'reply_to_message_id'      => $mssg_id,
-							'disable_web_page_preview' => true,
-							$tipe_data                 => $id_data,
-							'caption'                  => $text,
-						];
-						
-						switch ($tipe_data) {
-							case 'document':
-								$r = Request::sendDocument($data);
-								break;
-							case 'video':
-								$r = Request::sendVideo($data);
-								break;
-							case 'voice':
-								$r = Request::sendVoice($data);
-								break;
-							case 'photo':
-								$r = Request::sendPhoto($data);
-								break;
-							case 'sticker':
-								$r = Request::sendSticker($data);
-								break;
-						}
-					}
-					$limit++;
-				}
-			}
-//			else{
-//				$chatHandler->sendText("Due performance reason, we limit 3 batch call tags");
-//				break;
-//			}
-		}
-		return $r;
+
+//		$pinned_message = $message->getPinnedMessage()->getMessageId();
+//		if (isset($pinned_message)) {
+//			return $this->telegram->executeCommand('pinnedmessage');
+//		}
 	}
 	
 	/**
@@ -369,6 +303,10 @@ class GenericmessageCommand extends SystemCommand
 		return $isRestricted;
 	}
 	
+	/**
+	 * @return bool|ServerResponse
+	 * @throws TelegramException
+	 */
 	private function checkUsername()
 	{
 		$isNoUsername = false;
@@ -377,6 +315,7 @@ class GenericmessageCommand extends SystemCommand
 		$from_username = $message->getFrom()->getUsername();
 		$from_id = $message->getFrom()->getId();
 		$chat_id = $message->getChat()->getId();
+		$urlStart = Bot::getUrlStart();
 		
 		if ($from_username == '') {
 			$group_data = Settings::getNew(['chat_id' => $chat_id]);
@@ -385,7 +324,7 @@ class GenericmessageCommand extends SystemCommand
 				$chat = 'Hey, Kamu di Mute sebentar 5 menit, Segera <b>Pasang username</b> ya.' .
 					"\nJika sudah pasang Username, klik tombol <b>Sudah pasang</b> agar segera di UnMute.";
 				$btn_markup = [
-					['text' => 'Pasang Username', 'url' => urlStart . 'username'],
+					['text' => 'Pasang Username', 'url' => $urlStart . 'username'],
 					['text' => 'Sudah pasang', 'callback_data' => 'check_' . $from_id],
 				];
 				$chatHandler->restrictMember($from_id, '0:0:5');
@@ -403,6 +342,116 @@ class GenericmessageCommand extends SystemCommand
 			$isNoUsername = true;
 		}
 		return $isNoUsername;
+	}
+	
+	private function parseTags()
+	{
+		$message = $this->getMessage();
+		$chatid = $message->getChat()->getId();
+		$mssg_id = $message->getMessageId();
+		$chatHandler = new ChatHandler($message);
+		$repMssg = $message->getReplyToMessage();
+		$pecah = Words::multiexplode([' ', "\n"], $message->getText());
+		$limit = 1;
+		foreach ($pecah as $pecahan) {
+			if (($limit <= 3) && Words::isContain($pecahan, '#')) {
+				$pecahan = ltrim($pecahan, '#');
+				$hashtag = Words::isContain($pecahan, '#');
+				if (!$hashtag && strlen($pecahan) >= 3) {
+					$tag = Tags::getTag([
+						'id_chat' => $chatid,
+						'tag'     => $pecahan,
+					]);
+					
+					if ($repMssg != null) {
+						$mssg_id = $repMssg->getMessageId();
+					}
+					
+					$id_data = $tag[0]['id_data'];
+					$tipe_data = $tag[0]['type_data'];
+					$btn_data = $tag[0]['btn_data']; // teks1|link1.com, teks2|link2.com
+					
+					$text = '#️⃣<code>#' . $tag[0]['tag'] . '</code>' .
+						"\n" . $tag[0]['content'];
+					
+					$btns = [];
+					if ($btn_data != null) {
+//							if ($pecah[1] != '-r') {
+						$abtn_data = explode(',', $btn_data); // teks1|link1.com teks2|link2.com
+						foreach ($abtn_data as $btn) {
+							$abtn = explode('|', trim($btn));
+							$btns[] = [
+								'text' => trim($abtn[0]),
+								'url'  => trim($abtn[1]),
+							];
+						}
+//
+//							} else {
+//								$text .= "\n" . $btn_data;
+//							}
+					}
+					
+					if ($tipe_data == 'text') {
+						$data['text'] = $text;
+						$r = $chatHandler->sendText($text, $mssg_id, $btns);
+					} else {
+						$data = [
+							'chat_id'                  => $chatid,
+							'parse_mode'               => 'HTML',
+							'reply_to_message_id'      => $mssg_id,
+							'disable_web_page_preview' => true,
+							$tipe_data                 => $id_data,
+							'caption'                  => $text,
+						];
+						
+						switch ($tipe_data) {
+							case 'document':
+								$r = Request::sendDocument($data);
+								break;
+							case 'video':
+								$r = Request::sendVideo($data);
+								break;
+							case 'voice':
+								$r = Request::sendVoice($data);
+								break;
+							case 'photo':
+								$r = Request::sendPhoto($data);
+								break;
+							case 'sticker':
+								$r = Request::sendSticker($data);
+								break;
+						}
+					}
+					$limit++;
+				}
+			}
+//			else{
+//				$chatHandler->sendText("Due performance reason, we limit 3 batch call tags");
+//				break;
+//			}
+		}
+		return $r;
+	}
+	
+	/**
+	 * @return ServerResponse
+	 * @throws TelegramException
+	 */
+	private function checkForwardedMessage()
+	{
+		$message = $this->getMessage();
+		$res = null;
+//		$msgValidator = new MessageValidator($message);
+//		$res = $msgValidator->checkForwardedMessage();
+
+//		$forwarded = $message->getForwardFrom();
+		if ($message->getForwardFromMessageId() != "") {
+//			$forwd_chat_id = $message->getForwardFromChat()->getId();
+			$text = "Forwarded from forwd_chat_id";
+			$res = $this->chatHandler->sendText($text);
+		}
+		
+		return $res;
 	}
 }
 

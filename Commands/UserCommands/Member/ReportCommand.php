@@ -13,9 +13,9 @@ use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
-use src\Handlers\MessageHandlers;
-use src\Model\Group;
-use src\Utils\Time;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Group;
+use WinTenDev\Utils\Time;
 
 class ReportCommand extends UserCommand
 {
@@ -33,7 +33,7 @@ class ReportCommand extends UserCommand
     public function execute()
     {
         $message = $this->getMessage();
-        $mHandler = new MessageHandlers($message);
+        $mHandler = new ChatHandler($message);
         $chat_id = $message->getChat()->getId();
         $chat_user = $message->getChat()->getUsername();
         $mssg_id = $message->getMessageId();

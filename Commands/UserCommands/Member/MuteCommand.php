@@ -12,15 +12,15 @@ use ErrorException;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\ChatHandler;
-use src\Model\Group;
-use src\Model\Translator;
-use src\Utils\Converters;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Group;
+use WinTenDev\Model\Translator;
+use WinTenDev\Utils\Converters;
 
 class MuteCommand extends UserCommand
 {
 	protected $name = 'mute';
-	protected $description = 'Reply to ban member';
+	protected $description = 'Reply to mute member';
 	protected $usage = '<mute>';
 	protected $version = '1.0.0';
 	

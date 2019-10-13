@@ -1,19 +1,13 @@
 <?php
 
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Model\Logs;
-use src\Utils\Arrays;
-use src\Utils\Inputs;
+use Longman\TelegramBot\Telegram;
+use WinTenDev\Utils\Arrays;
+use WinTenDev\Utils\Inputs;
 
-//require_once __DIR__ . '/src/autoload.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
-// load all under folder src
-foreach (glob('src/*/*.php') as $files) {
-	include_once $files;
-}
-
-$bots = include "./Resources/Config/bots.php";
+$bots = include __DIR__ . "/Resources/Config/bots.php";
 $input = Inputs::get("id");
 
 foreach (glob('Resources/*/*.php') as $files) {
@@ -56,7 +50,7 @@ if (count($filtered) == 1) {
 //	$commands_paths = include __DIR__ .'/Resources/Config/path-commands.php';
 	
 	try {
-		$telegram = new Longman\TelegramBot\Telegram($bot_token, $bot_username);
+		$telegram = new Telegram($bot_token, $bot_username);
 		
 		// Set custom Upload and Download paths
 		$telegram->setDownloadPath(__DIR__ . '/Data/Download');
@@ -71,12 +65,11 @@ if (count($filtered) == 1) {
 		// Enable Limiter
 		$telegram->enableLimiter();
 		
-		echo "<br>Bot is running";
 	} catch (TelegramException $e) {
 		echo "<br>Error: " . $e->getMessage();
 		echo "<br>Stacktrace: " . $e->getTraceAsString();
 	}
-//	echo "<br>Everything OK!";
+
 } else {
 	echo "<br>Something went wrong";
 }

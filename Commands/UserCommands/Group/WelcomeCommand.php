@@ -11,11 +11,11 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\ChatHandler;
-use src\Model\Group;
-use src\Model\Settings;
-use src\Utils\Buttons;
-use src\Utils\Words;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Group;
+use WinTenDev\Model\Settings;
+use WinTenDev\Utils\Buttons;
+use WinTenDev\Utils\Words;
 
 class WelcomeCommand extends UserCommand
 {

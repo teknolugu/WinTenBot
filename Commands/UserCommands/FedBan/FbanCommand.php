@@ -12,9 +12,9 @@ use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
-use src\Handlers\ChatHandler;
-use src\Model\Fbans;
-use src\Model\Group;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Fbans;
+use WinTenDev\Model\Group;
 
 class FbanCommand extends UserCommand
 {
@@ -36,7 +36,8 @@ class FbanCommand extends UserCommand
 		$federation_name = federation_name;
 		$not_registered = $text = '⚠ Kamu belum teregistrasi ke ' . federation_name .
 			"\nKamu dapat register dengan <code>/fbanreg</code>" .
-			"\n\n<b>Peringatan: </b> Laporan palsu mungkin dapat membuat Anda tidak dapat menjadi Admin FBan atau Grub Anda akan di batasi selamanya!";
+			"\n\n<b>Peringatan: </b> Laporan palsu mungkin dapat membuat Anda tidak dapat menjadi Admin FBan " .
+			"atau Grub Anda akan di batasi selamanya!";
 		
 		$repMssg = $message->getReplyToMessage();
 		$data = explode(' ', $message->getText(true));
@@ -57,7 +58,8 @@ class FbanCommand extends UserCommand
 					$text = "ℹ $federation_name" .
 						"\n<code>/fban reason_ban</code> - Reply pesan" .
 						"\n<code>/fban user_id reason_ban</code>" .
-						"\n\n<b>Peringatan: </b> Laporan palsu mungkin dapat membuat Anda tidak dapat menjadi Admin FBan atau Grub Anda akan di batasi selamanya!";
+						"\n\n<b>Peringatan: </b> Laporan palsu mungkin dapat membuat Anda tidak dapat menjadi " .
+						"Admin FBan atau Grub Anda akan di batasi selamanya!";
 					return $chatHandler->editText($text);
 				}
 				$text = $federation_name . "\n";

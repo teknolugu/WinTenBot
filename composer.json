@@ -1,17 +1,21 @@
 {
-  "name": "winten/bot",
+  "name": "wintendev/wintenbot",
   "license": "MIT",
   "version": "1.0.0",
-  "type": "project",
   "require": {
-	"roave/security-advisories": "dev-master",
 	"php": ">=7",
-	"longman/telegram-bot": "^0.59",
-	"ammarfaizi2/googletranslate": "^0.0.1",
+	"longman/telegram-bot": "^0.60",
 	"stichoza/google-translate-php": "^4.0.2",
-	"catfan/medoo": "^1.7.2",
+	"catfan/medoo": "^1.7.3",
 	"sastrawi/sastrawi": "^1.2",
-	"tediscript/perangkum": "dev-master",
-	"cosenary/simple-php-cache": "dev-master"
+	"tediscript/perangkum": "dev-master"
+  },
+  "require-dev": {
+	"roave/security-advisories": "dev-master"
+  },
+  "autoload": {
+	"psr-4": {
+	  "WinTenDev\\": "src/WinTenDev"
+	}
   }
 }

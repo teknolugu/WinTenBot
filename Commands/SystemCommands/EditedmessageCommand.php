@@ -14,12 +14,12 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
-use src\Handlers\ChatHandler;
-use src\Model\MalFiles;
-use src\Model\Tags;
-use src\Model\UrlLists;
-use src\Model\Wordlists;
-use src\Utils\Words;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\MalFiles;
+use WinTenDev\Model\Tags;
+use WinTenDev\Model\UrlLists;
+use WinTenDev\Model\Wordlists;
+use WinTenDev\Utils\Words;
 
 /**
  * Edited message command

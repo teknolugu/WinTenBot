@@ -10,10 +10,10 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\ChatHandler;
-use src\Model\Group;
-use src\Model\Translator;
-use src\Utils\Converters;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Group;
+use WinTenDev\Model\Translator;
+use WinTenDev\Utils\Converters;
 
 class KickCommand extends UserCommand
 {
@@ -32,7 +32,6 @@ class KickCommand extends UserCommand
 	{
 		$message = $this->getMessage();
 		$cHandler = new ChatHandler($message);
-//		$mHandler = new MessageHandlers($message);
 		$chat_id = $message->getChat()->getId();
 		$from_id = $message->getFrom()->getId();
 		$repMssg = $message->getReplyToMessage();

@@ -9,11 +9,12 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\ChatHandler;
-use src\Model\Group;
-use src\Model\Translator;
-use src\Utils\Converters;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Group;
+use WinTenDev\Model\Translator;
+use WinTenDev\Utils\Converters;
 
 class BanCommand extends UserCommand
 {
@@ -25,14 +26,14 @@ class BanCommand extends UserCommand
 	/**
 	 * Execute command
 	 *
-	 * @return void
+	 * @return ServerResponse
 	 * @throws TelegramException
+	 * @throws \ErrorException
 	 */
 	public function execute()
 	{
 		$message = $this->getMessage();
 		$chatHandler = new ChatHandler($message);
-//		$mHandler = new MessageHandlers($message);
 		$chat_id = $message->getChat()->getId();
 		$from_id = $message->getFrom()->getId();
 		$repMssg = $message->getReplyToMessage();
@@ -61,6 +62,6 @@ class BanCommand extends UserCommand
 			$text = '🚫 <i>Kamu tidak memiliki akses /kick</i>';
 		}
 		
-		$chatHandler->editText($text);
+		return $chatHandler->editText($text);
 	}
 }

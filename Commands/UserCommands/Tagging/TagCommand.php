@@ -11,10 +11,10 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\ChatHandler;
-use src\Model\Group;
-use src\Model\Tags;
-use src\Utils\Entities;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Group;
+use WinTenDev\Model\Tags;
+use WinTenDev\Utils\Entities;
 
 class TagCommand extends UserCommand
 {

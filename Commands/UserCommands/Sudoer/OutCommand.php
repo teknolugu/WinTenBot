@@ -9,10 +9,10 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Model\Group;
-use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
+use WinTenDev\Model\Group;
+use WinTenDev\Utils\Time;
 
 class OutCommand extends UserCommand
 {

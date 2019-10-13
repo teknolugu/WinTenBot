@@ -11,7 +11,8 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\MessageHandlers;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Utils\Console;
 
 class DbgCommand extends UserCommand
 {
@@ -29,7 +30,7 @@ class DbgCommand extends UserCommand
 	public function execute()
 	{
 		$message = $this->getMessage();
-		$mHandler = new MessageHandlers($message);
+		$mHandler = new ChatHandler($message);
 		$repMssg = $message->getReplyToMessage();
 		$pecah = explode(' ', $message->getText(true));
 		
@@ -48,7 +49,7 @@ class DbgCommand extends UserCommand
 		}
 		
 		$text = "<b>Debug messages</b>\n" . '<code>' . $json . '</code>';
-		
+		Console::println("Executed => {$message->getFullCommand()}");
 		return $mHandler->editText($text);
 	}
 }

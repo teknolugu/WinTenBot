@@ -12,8 +12,9 @@ use Longman\TelegramBot\Commands\Command;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
-use src\Handlers\ChatHandler;
-use src\Model\Bot;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Bot;
+use WinTenDev\Utils\Inputs;
 
 /**
  * User "/help" command
@@ -47,7 +48,7 @@ class HelpCommand extends UserCommand
 		$message = $this->getMessage();
 		$chatHandler = new ChatHandler($message);
 		
-		$bot_name = $GLOBALS['bot_name'];
+		$bot_name = Inputs::globals('bot_name');
 		$urlBoot = Bot::getUrlStart();
 		
 		if (!$chatHandler->isPrivateChat) {

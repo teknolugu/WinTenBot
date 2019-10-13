@@ -9,9 +9,9 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
-use src\Handlers\ChatHandler;
-use src\Model\Group;
-use src\Model\MalFiles;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Group;
+use WinTenDev\Model\MalFiles;
 
 class MalfileCommand extends UserCommand
 {

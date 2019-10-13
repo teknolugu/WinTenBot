@@ -12,14 +12,16 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
-use src\Handlers\ChatHandler;
-use src\Model\Fbans;
-use src\Model\Group;
-use src\Model\Members;
-use src\Model\Settings;
-use src\Utils\Buttons;
-use src\Utils\Time;
-use src\Utils\Words;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Bot;
+use WinTenDev\Model\Fbans;
+use WinTenDev\Model\Group;
+use WinTenDev\Model\Members;
+use WinTenDev\Model\Settings;
+use WinTenDev\Utils\Buttons;
+use WinTenDev\Utils\Inputs;
+use WinTenDev\Utils\Time;
+use WinTenDev\Utils\Words;
 
 class NewchatmembersCommand extends SystemCommand
 {
@@ -33,11 +35,14 @@ class NewchatmembersCommand extends SystemCommand
 	{
 		$message = $this->getMessage();
 		$chat_id = $message->getChat()->getId();
-		$members = $message->getNewChatMembers();
 		$chat_title = $message->getChat()->getTitle();
 		$chat_username = $message->getChat()->getUsername();
+		$members = $message->getNewChatMembers();
+
 //		$pinned_msg = $message->getPinnedMessage()->getMessageId();
 		$chatHandler = new ChatHandler($message);
+		
+		$urlStart = Bot::getUrlStart();
 		$isKicked = false;
 		$isEnableCache = true;
 		$welcome_data = $isEnableCache ? Settings::readCache($chat_id) : Settings::getNew(['chat_id' => $chat_id]);
@@ -57,7 +62,7 @@ class NewchatmembersCommand extends SystemCommand
 		}
 		
 		if ($message->botAddedInChat()) {
-			$bot_name = $GLOBALS['bot_name'];
+			$bot_name = Inputs::globals('bot_name');
 			$text = "🙋‍ Hai, perkenalkan saya <b>" . $bot_name . '</b>!' .
 				"\nSaya adalah bot untuk debugging dan manajemen grup yang di lengkapi alat keamanan!" .
 				"\nAgar saya bekerja dengan fitur penuh, jadikan saya admin dengan level standard. " .
@@ -65,7 +70,9 @@ class NewchatmembersCommand extends SystemCommand
 				"\n\nJika kamu ingin baca dokumentasi dapat di baca di web di bawah ini";
 			$btn_markup[] = ['text' => '📃 Dokumentasi', 'url' => 'https://dev.winten.tk/'];
 			$send = $chatHandler->sendText($text, '-1', $btn_markup);
-			if (count($message->getNewChatMembers()) == 1) return $send;
+			if (count($message->getNewChatMembers()) == 1) {
+				return $send;
+			}
 		}
 		
 		if ($message->getNewChatMembers()) {
@@ -232,7 +239,7 @@ class NewchatmembersCommand extends SystemCommand
 		}
 		
 		if ($no_username_count > 0) {
-			$btn_markup[] = ['text' => 'Pasang username', 'url' => urlStart . 'username'];
+			$btn_markup[] = ['text' => 'Pasang username', 'url' => $urlStart . 'username'];
 		}
 		
 		if (count($member_ids) > 0 && $human_verification == '1') {

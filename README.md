@@ -16,20 +16,26 @@ We have special Developer edition which include Dev integration like git push ev
 # How to deploy or run locally
 How to run or install this Project for your own bot.
 
-Make sure you have installed composer and PHP 7.0
+Make sure you have installed composer and at least PHP 7.0
 
 0. Clone this repo, then open in terminal
 1. Run **composer install**
-2. Copy paste all file under Resources\Config and root which with .example subfix (example bot.example.php to bot.php) and fill config match your nessesary
-3. If you want to run locally type **php pool.php** (not tested anymore)
-4. If you want to run as webhook, you must upload this project to your server with HTTPS (SSL) support. for speed reason, we recommended using VPS.
-5. If you want to use multi-hook, you must fill at least one bots entry in file Resources\Config\bots.php. you can call using https://yourserver.com/multi-hook.php?id=your_bot_id
-6. Set webhook using postman or directly using browser or curl in terminal.
-7. One bot can't run on poll and hook mode.
+2. Copy paste all file under Resources\Config and root which with .example subfix (example bots.php.example to bots.php) and fill config match your nessesary.
+3. Run mode
+   - Poll mode
+        1. If you want to run locally type **php multi-poll.php [id bot in bots.php]**
+        2. Wait until get `Bot is must ready!`
+   - Webhook
+        1. Note: single hook mode is deprecated, please use multi-hook
+        2. If you want to run as webhook, you must upload this project to your server with HTTPS (SSL) support. for speed reason, we recommended using VPS.
+        3. fill at least one bots entry in file Resources\Config\bots.php. you can call using https://yourserver.com/multi-hook.php?id=your_bot_id 
+        4. Set webhook using postman or directly using browser or curl in terminal.
+        
+Note: One bot can't run on poll and hook mode same time.
 
-Feel free ask about deployment to [Telegram Bot API](https://t.me/TgBotID) or [Azhe Kun](https://t.me/Azhe403)
+Feel free ask about deployment to [Telegram Bot API](https://t.me/TgBotID) or [WinTen Dev](https://t.me/WinTenDev)
 
-# Thanks to
+# Powered by
 - [JetBrains PhpStorm](https://www.jetbrains.com/phpstorm)
 - [Php Telegram Bot](https://github.com/php-telegram-bot/core)
 - [Telegram Bot API](https://core.telegram.org/bots/api)

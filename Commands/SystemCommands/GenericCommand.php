@@ -13,7 +13,7 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\MessageHandlers;
+use WinTenDev\Handlers\ChatHandler;
 
 /**
  * Generic command
@@ -48,7 +48,7 @@ class GenericCommand extends SystemCommand
         $message = $this->getMessage();
 
         //You can use $command as param
-        $mHandler = new MessageHandlers($message);
+        $mHandler = new ChatHandler($message);
         $chat_id = $message->getChat()->getId();
         $user_id = $message->getFrom()->getId();
         $command = $message->getCommand();

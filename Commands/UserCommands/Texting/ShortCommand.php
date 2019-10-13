@@ -10,10 +10,10 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Utils\Words;
-use src\Utils\Time;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
+use WinTenDev\Utils\Time;
+use WinTenDev\Utils\Words;
 
 class ShortCommand extends UserCommand
 {

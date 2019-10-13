@@ -11,9 +11,9 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\ChatHandler;
-use src\Model\Fbans;
-use src\Model\Logs;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Fbans;
+use WinTenDev\Model\Logs;
 
 class UnfbanCommand extends UserCommand
 {

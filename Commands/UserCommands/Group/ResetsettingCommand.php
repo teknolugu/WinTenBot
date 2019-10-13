@@ -11,10 +11,8 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\ChatHandler;
-use src\Handlers\MessageHandlers;
-use src\Model\Group;
-use src\Model\Settings;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Settings;
 
 class ResetsettingCommand extends UserCommand
 {

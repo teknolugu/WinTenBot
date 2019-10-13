@@ -11,8 +11,8 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\MessageHandlers;
-use src\Model\Translator;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Translator;
 
 class TrCommand extends UserCommand
 {
@@ -28,11 +28,12 @@ class TrCommand extends UserCommand
 	 *
 	 * @return ServerResponse
 	 * @throws TelegramException
+	 * @throws \Exception
 	 */
 	public function execute()
 	{
 		$message = $this->getMessage();
-		$mHandler = new MessageHandlers($message);
+		$mHandler = new ChatHandler($message);
 		
 		$pecah = explode(' ', $message->getText(true));
 		$repMssg = $message->getReplyToMessage();

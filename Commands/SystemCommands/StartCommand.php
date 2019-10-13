@@ -14,9 +14,9 @@ use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
-use src\Handlers\ChatHandler;
-use src\Model\Bot;
-use src\Model\Settings;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Bot;
+use WinTenDev\Model\Settings;
 
 class StartCommand extends SystemCommand
 {

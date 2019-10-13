@@ -12,8 +12,8 @@ use GuzzleHttp\Exception\GuzzleException;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\MessageHandlers;
-use src\Model\Resi;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Resi;
 
 class ResiCommand extends UserCommand
 {
@@ -32,7 +32,7 @@ class ResiCommand extends UserCommand
     public function execute()
     {
         $message = $this->getMessage();
-        $mHandler = new MessageHandlers($message);
+        $mHandler = new ChatHandler($message);
         $cocot = explode(' ', strtolower($message->getText(true)));
 
         $kurirs = ['jne', 'pos', 'jnt', 'jne'];

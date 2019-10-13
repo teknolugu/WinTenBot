@@ -6,7 +6,11 @@
  * Time: 11:26 PM
  */
 
-$urlStart = 'https://t.me/' . bot_username . '?start=';
+use WinTenDev\Model\Bot;
+
+$bot_username = Bot::getBotUsername();
+
+$urlStart = 'https://t.me/' . $bot_username . '?start=';
 
 $terms_prefix = 'start_terms_';
 

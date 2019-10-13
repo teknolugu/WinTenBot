@@ -11,9 +11,9 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\MessageHandlers;
-use src\Model\Group;
-use src\Model\Settings;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Group;
+use WinTenDev\Model\Settings;
 
 class RulesCommand extends UserCommand
 {
@@ -31,7 +31,7 @@ class RulesCommand extends UserCommand
 	public function execute()
 	{
 		$message = $this->getMessage();
-		$mHandler = new MessageHandlers($message);
+		$mHandler = new ChatHandler($message);
 		$chat_id = $message->getChat()->getId();
 		$chat_title = $message->getChat()->getTitle();
 //		$mssg_id = $message->getMessageId();

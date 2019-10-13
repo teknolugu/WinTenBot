@@ -15,17 +15,18 @@ use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
-use src\Handlers\ChatHandler;
-use src\Model\Bot;
-use src\Model\Fbans;
-use src\Model\Group;
-use src\Model\MalFiles;
-use src\Model\Members;
-use src\Model\Settings;
-use src\Model\UrlLists;
-use src\Model\Wordlists;
-use src\Utils\Converters;
-use src\Utils\Folder;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Bot;
+use WinTenDev\Model\Fbans;
+use WinTenDev\Model\Group;
+use WinTenDev\Model\MalFiles;
+use WinTenDev\Model\Members;
+use WinTenDev\Model\Settings;
+use WinTenDev\Model\UrlLists;
+use WinTenDev\Model\Wordlists;
+use WinTenDev\Utils\Converters;
+use WinTenDev\Utils\Folder;
+use WinTenDev\Utils\Inputs;
 
 /**
  * Callback query command
@@ -75,6 +76,9 @@ class CallbackqueryCommand extends SystemCommand
 		$chatHandler->callBackMessageId = $callback_query->getMessage()->getMessageId();
 		
 		$bacot = explode('_', $callback_data);
+		$bot_name = Bot::getBotName();
+		
+		$isBeta = Inputs::globals('is_beta');
 		
 		// SWITCT LEVEL 1
 		switch ($bacot[0]) {
@@ -87,6 +91,25 @@ class CallbackqueryCommand extends SystemCommand
 			
 			// 2. LEVEL 1
 			case 'general':
+				switch ($bacot[1]){
+					case 'close-all':
+						if($bacot[2] == "admin"){
+							if($chatHandler->isAdmin($callback_from_id)){
+//								$text = "All completed";
+								$chatHandler->deleteMessage($callback_query->getMessage()->getMessageId());
+							}else{
+								$text = "🚫 401: Unauthorized access." .
+									"\nKamu bukan admin di Grup ini.";
+							}
+						}
+						$chatHandler->answerCallbackQuery($text);
+						break;
+						
+					case'anu':
+						$chatHandler->editText($bacot[1], '-1', BTN_OK_NO_CANCEL);
+					break;
+				}
+				
 //	        	$chatHandler->editText('wik',null,BTN_OK_NO_CANCEL);
 //				Request::editMessageText([
 //					'chat_id'      => $callback_query->getMessage()->getChat()->getId(),
@@ -97,13 +120,13 @@ class CallbackqueryCommand extends SystemCommand
 //					]),
 //					'text'         => $bacot[1],
 //				]);
-				$chatHandler->editText($bacot[1], '-1', BTN_OK_NO_CANCEL);
+				
 				break;
 			
 			// 3. Case HELP CALLBACK LEVEL 1
 			case 'help':
 				$splitHelp = explode('/', $bacot[1]);
-				$text = '<b>' . bot_name . '</b> <code>' . versi . '</code>' .
+				$text = '<b>' . $bot_name . '</b> <code>' . versi . '</code>' .
 					"\nby <b>WinTenDev ES2 (Elastic Security System)</b>\n\n";
 				$text .= Bot::loadInbotDocs($bacot[1]);
 				
@@ -144,16 +167,18 @@ class CallbackqueryCommand extends SystemCommand
 //						break;
 				}
 				
-				switch ($splitHelp[1]) {
-					case 'core':
-						$btn_markup = BTN_HELP_CORE;
-						break;
-					case 'info':
-						$btn_markup = BTN_HELP_INFO;
-						break;
-					case 'welcome':
-						$btn_markup = BTN_HELP_WELCOME;
-						break;
+				if(isset($splitHelp[1])) {
+					switch ($splitHelp[1]) {
+						case 'core':
+							$btn_markup = BTN_HELP_CORE;
+							break;
+						case 'info':
+							$btn_markup = BTN_HELP_INFO;
+							break;
+						case 'welcome':
+							$btn_markup = BTN_HELP_WELCOME;
+							break;
+					}
 				}
 				
 				return $chatHandler->editMessageCallback($text, '-1', $btn_markup);
@@ -177,7 +202,7 @@ class CallbackqueryCommand extends SystemCommand
 			
 			case 'setting':
 				$isAdmin = Group::isAdmin($callback_from_id, $callback_chat_id);
-				if ($isAdmin) {
+				if ($isAdmin || $chatHandler->isPrivateChat) {
 					Settings::toggleSetting([
 						'chat_id' => $callback_chat_id,
 						'toggle'  => 'enable' . ltrim($callback_data, $bacot[0]),
@@ -186,7 +211,7 @@ class CallbackqueryCommand extends SystemCommand
 					$text = "✅ Saved " . ucfirst(ltrim($callback_data, 'setting_'));
 					$edit = '⚙ Group settings for <b>' . $callback_chat_title . '</b>' . "\n\n" . $text;
 					
-					$btns = Settings::getForTombol(['chat_id' => $callback_chat_id]);
+					$btns = Settings::getForTombol($callback_chat_id, $chatHandler->isPrivateChat);
 					$btn_markup = [];
 					$btns = array_map(null, ...$btns);
 					foreach ($btns as $key => $val) {
@@ -260,46 +285,94 @@ class CallbackqueryCommand extends SystemCommand
 			
 			// Level 1
 			case 'action':
-				
 				// SWITCH LEVEL 2
 				switch ($bacot[1]) {
 					case 'delete-message':
-						$r = Request::deleteMessage([
-							'chat_id'    => $bacot[3],
-							'message_id' => $bacot[2],
-						]);
-//						$chatHandler->deleteMessage($bacot[2]);
+						if ($chatHandler->isAdmin($callback_from_id)) {
+//							$chatHandler->deleteMessage($bacot[2]);
+							Request::deleteMessage([
+								'chat_id'  => $bacot[3],
+								'message_id' => $bacot[2]
+							]);
+						} else {
+							$text = "🚫 401: Unauthorized access." .
+								"\nKamu bukan admin di Grup ini.";
+						}
+						
 						break;
 					
 					case 'kick-member':
-						$r = Request::kickChatMember([
-							'chat_id' => $bacot[3],
-							'user_id' => $bacot[2],
-						]);
-						$r = Request::unbanChatMember([
-							'chat_id' => $bacot[3],
-							'user_id' => $bacot[2],
-						]);
+						if ($chatHandler->isAdmin($callback_from_id)) {
+//							$text = "Banned : {$bacot[2]}";
+							$chatHandler->kickMember([
+								'chat_id' => $bacot[3],
+								'user_id' => $bacot[2],
+							], true);
+						} else {
+							$text = "🚫 401: Unauthorized access." .
+								"\nKamu bukan admin di Grup ini.";
+						}
+						
 						break;
 					
 					case 'ban-member':
-						$r = Request::kickChatMember([
-							'chat_id' => $bacot[3],
-							'user_id' => $bacot[2],
-						]);
+						if($chatHandler->isAdmin($callback_from_id)){
+							$chatHandler->kickMember([
+								'chat_id' => $bacot[3],
+								'user_id' => $bacot[2],
+							]);
+						}else{
+							$text = "🚫 401: Unauthorized access." .
+								"\nKamu bukan admin di Grup ini.";
+						}
+						
 						break;
 					case 'unmute-member':
-						$r = $chatHandler->unrestrictMember($bacot[2]);
-						$chatHandler->editMessageCallback("Anggota berhasil di unmute");
-						return $chatHandler->deleteMessage($chatHandler->callBackMessageId, 3);
+						if($chatHandler->isAdmin($callback_from_id)){
+							$r = $chatHandler->unrestrictMember($bacot[2]);
+							$chatHandler->editMessageCallback("Anggota berhasil di unmute");
+							return $chatHandler->deleteMessage($chatHandler->callBackMessageId, 3);
+						}else{
+							$text = "🚫 401: Unauthorized access." .
+								"\nKamu bukan admin di Grup ini.";
+						}
+						break;
+					
+					case 'instant-fban':
+						if ($chatHandler->isAdmin($callback_from_id)) {
+							$fbans_data = [
+								'user_id'     => $bacot[2],
+								'reason_ban'  => 'instant-fban by' . $callback_from_id,
+								'banned_by'   => $chatHandler->from_id,
+								'banned_from' => $message->getChat()->getId(),
+							];
+							
+							$chatHandler->kickMember($bacot[2], true);
+							
+							$fban = Fbans::saveFBans($fbans_data);
+							Request::forwardMessage([
+								'chat_id'      => log_channel,
+								'from_chat_id' => $chatHandler->chatId,
+								'message_id'   => $bacot[3],
+							]);
+							
+							$text = "✅ Global Banned succesfully.";
+							$writeFban = Fbans::writeCacheFbans();
+						} else {
+							$text = "🚫 401: Unauthorized access." .
+								"\nKamu bukan admin di Grup ini.";
+						}
+						
 						break;
 				}
 				
 				$aksi = str_replace('-', ' ', ucwords($bacot[1]));
+				
+				$chatHandler->answerCallbackQuery($text);
+				
 				if ($r->isOk()) {
 					$text = "Aksi $aksi berhasil.";
-					$reportAction = 'Wih siapa yg anuin?' .
-						"\nAksi <b>$aksi</b> di lakukan oleh $callback_from_id";
+					$reportAction = "\nAksi <b>$aksi</b> di lakukan oleh $callback_from_id";
 					Request::sendMessage([
 						'chat_id'    => $bacot[3],
 						'parse_mode' => 'HTML',
@@ -434,10 +507,11 @@ class CallbackqueryCommand extends SystemCommand
 				break;
 		}
 		
-		if (isBeta) {
+		$isBeta = Inputs::globals('is_beta');
+		if ($isBeta) {
 			$text = $callback_data;
 		} else {
-			$text = "Sesuatu telah terjadi.";
+			$text = "🚫 Sesuatu telah terjadi.";
 		}
 		$res = $chatHandler->answerCallbackQuery($text);
 
@@ -454,7 +528,6 @@ class CallbackqueryCommand extends SystemCommand
 	/**
 	 * @param $bacot
 	 * @return ServerResponse
-	 * @throws TelegramException
 	 */
 	private function callbackStart($bacot)
 	{

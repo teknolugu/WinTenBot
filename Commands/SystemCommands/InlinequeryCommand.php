@@ -8,20 +8,20 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Exception\TelegramException;
-use src\Utils\Words;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineQuery\InlineQueryResultArticle;
 use Longman\TelegramBot\Entities\InputMessageContent\InputTextMessageContent;
+use Longman\TelegramBot\Entities\ServerResponse;
+use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
-use src\Model\Notes;
+use WinTenDev\Model\Notes;
 
 class InlinequeryCommand extends SystemCommand
 {
 	/**
 	 * @return ServerResponse
 	 * @throws TelegramException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
 	 */
 	public function execute()
 	{

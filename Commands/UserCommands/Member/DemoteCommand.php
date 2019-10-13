@@ -11,10 +11,10 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\MessageHandlers;
-use src\Model\Group;
-use src\Model\Members;
-use src\Model\Translator;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Group;
+use WinTenDev\Model\Members;
+use WinTenDev\Model\Translator;
 
 class DemoteCommand extends UserCommand
 {
@@ -35,7 +35,7 @@ class DemoteCommand extends UserCommand
 		$promoteRes = null;
 		$tindakan = '';
 		$message = $this->getMessage();
-		$mHandler = new MessageHandlers($message);
+		$mHandler = new ChatHandler($message);
 		$chat_id = $message->getChat()->getId();
 		$from_id = $message->getFrom()->getId();
 		$repMssg = $message->getReplyToMessage();

@@ -1,5 +1,4 @@
 <?php
-
 return [
 	__DIR__ . '/Commands/SystemCommands',
 	__DIR__ . '/Commands/UserCommands/Additional',

@@ -11,8 +11,9 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\ChatHandler;
-use src\Model\Bot;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Bot;
+use WinTenDev\Utils\Inputs;
 
 class InfoCommand extends UserCommand
 {
@@ -34,8 +35,9 @@ class InfoCommand extends UserCommand
 		
 		$text = '🤖 <b>WinTen Beta Bot</b> <code>' . versi . "</code>\n" . descBot;
 		$bot_name = Bot::getBotName();
+		$is_beta = Inputs::globals('is_beta');
 		
-		if (isBeta) {
+		if ($is_beta) {
 			$text .= descBeta;
 		}
 		

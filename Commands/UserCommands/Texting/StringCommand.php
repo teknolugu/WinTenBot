@@ -11,8 +11,8 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\MessageHandlers;
-use src\Utils\Words;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Utils\Words;
 
 class StringCommand extends UserCommand
 {
@@ -32,7 +32,7 @@ class StringCommand extends UserCommand
         $mssg = $this->getMessage();
         $raw_message = $mssg->getText(true);
         $replyMssg = $mssg->getReplyToMessage();
-        $mHandler = new MessageHandlers($mssg);
+        $mHandler = new ChatHandler($mssg);
         $chat_id = $mssg->getChat()->getId();
         $bacot = explode(' ', $raw_message);
 

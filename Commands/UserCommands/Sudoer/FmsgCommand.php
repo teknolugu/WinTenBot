@@ -5,14 +5,13 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\ChatHandler;
-use src\Model\Fbans;
-use src\Model\MalFiles;
-use src\Model\UrlLists;
-use src\Model\Wordlists;
-use src\Utils\Format;
-use src\Utils\Uri;
-use src\Utils\Words;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Fbans;
+use WinTenDev\Model\MalFiles;
+use WinTendev\Model\UrlLists;
+use WinTenDev\Model\Wordlists;
+use WinTenDev\Utils\Format;
+use WinTenDev\Utils\Words;
 
 class FmsgCommand extends UserCommand
 {

@@ -11,10 +11,9 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use src\Handlers\ChatHandler;
-use src\Model\Caches;
-use src\Model\Settings;
-use src\Model\Tags;
+use WinTenDev\Handlers\ChatHandler;
+use WinTenDev\Model\Settings;
+use WinTenDev\Model\Tags;
 
 class TagsCommand extends UserCommand
 {
@@ -42,7 +41,9 @@ class TagsCommand extends UserCommand
 //		$tags_data = Tags::getTags($chat_id);
 		
 		$tags_data = Tags::readCache($chat_id);
-		$hit = count($tags_data);
+		if(is_array($tags_data)) {
+			$hit = count($tags_data);
+		}
 		
 		$no = 1;
 		if ($hit <= 0) {
