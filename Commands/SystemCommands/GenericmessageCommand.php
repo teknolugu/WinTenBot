@@ -68,10 +68,15 @@ class GenericmessageCommand extends SystemCommand
 		$chat_title = $message->getChat()->getTitle();
 		$repMsg = $this->getMessage()->getReplyToMessage();
 		
+		$chat_setting = Settings::readCache($chat_id);
+		$enable_welcome_message = $chat_setting[0]['enable_welcome_message'];
+		
 		$kata = strtolower($pesan);
 		$pesanCmd = explode(' ', strtolower($pesan))[0];
 		
-		$msgValidator = new MessageValidator($message);
+		// Validate incoming message..
+//		$msgValidator = new MessageValidator($message);
+//		$msgValidator->execValidate();
 		
 		if ($message->getNewChatMembers()) {
 			return $this->telegram->executeCommand('newchatmembers');
@@ -99,9 +104,10 @@ class GenericmessageCommand extends SystemCommand
 		if ($isNoUsername) {
 			return $isNoUsername;
 		}
+		
+		$isForwarded = $this->checkForwardedMessage();
 
-//		$isForwarded = $this->checkForwardedMessage();
-		$msgValidator->checkForwardedMessage();
+//		$msgValidator->checkForwardedMessage();
 //		if ($isForwarded) {
 //			return $isForwarded;
 //		}
@@ -344,6 +350,27 @@ class GenericmessageCommand extends SystemCommand
 		return $isNoUsername;
 	}
 	
+	/**
+	 * @return ServerResponse
+	 * @throws TelegramException
+	 */
+	private function checkForwardedMessage()
+	{
+		$message = $this->getMessage();
+		$res = null;
+//		$msgValidator = new MessageValidator($message);
+//		$res = $msgValidator->checkForwardedMessage();
+
+//		$forwarded = $message->getForwardFrom();
+		if ($message->getForwardFromMessageId() != "") {
+//			$forwd_chat_id = $message->getForwardFromChat()->getId();
+			$text = "Forwarded from forwd_chat_id";
+			$res = $this->chatHandler->sendText($text);
+		}
+		
+		return $res;
+	}
+	
 	private function parseTags()
 	{
 		$message = $this->getMessage();
@@ -431,27 +458,6 @@ class GenericmessageCommand extends SystemCommand
 //			}
 		}
 		return $r;
-	}
-	
-	/**
-	 * @return ServerResponse
-	 * @throws TelegramException
-	 */
-	private function checkForwardedMessage()
-	{
-		$message = $this->getMessage();
-		$res = null;
-//		$msgValidator = new MessageValidator($message);
-//		$res = $msgValidator->checkForwardedMessage();
-
-//		$forwarded = $message->getForwardFrom();
-		if ($message->getForwardFromMessageId() != "") {
-//			$forwd_chat_id = $message->getForwardFromChat()->getId();
-			$text = "Forwarded from forwd_chat_id";
-			$res = $this->chatHandler->sendText($text);
-		}
-		
-		return $res;
 	}
 }
 
