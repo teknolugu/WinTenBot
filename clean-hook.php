@@ -1,8 +1,23 @@
 <?php
-include_once './Resources/Config/bot.php';
-include_once './Resources/Config/config.php';
 
-define('API_URL', 'https://api.telegram.org/bot' . bot_token . '/');
+use WinTenDev\Utils\Arrays;
+use WinTenDev\Utils\Inputs;
+
+include_once './vendor/autoload.php';
+//include_once './Resources/Config/bot.php';
+//include_once './Resources/Config/config.php';
+
+$bots = include __DIR__ . '/Resources/Config/bots.php';
+$input = Inputs::get('id');
+$filtered = Arrays::arrayFilter($bots, ['id' => $input]);
+$bot_token = $filtered[0]['bot_token'];
+$bot_name = $filtered[0]['bot_name'];
+
+Arrays::toJson([
+	'bot_name' => $filtered[0],
+]);
+
+define('API_URL', 'https://api.telegram.org/bot' . $bot_token . '/');
 
 function apiRequestWebhook($method, $parameters)
 {
@@ -129,7 +144,9 @@ function processMessage($message)
         $text = $message['text'];
 
         if (strpos($text, '/ping') === 0) {
-            apiRequestJson('sendMessage', array('chat_id' => $chat_id, 'text' => 'Hello', 'reply_markup' => array(
+	        apiRequestJson('sendMessage',
+		        array('chat_id' => $chat_id, 'text' => 'Hello', 'reply_markup' =>
+			        array(
                 'keyboard' => array(array('Hello', 'Hi')),
                 'one_time_keyboard' => true,
                 'resize_keyboard' => true)));
