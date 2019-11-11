@@ -23,9 +23,15 @@ class Arrays
 				}
 			}
 			if ($find) {
-				array_push($foundItems, $item);
+				$foundItems[] = $item;
 			}
 		}
 		return $foundItems;
+	}
+	
+	public static function toJson($data)
+	{
+		header('Content-Type: application/json');
+		echo \GuzzleHttp\json_encode($data, JSON_PRETTY_PRINT);
 	}
 }

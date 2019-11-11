@@ -66,8 +66,12 @@ if (count($filtered) == 1) {
 		$telegram->enableLimiter();
 		
 	} catch (TelegramException $e) {
-		echo "<br>Error: " . $e->getMessage();
-		echo "<br>Stacktrace: " . $e->getTraceAsString();
+		$error = [
+			'Status'     => $e->getCode(),
+			'Error'      => $e->getMessage(),
+			'Stacktrace' => $e->getTrace(),
+		];
+		Arrays::toJson($error);
 	}
 
 } else {
