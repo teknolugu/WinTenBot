@@ -10,6 +10,7 @@ namespace WinTenDev\Model;
 
 use Medoo\Medoo;
 use PDOStatement;
+use WinTenDev\Utils\Caches;
 
 class Tags
 {
