@@ -40,19 +40,6 @@ class Wordlists
 	}
 	
 	/**
-	 * @return array|bool
-	 */
-	public static function getAll()
-	{
-		$db = new Medoo(db_data);
-		return $db->select('wordlists', [
-			'word', 'class',
-		], [
-			'ORDER' => 'word',
-		]);
-	}
-	
-	/**
 	 * @return mixed
 	 */
 	public static function loadFromFile()
@@ -72,12 +59,16 @@ class Wordlists
 	}
 	
 	/**
-	 * @return mixed
+	 * @return array|bool
 	 */
-	public static function readCache()
+	public static function getAll()
 	{
-		$cache = new Caches();
-		return $cache->readCache('cache-json', 'wordlist');
+		$db = new Medoo(db_data);
+		return $db->select('wordlists', [
+			'word', 'class',
+		], [
+			'ORDER' => 'word',
+		]);
 	}
 	
 	/**
@@ -90,7 +81,7 @@ class Wordlists
 //        $wordlists = self::loadFromFile();
 		$isBadword = false;
 		$wordlists = self::readCache();
-		if(!is_array($wordlists)) {
+		if (!is_array($wordlists)) {
 			return false;
 		}
 		
@@ -107,5 +98,14 @@ class Wordlists
 		}
 		
 		return $isBadword;
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public static function readCache()
+	{
+		$cache = new Caches();
+		return $cache->readCache('cache-json', 'wordlist');
 	}
 }
