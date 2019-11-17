@@ -43,6 +43,8 @@ class TagsCommand extends UserCommand
 		$tags_data = Tags::readCache($chat_id);
 		if(is_array($tags_data)) {
 			$hit = count($tags_data);
+		} else {
+			$hit = 0;
 		}
 		
 		$no = 1;
@@ -52,11 +54,11 @@ class TagsCommand extends UserCommand
 			$hit = count($tags_data);
 			
 			if ($hit <= 0) {
-				return $chatHandler->sendText('Tidak ada Tags di hatiqu');
+				return $chatHandler->editText('Tidak ada Tags di hatiqu');
 			}
 		}
 		
-		if ($hit > 0) {
+		if ($hit >= 0) {
 			$chatHandler->editText('Completing..');
 			$text = "#️⃣  <b>{$hit} Cloud tags</b>\n\n";
 			foreach ($tags_data as $data) {
